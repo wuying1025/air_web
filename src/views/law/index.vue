@@ -39,6 +39,7 @@
                   :props="props"
                   @change="change"
                   placeholder="请选择分类"
+                  filterable
                 ></el-cascader>
               </li>
               <li>
@@ -259,7 +260,6 @@
 </template>
 
 <script>
-// import Sidebar from "../../components/Sidebar"
 import ComHeader from "../../components/ComHeader";
 import ComMenu from "../../components/ComMenu";
 import axios from "axios";
@@ -272,7 +272,7 @@ export default {
       // 人员树型结构
       menuList: [],
       list: [],
-      checkList:[],//选中列表
+      checkList: [], //选中列表
       // cateList: [], //一级分类别表
       currentPage: 1, //分页当前页
       pageSize: 10,
@@ -305,7 +305,7 @@ export default {
         size: this.pageSize,
         status: parseInt(this.status),
         cateType: this.cateId.length, //  一级 1   二级 2   全部0
-        cateId: this.cateId.pop(),
+        cateId: this.cateId[this.cateId.length - 1],
         content: this.content,
         deptId: this.deptId,
         time: this.time
@@ -349,12 +349,12 @@ export default {
       // this.multipleSelection = val;
       this.checkList = val;
     },
-    donwloadAll(){
+    donwloadAll() {
       // 循环选中列表下载
-      this.checkList.forEach(item=>{
+      this.checkList.forEach(item => {
         // console.log(item)
-        this.downHandle(item)
-      })
+        this.downHandle(item);
+      });
     }
   },
   created() {
@@ -368,28 +368,31 @@ export default {
       lazyLoad(node, resolve) {
         const { level } = node;
         if (level == 0) {
-          console.log(111);
           getCate().then(res => {
             const nodes = res.data.map(item => ({
               value: item.id,
-              label: item.name
-              // leaf: level >= 2
+              label: item.name,
+              leaf: level >= 1
             }));
             // 通过调用resolve将子节点数据返回，通知组件数据加载完成
             resolve(nodes);
           });
         } else if (level == 1) {
-          console.log(222);
+          console.log(1, level);
+
           getSubCate({ id: node.value }).then(res => {
             const nodes = res.data.map(item => ({
               value: item.id,
               label: item.name,
-              leaf: true
-              // leaf:level >= 1
+              // leaf: true
+              leaf: level >= 1
             }));
             // 通过调用resolve将子节点数据返回，通知组件数据加载完成
             resolve(nodes);
           });
+        } else if (level == 2) {
+          // console.log(2,level);
+          resolve([]);
         }
       }
     };
