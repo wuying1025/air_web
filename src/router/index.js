@@ -51,19 +51,7 @@ export const constantRoutes = [{
   },
   {
     path: '',
-    component: () => import('@/views/law'),
-    redirect: 'index',
-    children: [{
-      path: 'index',
-      component: () => import('@/views/index'),
-      name: '首页',
-      meta: {
-        title: '首页',
-        icon: 'dashboard',
-        noCache: true,
-        affix: true
-      }
-    }]
+    component: () => import('@/views/law')
   },
   {
     path: '/user',
