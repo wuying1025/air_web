@@ -300,6 +300,15 @@ export default {
     },
     // 获取数据
     getData() {
+    // POST /resources/selectMyResources
+    // status  0 未落实   1已落实   2超时    3  全部
+    // cateType  分类 一级分类 1  二级分类 2
+    // cateId  分类id
+    // content  搜索内推
+    // deptId 0 全部部门  |部门id
+    // time  月1 季2 年3 
+    // currentPage当前页 
+    // size 分页每页条数
       getData({
         current: this.currentPage,
         size: this.pageSize,
