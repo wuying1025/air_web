@@ -9,16 +9,62 @@
       </el-breadcrumb>
     </div>
     <div class="header-right">
-      <a href="#" class="header-icons news active"></a>
+      <a href="javascript:;" class="header-icons news">
+        <span class="icon" v-if="msgCount">{{msgCount}}</span>
+      </a>
       <a href="#" class="header-icons message"></a>
       <a href="#" class="header-icons mine"></a>
-      <a href="#" class="header-icons out"></a>
+      <a href="javascript:;" class="header-icons out" @click="logout"></a>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { getCount } from "@/api/message";
+import { getToken, setToken, removeToken } from '@/utils/auth'
+
+export default {
+  data(){
+    return {
+      msgCount:0,
+      timer:null
+    }
+  },
+  methods:{
+    getData(){
+      getCount().then(res => {
+        this.msgCount = res.data;
+      });
+    },
+     logout() {
+      this.$confirm('确定注销并退出系统吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+          // 清楚token 角色 权限  调到登录页
+          this.$store.commit('SET_TOKEN', '')
+          this.$store.commit('SET_ROLES', [])
+          this.$store.commit('SET_PERMISSIONS', [])
+          removeToken();
+          this.$router.push('/login')
+        // this.$store.dispatch('LogOut').then(() => {
+        //   location.reload()
+        // })
+      })
+    }
+  },
+  created() {
+    //获取消息列表
+    this.getData();
+    this.timer = setInterval(() => {
+      this.getData();
+    }, 3000);
+  },
+  beforeDestroy(){
+    clearInterval(this.timer);
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -56,6 +102,20 @@ export default {};
 }
 .header-right .news {
   background-position: 13px -3px;
+  position: relative;
+  .icon {
+    position: absolute;
+    right: 7px;
+    width: 14px;
+    height: 14px;
+    font-size: 12px;
+    text-align: center;
+    line-height: 12px;
+    top: 1px;
+    background: #f00;
+    color: #fff;
+    border-radius: 50%;
+  }
 }
 .header-right .active {
   background-position: 13px -71px;

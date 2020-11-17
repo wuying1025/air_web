@@ -12,8 +12,10 @@
         <el-menu class="el-menu-vertical-demo" text-color="#001d6f" @select="handleSelect">
           <el-submenu index="1">
             <template slot="title">
-              <i class="iconfont icon-zuzhijiagou"></i>
-              <span>发文部门</span>
+              <div @click="getAllDept">
+                <i class="iconfont icon-zuzhijiagou"></i>
+                <span>发文部门</span>
+              </div>
             </template>
             <!-- 递归菜单 -->
             <ComMenu :menuList="menuList"></ComMenu>
@@ -300,15 +302,15 @@ export default {
     },
     // 获取数据
     getData() {
-    // POST /resources/selectMyResources
-    // status  0 未落实   1已落实   2超时    3  全部
-    // cateType  分类 一级分类 1  二级分类 2
-    // cateId  分类id
-    // content  搜索内推
-    // deptId 0 全部部门  |部门id
-    // time  月1 季2 年3 
-    // currentPage当前页 
-    // size 分页每页条数
+      // POST /resources/selectMyResources
+      // status  0 未落实   1已落实   2超时    3  全部
+      // cateType  分类 一级分类 1  二级分类 2
+      // cateId  分类id
+      // content  搜索内推
+      // deptId 0 全部部门  |部门id
+      // time  月1 季2 年3
+      // currentPage当前页
+      // size 分页每页条数
       getData({
         current: this.currentPage,
         size: this.pageSize,
@@ -322,7 +324,6 @@ export default {
         .then(res => {
           this.list = res.data.records;
           this.total = res.data.total;
-          // console.log(list);
         })
         .catch(err => {
           console.log(err);
@@ -361,9 +362,13 @@ export default {
     donwloadAll() {
       // 循环选中列表下载
       this.checkList.forEach(item => {
-        // console.log(item)
         this.downHandle(item);
       });
+    },
+    // 获取所有部门数据
+    getAllDept() {
+      this.deptId = 0;
+      this.getData();
     }
   },
   created() {
@@ -491,7 +496,7 @@ export default {
 /*表格内容区  */
 .main-content {
   background: #fff;
-  height: calc(100vh - 210px);
+  min-height: calc(100vh - 210px);
   padding: 20px;
   box-sizing: border-box;
   /* height:calc(100vh-200px); */
@@ -514,5 +519,9 @@ export default {
 .el-header {
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding-left: 20px;
+}
+
+.page-box {
+  margin-top: 20px;
 }
 </style>

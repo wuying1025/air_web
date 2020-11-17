@@ -39,3 +39,13 @@ export function changeMessageStatus(data) {
     data: data
   })
 }
+
+
+// 获取未读消息数量
+export function getCount(query) {
+  return request({
+    url: '/msg/getCount',
+    method: 'get',
+    params: query
+  })
+}
