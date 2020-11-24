@@ -33,3 +33,11 @@ export function getSubCate(params) {
         method: 'get',
     })
 }
+
+// 落实法规
+export function finishLaw(data) {
+    return request({
+        url: '/resources/doneResources/' + data.id,
+        method: 'get',
+    })
+}

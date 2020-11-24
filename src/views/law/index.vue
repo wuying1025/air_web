@@ -82,7 +82,8 @@
                     ></el-table-column>
                     <el-table-column prop="title" label="法规名称" width="120"></el-table-column>
                     <el-table-column prop="categoryName" label="法规分类" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="finishTime" label="完成时间" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="deptName" label="部门" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="finishTime" label="截止时间" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="name" label="下载" show-overflow-tooltip>
                       <template slot-scope="scope">
                         <a
@@ -94,10 +95,16 @@
                     <el-table-column prop="content" label="条令内容" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="isDone" label="相关工作落实" show-overflow-tooltip>
                       <template slot-scope="scope">
+                        <span v-if="scope.row.isDone == 1" class="isdone finish">已落实</span>
                         <!-- isTimeout  1|0 是否超时 不超时判断是否落实 -->
-                        <span v-if="scope.row.isTimeout == 1" class="isdone overtime">超时</span>
-                        <span v-else-if="scope.row.isDone == 0" class="isdone unfinish">未落实</span>
-                        <span v-else class="isdone finish">已落实</span>
+                        <span v-else-if="scope.row.isTimeout > 0" class="isdone overtime">超时</span>
+                        <span
+                          v-else
+                          class="isdone unfinish"
+                          @click="goFinish(scope.row)"
+                        >未落实</span>
+                        <!-- <span v-else-if="scope.row.isDone == 0" class="isdone unfinish">未落实</span> -->
+                        <!-- <span v-else class="isdone finish">已落实</span> -->
                       </template>
                     </el-table-column>
                   </el-table>
@@ -131,7 +138,8 @@
                     ></el-table-column>
                     <el-table-column prop="title" label="法规名称" width="120"></el-table-column>
                     <el-table-column prop="categoryName" label="法规分类" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="finishTime" label="完成时间" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="deptName" label="部门" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="finishTime" label="截止时间" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="name" label="下载" show-overflow-tooltip>
                       <template slot-scope="scope">
                         <a
@@ -178,7 +186,8 @@
                     ></el-table-column>
                     <el-table-column prop="title" label="法规名称" width="120"></el-table-column>
                     <el-table-column prop="categoryName" label="法规分类" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="finishTime" label="完成时间" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="deptName" label="部门" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="finishTime" label="截止时间" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="name" label="下载" show-overflow-tooltip>
                       <template slot-scope="scope">
                         <a
@@ -191,7 +200,11 @@
                     <el-table-column prop="isDone" label="相关工作落实" show-overflow-tooltip>
                       <template slot-scope="scope">
                         <!-- isTimeout  1|0 是否超时 不超时判断是否落实 -->
-                        <span v-if="scope.row.isDone == 0" class="isdone unfinish">未落实</span>
+                        <span
+                          v-if="scope.row.isDone == 0"
+                          class="isdone unfinish"
+                          @click="goFinish(scope.row)"
+                        >未落实</span>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -225,7 +238,8 @@
                     ></el-table-column>
                     <el-table-column prop="title" label="法规名称" width="120"></el-table-column>
                     <el-table-column prop="categoryName" label="法规分类" show-overflow-tooltip></el-table-column>
-                    <el-table-column prop="finishTime" label="完成时间" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="deptName" label="部门" show-overflow-tooltip></el-table-column>
+                    <el-table-column prop="finishTime" label="截止时间" show-overflow-tooltip></el-table-column>
                     <el-table-column prop="name" label="下载" show-overflow-tooltip>
                       <template slot-scope="scope">
                         <a
@@ -238,7 +252,7 @@
                     <el-table-column prop="isDone" label="相关工作落实" show-overflow-tooltip>
                       <template slot-scope="scope">
                         <!-- isTimeout  1|0 是否超时 不超时判断是否落实 -->
-                        <span v-if="scope.row.isTimeout == 1" class="isdone overtime">超时</span>
+                        <span v-if="scope.row.isTimeout > 0" class="isdone overtime">超时</span>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -265,7 +279,13 @@
 import ComHeader from "../../components/ComHeader";
 import ComMenu from "../../components/ComMenu";
 import axios from "axios";
-import { getTreeUser, getData, getCate, getSubCate } from "@/api/law";
+import {
+  getTreeUser,
+  getData,
+  getCate,
+  getSubCate,
+  finishLaw
+} from "@/api/law";
 
 export default {
   data() {
@@ -369,6 +389,20 @@ export default {
     getAllDept() {
       this.deptId = 0;
       this.getData();
+    },
+    // 去落实
+    goFinish(obj) {
+      // 是否确定落实
+      this.$confirm("确认落实此法规，落实后无法恢复, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        console.log(111)
+        finishLaw({ id: obj.id }).then(res => {
+          this.getData();
+        });
+      });
     }
   },
   created() {
@@ -508,13 +542,14 @@ export default {
   padding: 0px 12px;
 }
 .unfinish {
-  background: #f61717;
+  background: #f6ac1e;
+  cursor: pointer;
 }
 .finish {
   background: #8a8a8a;
 }
 .overtime {
-  background: #f6ac1e;
+  background: #f61717;
 }
 .el-header {
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
