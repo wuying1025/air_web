@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import logoImg from '@/assets/logo/logo.png'
+import logoImg from '@/assets/logo/logo1.png'
 
 export default {
   name: 'SidebarLogo',
@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      title: 'OA系统',
+      title: '法规查询提醒系统',
       logo: logoImg
     }
   }
@@ -46,9 +46,9 @@ export default {
 .sidebar-logo-container {
   position: relative;
   width: 100%;
-  height: 50px;
-  line-height: 50px;
-  background: #2b2f3a;
+  height: 108px;
+  // line-height: 50px;
+  // background: #2b2f3a;
   text-align: center;
   overflow: hidden;
 
@@ -57,19 +57,16 @@ export default {
     width: 100%;
 
     & .sidebar-logo {
-      width: 32px;
-      height: 32px;
       vertical-align: middle;
       margin-right: 12px;
     }
-
     & .sidebar-title {
-      display: inline-block;
+      display: block;
       margin: 0;
-      color: #fff;
-      font-weight: 600;
-      line-height: 50px;
-      font-size: 14px;
+      color: #001d6f;
+      font-weight: 500;
+      line-height: 30px;
+      font-size: 20px;
       font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       vertical-align: middle;
     }

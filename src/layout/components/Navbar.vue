@@ -1,9 +1,14 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <hamburger
+      id="hamburger-container"
+      :is-active="sidebar.opened"
+      class="hamburger-container"
+      @toggleClick="toggleSideBar"
+    />
 
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
-    
+
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <!-- <search id="header-search" class="right-menu-item" />
@@ -20,51 +25,36 @@
 
         <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip> -->
-
+        </el-tooltip>-->
+        <a href="javascript:;" class="header-icons news">
+          <span class="icon" v-if="msgCount">{{msgCount}}</span>
+        </a>
+        <a href="#" class="header-icons message"></a>
+        <a href="#" class="header-icons mine"></a>
+        <a href="javascript:;" class="header-icons out" @click="logout"></a>
       </template>
-
-      <el-dropdown class=" right-menu-item hover-effect" trigger="click">
-        <div class="user-info">
-          <div class="user-name">{{user_name}}</div>
-          <!-- <img :src="avatar" class="user-avatar"> -->
-          <i class="el-icon-caret-bottom" />
-        </div>
-        <el-dropdown-menu slot="dropdown">
-          <router-link to="/user/profile">
-            <el-dropdown-item>个人中心</el-dropdown-item>
-          </router-link>
-          <el-dropdown-item @click.native="setting = true">
-            <span>布局设置</span>
-          </el-dropdown-item>
-          <el-dropdown-item divided @click.native="logout">
-            <span>退出登录</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
     </div>
-    <el-tooltip content="进入消息中心查看消息" effect="dark" placement="bottom">
-    <div class="msg-remind" @click="goMessageCenter">
-      <el-badge :value="message>0?message:''" class="item">
-        <i class="el-icon-message-solid"></i>
-      </el-badge>
-    </div>
-    </el-tooltip>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
-import Screenfull from '@/components/Screenfull'
-import SizeSelect from '@/components/SizeSelect'
-import Search from '@/components/HeaderSearch'
-import RuoYiGit from '@/components/RuoYi/Git'
-import RuoYiDoc from '@/components/RuoYi/Doc'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { mapGetters } from "vuex";
+import Breadcrumb from "@/components/Breadcrumb";
+import Hamburger from "@/components/Hamburger";
+import Screenfull from "@/components/Screenfull";
+import SizeSelect from "@/components/SizeSelect";
+import Search from "@/components/HeaderSearch";
+import RuoYiGit from "@/components/RuoYi/Git";
+import RuoYiDoc from "@/components/RuoYi/Doc";
+import { getToken, setToken, removeToken } from "@/utils/auth";
+import { getCount } from "@/api/message";
 
 export default {
+  data() {
+    return {
+      msgCount: 0
+    };
+  },
   components: {
     Breadcrumb,
     Hamburger,
@@ -75,78 +65,81 @@ export default {
     RuoYiDoc
   },
   computed: {
-    ...mapGetters([
-      'sidebar',
-      'avatar',
-      'device',
-      'message',
-      'user_name'
-    ]),
+    ...mapGetters(["sidebar", "avatar", "device", "message", "user_name"]),
     setting: {
       get() {
-        return this.$store.state.settings.showSettings
+        return this.$store.state.settings.showSettings;
       },
       set(val) {
-        this.$store.dispatch('settings/changeSetting', {
-          key: 'showSettings',
+        this.$store.dispatch("settings/changeSetting", {
+          key: "showSettings",
           value: val
-        })
+        });
       }
     }
   },
   methods: {
     // 跳转消息列表
-    goMessageCenter(){
-      this.$router.push('/message/messageList')
+    goMessageCenter() {
+      this.$router.push("/message/messageList");
     },
     toggleSideBar() {
-      this.$store.dispatch('app/toggleSideBar')
+      this.$store.dispatch("app/toggleSideBar");
     },
     logout() {
-      this.$confirm('确定注销并退出系统吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.$confirm("确定注销并退出系统吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       }).then(() => {
-          // 清楚token 角色 权限  调到登录页
-          this.$store.commit('SET_TOKEN', '')
-          this.$store.commit('SET_ROLES', [])
-          this.$store.commit('SET_PERMISSIONS', [])
-          removeToken();
-          this.$router.push('/login')
+        // 清楚token 角色 权限  调到登录页
+        this.$store.commit("SET_TOKEN", "");
+        this.$store.commit("SET_ROLES", []);
+        this.$store.commit("SET_PERMISSIONS", []);
+        removeToken();
+        this.$router.push("/login");
         // this.$store.dispatch('LogOut').then(() => {
         //   location.reload()
         // })
-      })
+      });
+    },
+    getData() {
+      getCount().then(res => {
+        this.msgCount = res.data;
+        console.log(this.msgCount)
+      });
     }
+  },
+  created() {
+    this.getData();
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-.user-info{
+.user-info {
   padding-right: 20px;
   position: relative;
-  .user-name{
+  .user-name {
     font-size: 14px;
     display: flex;
     justify-content: center;
   }
-  i{
+  i {
     position: absolute;
     right: 2px;
-    top:15px;
+    top: 15px;
   }
 }
-.msg-remind{
+.msg-remind {
   float: right;
   height: 100%;
   display: flex;
   align-items: center;
-  padding:0 8px;
+  padding: 0 8px;
   cursor: pointer;
-  &:hover{
-    background: rgba(0,0,0,0.025)
+  &:hover {
+    background: rgba(0, 0, 0, 0.025);
   }
   .el-icon-message-solid:before {
     content: "\E799";
@@ -155,22 +148,24 @@ export default {
   }
 }
 .navbar {
-  height: 50px;
+  height: 108px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   overflow: hidden;
   position: relative;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0,21,41,.08);
+  // background: #fff;
+  // box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {
-    line-height: 46px;
+    line-height: 108px;
     height: 100%;
     float: left;
     cursor: pointer;
-    transition: background .3s;
-    -webkit-tap-highlight-color:transparent;
+    transition: background 0.3s;
+    -webkit-tap-highlight-color: transparent;
+    // color:#fff;
 
     &:hover {
-      background: rgba(0, 0, 0, .025)
+      // background: rgba(0, 0, 0, .025)
     }
   }
 
@@ -185,7 +180,7 @@ export default {
 
   .right-menu {
     float: right;
-    height: 100%;
+    height: 50px;
     line-height: 50px;
 
     &:focus {
@@ -202,10 +197,10 @@ export default {
 
       &.hover-effect {
         cursor: pointer;
-        transition: background .3s;
+        transition: background 0.3s;
 
         &:hover {
-          background: rgba(0, 0, 0, .025)
+          background: rgba(0, 0, 0, 0.025);
         }
       }
     }
@@ -234,5 +229,44 @@ export default {
       }
     }
   }
+}
+.right-menu {
+  margin: 32px 30px 0 0;
+}
+.right-menu .header-icons {
+  display: inline-block;
+  width: 50px;
+  height: 35px;
+  background: url(../../assets/image/icons.png) no-repeat;
+  cursor: pointer;
+}
+.right-menu .news {
+  background-position: 13px -3px;
+  position: relative;
+  .icon {
+    position: absolute;
+    right: 7px;
+    width: 14px;
+    height: 14px;
+    font-size: 12px;
+    text-align: center;
+    line-height: 12px;
+    top: 1px;
+    background: #f00;
+    color: #fff;
+    border-radius: 50%;
+  }
+}
+.right-menu .active {
+  background-position: 13px -71px;
+}
+.right-menu .message {
+  background-position: -50px -1px;
+}
+.right-menu .mine {
+  background-position: -113px -3px;
+}
+.right-menu .out {
+  background-position: -183px -3px;
 }
 </style>

@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'OA系统',
+  title: '门户网站',
 
   /**
    * 是否系统布局配置
@@ -9,7 +9,7 @@ module.exports = {
   /**
    * 是否显示 tagsView
    */
-  tagsView: true,
+  // tagsView: true,
 
   /**
    * 是否固定头部

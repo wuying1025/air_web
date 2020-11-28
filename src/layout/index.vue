@@ -105,4 +105,8 @@ export default {
   .mobile .fixed-header {
     width: 100%;
   }
+  .main-container{
+    background: #eaeff3 url(./../assets/image/bg.jpg) 0 0 no-repeat;
+    background-size: contain;
+  }
 </style>

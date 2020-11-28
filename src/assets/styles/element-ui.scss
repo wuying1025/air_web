@@ -3,6 +3,8 @@
 .el-breadcrumb__inner,
 .el-breadcrumb__inner a {
   font-weight: 400 !important;
+  color:#fff;
+  font-size: 19px;
 }
 
 .el-upload {
@@ -81,4 +83,92 @@
 // to fix el-date-picker css style
 .el-range-separator {
   box-sizing: content-box;
+}
+
+
+/* 修改分页的样式 */
+.page-box{
+  padding:20px 0;
+  float: right;
+}
+.el-pager li{
+  border:1px solid #dfdfdf;
+  background: #fff;
+  margin:0 4px;
+  border-radius: 3px;
+  color:#595959;
+  font-weight: normal;
+}
+.el-pager li.active {
+  color: #fff;
+  background: #0177d5;
+}
+
+/* 修改input select  元素样式 */
+.el-input--medium .el-input__inner {
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+}
+
+.el-input--medium .el-input__icon {
+  line-height: 40px;
+}
+/* main-tabs 修改tabs的样式 */
+.el-tabs--card>.el-tabs__header .el-tabs__item{
+  border:none;
+}
+.el-tabs--card>.el-tabs__header .el-tabs__nav{
+  border:none;
+}
+.el-tabs--card>.el-tabs__header .el-tabs__item.is-active{
+  background: #fff;
+  color:#001d6f;
+  border-radius: 5px 5px 0 0;
+}
+.el-tabs--card>.el-tabs__header .el-tabs__item {
+  color:#fff;
+  font-size:16px;
+  font-weight: normal;
+  padding: 3px 25px;
+  height:auto;
+}
+.el-tabs__header{
+  margin:0;
+}
+.el-tabs--card>.el-tabs__header{
+  border:none;
+}
+
+.icon-Shape{
+  color:#4977fc;
+  margin-right:3px;
+}
+
+
+// 修改左侧menu菜单
+.el-menu-item{
+  font-size: 15px;
+}
+.el-submenu__title{
+  font-size: 15px;
+}
+.el-submenu__title i{
+  color:#001d6f;
+  font-weight: 600;
+}
+.el-submenu__title{
+  position: relative;
+}
+.el-submenu__title::after,.el-menu-item::after{
+  content:"";
+  position: absolute;
+  left:3px;
+  top:0;
+  width: 3px;
+  height: 56px;
+  background: #fff;
+}
+.el-submenu__title:hover::after,.el-menu-item:hover::after{
+  background: #001d6f;
 }

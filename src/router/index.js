@@ -50,9 +50,25 @@ export const constantRoutes = [{
     hidden: true
   },
   {
-    path: '',
-    component: () => import('@/views/law')
+    path: '/',
+    component: Layout,
+    redirect: 'index',
+    children: [{
+      path: 'index',
+      component: () => import('@/views/law'),
+      name: '首页',
+      meta: {
+        title: '首页',
+        icon: 'dashboard',
+        noCache: true,
+        affix: true
+      }
+    }]
   },
+  // {
+  //   path: '/test',
+  //   component: () => import('@/views/law')
+  // },
   {
     path: '/user',
     component: Layout,
