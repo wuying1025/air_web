@@ -44,8 +44,9 @@ const user = {
       const password = userInfo.password
       const code = userInfo.code
       const uuid = userInfo.uuid
+      const type = 2;
       return new Promise((resolve, reject) => {
-        login(username, password, code, uuid).then(res => {
+        login(username, password, code, uuid, type).then(res => {
           if(res.token == 2){//判断验证码是否错误
             resolve(res.token);
             return true;

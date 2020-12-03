@@ -25,6 +25,9 @@ import { parseTime, resetForm, addDateRange, selectDictLabel, download, handleTr
 import Pagination from "@/components/Pagination";
 import uploader from "vue-simple-uploader";
 
+// 引入echarts
+import echarts from 'echarts'
+// import * as echarts from 'echarts'
 
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts
