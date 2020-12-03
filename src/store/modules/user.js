@@ -44,7 +44,7 @@ const user = {
       const password = userInfo.password
       const code = userInfo.code
       const uuid = userInfo.uuid
-      const type = 2;
+      const type = "2";
       return new Promise((resolve, reject) => {
         login(username, password, code, uuid, type).then(res => {
           if(res.token == 2){//判断验证码是否错误
@@ -63,6 +63,7 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
+        console.log(state.token)
         getInfo(state.token).then(res => {
           const user = res.user
           const avatar = user.avatar == "" ? require("@/assets/image/profile.jpg") : process.env.VUE_APP_BASE_API + user.avatar;
