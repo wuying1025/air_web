@@ -41,3 +41,21 @@ export function finishLaw(data) {
         method: 'get',
     })
 }
+
+// 门户管理员查看全部法规列表
+export function allLawList(data) {
+    return request({
+        url: '/resources/selectManageResources',
+        method: 'post',
+        data: data
+    })
+}
+// 根据法规查询连队落实情况
+export function getLawDoneById(data) {
+    return request({
+        url: '/resources/getResDoneById/' + data.id,
+        method: 'get',
+    })
+}
+
+

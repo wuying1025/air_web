@@ -57,18 +57,19 @@ export const constantRoutes = [{
       path: 'index',
       component: () => import('@/views/law'),
       name: '首页',
-      meta: {
-        title: '首页',
-        icon: 'dashboard',
-        noCache: true,
-        affix: true
-      }
     }]
   },
-  // {
-  //   path: '/test',
-  //   component: () => import('@/views/law')
-  // },
+  {
+    path: '/laws',
+    component: Layout,
+    redirect: 'index',
+    children: [{
+      path: 'detail',
+      component: () => import('@/views/law/detail'),
+      name: '落实详情',
+     
+    }]
+  },
   {
     path: '/user',
     component: Layout,

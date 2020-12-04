@@ -5,6 +5,7 @@
         <div class="main-tabs">
           <!-- 筛选条件 -->
           <ul class="main-tabs-right">
+            
             <li class="export-btn" @click="donwloadAll">导出</li>
             <li>
               <el-cascader
@@ -65,14 +66,14 @@
                     </template>
                   </el-table-column>
                   <el-table-column prop="content" label="条令内容" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="content" label="完成详情" show-overflow-tooltip>
+                    <template slot-scope="scope">
+                      <span>{{scope.row.doneCount}}/{{scope.row.deptCount}}</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column prop="isDone" label="相关工作落实" show-overflow-tooltip>
                     <template slot-scope="scope">
-                      <span v-if="scope.row.isDone == 1" class="isdone finish">已落实</span>
-                      <!-- isTimeout  1|0 是否超时 不超时判断是否落实 -->
-                      <span v-else-if="scope.row.isTimeout > 0" class="isdone overtime">超时</span>
-                      <span v-else class="isdone unfinish" @click="goFinish(scope.row)">未落实</span>
-                      <!-- <span v-else-if="scope.row.isDone == 0" class="isdone unfinish">未落实</span> -->
-                      <!-- <span v-else class="isdone finish">已落实</span> -->
+                      <span class="detail-btn" @click="go(scope.row.id)">查看</span>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -245,10 +246,9 @@
 <script>
 import axios from "axios";
 import {
-  getData,
+  allLawList,
   getCate,
   getSubCate,
-  finishLaw
 } from "@/api/law";
 
 export default {
@@ -265,7 +265,6 @@ export default {
       cateType: 1, //1一级  2二级,
       cateId: [], //收集分类id
       content: "", //搜索框内容
-      deptId: 0, //部门id全部
       time: 0, // 0 全部  1月 2季  3 年
       // 级联分类
       props: {}
@@ -274,23 +273,13 @@ export default {
   methods: {
     // 获取数据
     getData() {
-      // POST /resources/selectMyResources
-      // status  0 未落实   1已落实   2超时    3  全部
-      // cateType  分类 一级分类 1  二级分类 2
-      // cateId  分类id
-      // content  搜索内推
-      // deptId 0 全部部门  |部门id
-      // time  月1 季2 年3
-      // currentPage当前页
-      // size 分页每页条数
-      getData({
+      allLawList({
         current: this.currentPage,
         size: this.pageSize,
         status: parseInt(this.status),
         cateType: this.cateId.length, //  一级 1   二级 2   全部0
         cateId: this.cateId[this.cateId.length - 1],
         content: this.content,
-        deptId: this.deptId,
         time: this.time
       })
         .then(res => {
@@ -320,12 +309,6 @@ export default {
     change() {
       this.getData();
     },
-    // 部门选中回调
-    handleSelect(key, keyPath) {
-      // console.log(key, keyPath);
-      this.deptId = key;
-      this.getData();
-    },
     // 表格多选
     handleSelectionChange(val) {
       // this.multipleSelection = val;
@@ -342,19 +325,11 @@ export default {
       this.deptId = 0;
       this.getData();
     },
-    // 去落实
-    goFinish(obj) {
-      // 是否确定落实
-      this.$confirm("确认落实此法规，落实后无法恢复, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(() => {
-        console.log(111);
-        finishLaw({ id: obj.id }).then(res => {
-          this.getData();
-        });
-      });
+    go(id){
+      this.$router.push({
+        path:"/laws/detail",
+        query:{id}
+      })
     }
   },
   created() {
@@ -461,5 +436,16 @@ export default {
 
 .page-box {
   margin-top: 20px;
+}
+.detail-btn{
+  background: #7094fd;
+  color:#fff;
+  display: inline-block;
+  width: 60px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 10px;
+  cursor: pointer;
 }
 </style>
