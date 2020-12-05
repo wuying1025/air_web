@@ -1,5 +1,33 @@
 import request from '@/utils/request'
-
+// 添加法规文件内容
+export function addContent(data) {
+    return request({
+        url: '/rawrule/store',
+        method: 'post',
+        data: data
+    })
+}
+// 获取法规列表
+export function getRawList() {
+    return request({
+        url: '/rawrule/raw/list',
+        method: 'get'
+    })
+}
+// 获取法规列表
+export function delLaw({id}) {
+    return request({
+        url: '/rawrule/domdel/'+id,
+        method: 'get'
+    })
+}
+// 获取法规详情
+export function getLawDetail({id}) {
+    return request({
+        url: '/rawrule/dom/'+id,
+        method: 'get'
+    })
+}
 // 查询部门下拉树结构
 export function getTreeUser(params) {
     return request({
