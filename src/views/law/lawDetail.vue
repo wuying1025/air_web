@@ -14,7 +14,7 @@
         <tinymce
           v-if="content"
           v-model="content"
-          menubar=""
+          :menubar="false"
           :toolbar="['searchreplace']"
           tinyType="contentType"
           :height="500"
