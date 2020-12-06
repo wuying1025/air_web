@@ -43,7 +43,6 @@
                   border
                   :header-cell-style="{background:'#fafafa'}"
                   @selection-change="handleSelectionChange"
-                >
                   >
                   <el-table-column type="selection" width="55"></el-table-column>
                   <el-table-column
@@ -87,7 +86,11 @@
                 </div>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="已落实" name="1">
+            <el-tab-pane name="1">
+              <span slot="label">
+                <i class="count">{{doneNum}}</i>
+                已落实
+              </span>
               <div class="main-content">
                 <el-table
                   ref="multipleTable"
@@ -135,7 +138,11 @@
                 </div>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="未落实" name="0">
+            <el-tab-pane name="0">
+              <span slot="label">
+                <i class="count">{{unDoneNum}}</i>
+                未落实
+              </span>
               <div class="main-content">
                 <el-table
                   ref="multipleTable"
@@ -187,7 +194,11 @@
                 </div>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="超时" name="2">
+            <el-tab-pane name="2">
+              <span slot="label">
+                <i class="count">{{timeOutNum}}</i>
+                超时
+              </span>
               <div class="main-content">
                 <el-table
                   ref="multipleTable"
@@ -268,7 +279,10 @@ export default {
       deptId: 0, //部门id全部
       time: 0, // 0 全部  1月 2季  3 年
       // 级联分类
-      props: {}
+      props: {},
+      unDoneNum:0,
+      doneNum:0,
+      timeOutNum:0
     };
   },
   methods: {
@@ -294,8 +308,11 @@ export default {
         time: this.time
       })
         .then(res => {
-          this.list = res.data.records;
-          this.total = res.data.total;
+          this.list = res.data.result.records;
+          this.total = res.data.result.total;
+          this.unDoneNum = res.data.countNum;
+          this.doneNum = res.data.doneNum;
+          this.timeOutNum = res.data.timeOutNum;
         })
         .catch(err => {
           console.log(err);
@@ -460,5 +477,19 @@ export default {
 
 .page-box {
   margin-top: 20px;
+}
+.count{
+  position: absolute;
+  right: 13px;
+  width: 14px;
+  height: 14px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 12px;
+  top: 3px;
+  background: #f00;
+  color: #fff;
+  border-radius: 50%;
+  font-style: normal;
 }
 </style>

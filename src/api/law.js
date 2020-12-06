@@ -8,10 +8,10 @@ export function getTreeUser(params) {
         params
     })
 }
-// 查询法规数据
+// 查询我的数据
 export function getData(data) {
     return request({
-        url: 'resources/selectMyResources',
+        url: '/resources/selectLoginResources',
         method: 'post',
         data: data
     })
