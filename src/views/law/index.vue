@@ -66,7 +66,7 @@
                   <el-table-column prop="content" label="条令内容" show-overflow-tooltip></el-table-column>
                   <el-table-column prop="isDone" label="相关工作落实" show-overflow-tooltip>
                     <template slot-scope="scope">
-                      <span v-if="scope.row.isDone == 1" class="isdone finish">已落实</span>
+                      <span v-if="scope.row.isDone == 1" class="isdone finish" @click="goUnFinish(scope.row)">已落实</span>
                       <!-- isTimeout  1|0 是否超时 不超时判断是否落实 -->
                       <span v-else-if="scope.row.isTimeout > 0" class="isdone overtime">超时</span>
                       <span v-else class="isdone unfinish" @click="goFinish(scope.row)">未落实</span>
@@ -123,7 +123,7 @@
                   <el-table-column prop="isDone" label="相关工作落实" show-overflow-tooltip>
                     <template slot-scope="scope">
                       <!-- isTimeout  1|0 是否超时 不超时判断是否落实 -->
-                      <span v-if="scope.row.isDone == 1" class="isdone finish">已落实</span>
+                      <span v-if="scope.row.isDone == 1" class="isdone finish"  @click="goUnFinish(scope.row)">已落实</span>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -259,7 +259,8 @@ import {
   getData,
   getCate,
   getSubCate,
-  finishLaw
+  finishLaw,
+  unFinishLaw
 } from "@/api/law";
 
 export default {
@@ -362,12 +363,25 @@ export default {
     // 去落实
     goFinish(obj) {
       // 是否确定落实
-      this.$confirm("确认落实此法规，落实后无法恢复, 是否继续?", "提示", {
+      this.$confirm("确认落实此法规， 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
         finishLaw({ id: obj.id }).then(res => {
+          this.getData();
+        });
+      });
+    },
+    // 落实变未落实
+    goUnFinish(obj) {
+      // 是否确定落实
+      this.$confirm("确认落实变成未落实法规, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        unFinishLaw({ id: obj.id }).then(res => {
           this.getData();
         });
       });
@@ -466,6 +480,9 @@ export default {
 }
 .finish {
   background: #8a8a8a;
+}
+.isdone{
+  cursor: pointer;
 }
 .overtime {
   background: #f61717;

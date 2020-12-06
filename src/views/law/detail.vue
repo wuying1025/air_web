@@ -13,11 +13,11 @@
         >
           <el-table-column align="center" prop="deptName" label="连队" width="120"></el-table-column>
           <el-table-column align="center" prop="title" label="内容" show-overflow-tooltip></el-table-column>
-          <el-table-column align="center" prop="endTime" label="截止时间" show-overflow-tooltip></el-table-column>
-          <el-table-column align="center" prop="finishTime" label="落实时间" show-overflow-tooltip></el-table-column>
+          <el-table-column align="center" prop="finishTime" label="截止时间" show-overflow-tooltip></el-table-column>
+          <el-table-column align="center" prop="createTime" label="落实时间" show-overflow-tooltip></el-table-column>
           <el-table-column align="center" prop="isDone" label="落实状态" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span v-if="scope.row.isDone == 1" class="isdone finish">已落实</span>
+              <span v-if="scope.row.createTime" class="isdone finish">已落实</span>
               <!-- isTimeout  1|0 是否超时 不超时判断是否落实 -->
               <span v-else-if="scope.row.isTimeout > 0" class="isdone overtime">超时</span>
               <span v-else class="isdone unfinish" @click="goFinish(scope.row)">未落实</span>

@@ -70,6 +70,14 @@ export function finishLaw(data) {
     })
 }
 
+// 落实变成未落实
+export function unFinishLaw(data) {
+    return request({
+        url: '/resources/notDoneResources/' + data.id,
+        method: 'get',
+    })
+}
+
 // 门户管理员查看全部法规列表
 export function allLawList(data) {
     return request({
