@@ -73,7 +73,7 @@ export default {
     //单行选中
     checkLine(row) {
       this.$router.push({
-        path: "/law/lawDetail/" + row.id,
+        path: "/release/lawdetail/" + row.id,
       });
     },
     // 获取法规列表数据
@@ -117,7 +117,7 @@ export default {
     // 查看详情
     showDetail(_data) {
       this.$router.push({
-        path: "/law/lawDetail/" + _data.id,
+        path: "/release/lawdetail/" + _data.id,
       });
     },
   },

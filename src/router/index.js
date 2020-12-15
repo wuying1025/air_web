@@ -71,6 +71,16 @@ export const constantRoutes = [{
     }]
   },
   {
+    path: '/release',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: 'lawdetail/:id',
+      component: () => import('@/views/law/lawDetail'),
+      hidden: true,
+    }]
+  },
+  {
     path: '/user',
     component: Layout,
     hidden: true,

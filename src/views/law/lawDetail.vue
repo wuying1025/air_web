@@ -30,10 +30,19 @@
               <el-button size="small" type="primary" @click="searchHandle">查询</el-button>
             </el-form-item>
           </el-form>
+          <span v-if="hrefList.length > 0" class="search-res-info"
+            >共有{{ hrefList.length }}条结果</span
+          >
         </div>
-        <ul v-if="hrefList.length>0" @click="testScroll">
-          <li v-for="(item, index) in hrefList" :key="index" v-html="item"></li>
-        </ul>
+        <div class="list-content" v-if="hrefList.length > 0">
+          <ul @click="testScroll">
+            <li v-for="(item, index) in hrefList" :key="index">
+              <span>第{{ index + 1 }}条</span>
+              <div v-html="item"></div>
+            </li>
+          </ul>
+        </div>
+        
         <div v-else class="empty-list">
           暂无搜索内容
         </div>
@@ -203,7 +212,7 @@ h3 {
   position: fixed;
   right: 30px;
   top: 220px;
-  height: calc(100vh - 320px);
+  height: calc(100vh - 270px);
   overflow-y: scroll;
   background-color: #fff;
   box-shadow: -3px 0 3 rgba(0, 0, 0, 0.3);
@@ -218,7 +227,7 @@ h3 {
   cursor: pointer;
 }
 .search-content{
-  height: 60px;
+  height: 80px;
   padding-top:20px;
   background-color: #fff;
   position: fixed;
@@ -237,6 +246,24 @@ h3 {
   transform: translateY(-50%);
   width: 100%;
   text-align: center;
+}
+.search-res-info {
+  position: relative;
+  top: -20px;
+  left: 16px;
+  color: #999;
+  font-size: 14px;
+}
+.list-content {
+  margin-top: 20px;
+  overflow: hidden;
+  margin-left: -3px;
+}
+.list-content span {
+  font-size: 13px;
+  color: #999;
+  display: inline-block;
+  margin-bottom: 5px;
 }
 .table-content {
   background-color: #fff;
