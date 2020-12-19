@@ -49,6 +49,7 @@
     "@fullcalendar/vue": "^5.3.0",
     "@riophae/vue-treeselect": "0.4.0",
     "@tinymce/tinymce-vue": "^2.0.0",
+    "Uploader": "^2.0.0",
     "axios": "0.18.1",
     "clipboard": "2.0.4",
     "echarts": "^4.2.1",
@@ -74,6 +75,7 @@
     "vue-router": "3.0.2",
     "vue-simple-uploader": "^0.7.4",
     "vue-splitpane": "1.0.4",
+    "vue-ueditor-wrap": "^2.4.4",
     "vuedraggable": "2.20.0",
     "vuex": "3.1.0"
   },

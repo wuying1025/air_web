@@ -26,105 +26,141 @@ import Layout from '@/layout'
 
 // 公共路由
 export const constantRoutes = [{
-    path: '/redirect',
-    component: Layout,
-    hidden: true,
-    children: [{
-      path: '/redirect/:path(.*)',
-      component: () => import('@/views/redirect')
-    }]
+  path: '/redirect',
+  component: Layout,
+  hidden: true,
+  children: [{
+    path: '/redirect/:path(.*)',
+    component: () => import('@/views/redirect')
+  }]
+},
+{
+  path: '/login',
+  component: () => import('@/views/login'),
+  hidden: true
+},
+{
+  path: '/404',
+  component: () => import('@/views/error/404'),
+  hidden: true
+},
+{
+  path: '/401',
+  component: () => import('@/views/error/401'),
+  hidden: true
+},
+{
+  path: '/',
+  component: Layout,
+  redirect: 'index',
+  children: [{
+    path: 'index',
+    component: () => import('@/views/law'),
+    name: '首页',
+  }]
+},
+{
+  path: '/laws',
+  component: Layout,
+  redirect: 'index',
+  children: [{
+    path: 'detail',
+    component: () => import('@/views/law/detail'),
+    name: '落实详情',
+
+  }]
+},
+{
+  path: '/work',
+  component: Layout,
+  hidden: true,
+  children: [{
+    path: 'inspect',
+    component: () => import('@/views/spwork/inspect/detail'),
+    name: '我的专项检查详情',
+    meta: { title: '我的专项检查详情' }
   },
+  // {
+  //   path: 'leaderinspect',
+  //   component: () => import('@/views/spwork/inspect/leaderDetail'),
+  //   name: '基层专项检查详情',
+  //   meta: { title: '基层专项检查详情' }
+  // },
   {
-    path: '/login',
-    component: () => import('@/views/login'),
-    hidden: true
+    path: 'activity',
+    component: () => import('@/views/spwork/activity/detail'),
+    name: '专项活动详情',
+    meta: { title: '专项活动详情' }
   },
+  // {
+  //   path: 'leaderactivity',
+  //   component: () => import('@/views/spwork/activity/detail'),
+  //   name: '专项活动详情',
+  //   meta: { title: '专项活动详情' }
+  // },
   {
-    path: '/404',
-    component: () => import('@/views/error/404'),
-    hidden: true
-  },
-  {
-    path: '/401',
-    component: () => import('@/views/error/401'),
-    hidden: true
-  },
-  {
-    path: '/',
-    component: Layout,
-    redirect: 'index',
-    children: [{
-      path: 'index',
-      component: () => import('@/views/law'),
-      name: '首页',
-    }]
-  },
-  {
-    path: '/laws',
-    component: Layout,
-    redirect: 'index',
-    children: [{
-      path: 'detail',
-      component: () => import('@/views/law/detail'),
-      name: '落实详情',
-     
-    }]
-  },
-  {
-    path: '/user',
-    component: Layout,
-    hidden: true,
-    redirect: 'noredirect',
-    children: [{
-      path: 'profile',
-      component: () => import('@/views/system/user/profile/index'),
-      name: 'Profile',
-      meta: {
-        title: '个人中心',
-        icon: 'user'
-      }
-    }]
-  },
-  {
-    path: '/dict',
-    component: Layout,
-    hidden: true,
-    children: [{
-      path: 'type/data/:dictId(\\d+)',
-      component: () => import('@/views/system/dict/data'),
-      name: 'Data',
-      meta: {
-        title: '字典数据',
-        icon: ''
-      }
-    }]
-  },
-  {
-    path: '/job',
-    component: Layout,
-    hidden: true,
-    children: [{
-      path: 'log',
-      component: () => import('@/views/monitor/job/log'),
-      name: 'JobLog',
-      meta: {
-        title: '调度日志'
-      }
-    }]
-  },
-  {
-    path: '/gen',
-    component: Layout,
-    hidden: true,
-    children: [{
-      path: 'edit',
-      component: () => import('@/views/tool/gen/editTable'),
-      name: 'GenEdit',
-      meta: {
-        title: '修改生成配置'
-      }
-    }]
-  },
+    // editActivity
+    path: 'editActivity',
+    component: () => import('@/views/spwork/activity/editActivity'),
+    name: '填报活动',
+    meta: { title: '填报活动' }
+  }]
+},
+{
+  path: '/user',
+  component: Layout,
+  hidden: true,
+  redirect: 'noredirect',
+  children: [{
+    path: 'profile',
+    component: () => import('@/views/system/user/profile/index'),
+    name: 'Profile',
+    meta: {
+      title: '个人中心',
+      icon: 'user'
+    }
+  }]
+},
+{
+  path: '/dict',
+  component: Layout,
+  hidden: true,
+  children: [{
+    path: 'type/data/:dictId(\\d+)',
+    component: () => import('@/views/system/dict/data'),
+    name: 'Data',
+    meta: {
+      title: '字典数据',
+      icon: ''
+    }
+  }]
+},
+{
+  path: '/job',
+  component: Layout,
+  hidden: true,
+  children: [{
+    path: 'log',
+    component: () => import('@/views/monitor/job/log'),
+    name: 'JobLog',
+    meta: {
+      title: '调度日志'
+    }
+  }]
+},
+{
+  path: '/gen',
+  component: Layout,
+  hidden: true,
+  children: [{
+    path: 'edit',
+    component: () => import('@/views/tool/gen/editTable'),
+    name: 'GenEdit',
+    meta: {
+      title: '修改生成配置'
+    }
+  }]
+},
 ]
 
 export default new Router({
