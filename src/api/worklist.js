@@ -44,12 +44,12 @@ export const updateStep = (data = {}) => request({
     data
 })
 // 通过id查询检查
-export const getInspectById = id => {
-    return request({
-        url: `/special/get/${id}`,
-        method: 'get'
-    })
-}
+// export const getInspectById = id => {
+//     return request({
+//         url: `/special/get/${id}`,
+//         method: 'get'
+//     })
+// }
 // 查询全部工作清单列表
 export const selectAcitvity = (data = {}) => request({
     url: '/special/getActivityWork',
@@ -91,3 +91,23 @@ export const getDeptWork = (deptId,activityId) => {
         method: 'get'
     })
 }
+// 获取活动详情
+export const getActivityByDeptId = (id) => {
+    return request({
+        url: `/special/getWorkByDeptId/${id}`,
+        method: 'get'
+    })
+}
+
+export const getInspectById = id => {
+    return request({
+        url: `/special/get/${id}`,
+        method: 'get'
+    })
+}
+
+export const queryScore = (data = {}) => request({
+    url: '/special/queryScore',
+    method: 'post',
+    data
+})

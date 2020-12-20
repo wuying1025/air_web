@@ -25,13 +25,13 @@
                 @click.stop="showDetail(scope.row)"
               >详情</el-button>
               <!-- 小兵角色user的可以填报 -->
-              <el-button
+              <!-- <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-edit"
                 v-if="scope.row.type && roles == 'user'"
                 @click.stop="edit(scope.row)"
-              >填报</el-button>
+              >填报</el-button>-->
             </template>
           </el-table-column>
         </el-table>
@@ -57,6 +57,8 @@ import {
   getStep,
   updateStep
 } from "@/api/worklist";
+import { getRoles } from "@/utils/auth";
+
 export default {
   data() {
     return {
@@ -66,7 +68,7 @@ export default {
       total: 0,
       currentPage: 0,
       pageSize: 10,
-      roles: this.$store.state.user.roles[0]
+      roles: this.$store.getters.roles[0]
     };
   },
   methods: {
@@ -82,16 +84,35 @@ export default {
       this.loading = false;
     },
     showDetail(data) {
-      // 活动类type 1
+      // 活动类type 1 跳转活动详情页
       if (data.type == 1) {
-        this.$router.push({path:"/work/activity",query:{id:data.id}});
+        if (this.$store.getters.roles[0] == "user") {
+          // 小兵
+          let link = this.$router.resolve({
+            path: "/work/activity",
+            query: { id: data.id }
+          });
+          window.open(link.href, "_blank");
+          // this.$router.push({ path: "/work/activity", query: { id: data.id } });
+        } else if (this.$store.getters.roles[0] == "leader") {
+          let link = this.$router.resolve({
+            path: "/work/leaderactivity",
+            query: { id: data.id }
+          });
+          window.open(link.href, "_blank");
+          //领导
+          // this.$router.push({
+          //   path: "/work/leaderactivity",
+          //   query: { id: data.id }
+          // });
+        }
       } else {
         // 检查类 type 0
-        this.$router.push({path:"/work/inspect",query:{id:data.id}});
+        this.$router.push({ path: "/work/inspect", query: { id: data.id } });
       }
     },
-    edit(data){
-      this.$router.push({path:'/work/editActivity',query:{id:data.id}})
+    edit(data) {
+      this.$router.push({ path: "/work/editActivity", query: { id: data.id } });
     },
     handleCurrentChange(value) {
       this.currentPage = value;

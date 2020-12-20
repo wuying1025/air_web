@@ -7,15 +7,11 @@
           <img :src="iconImg" class="check-icon-img" alt />
           <span class="check-icon-txt">方案一</span>
         </div>
-        <div class="down">查看详细表格下载</div>
+        <!-- <div class="down">查看详细表格下载</div> -->
       </div>
-      <el-steps :space="350" :active="3" align-center finish-status="success">
-        <!-- <el-step title="准备" description="2020-10-02"></el-step>
-        <el-step title="下发" description="2020-10-02"></el-step>
-        <el-step title="检查" description="2020-10-02"></el-step>
-        <el-step title="完成" description="2020-10-02"></el-step>-->
+      <el-steps :space="350" :active="active" align-center finish-status="success">
         <el-step
-          v-for="(obj,index) in steps"
+          v-for="(obj,index) in deptActityList"
           :key="index"
           :title="obj.stepName"
           :description="obj.finishTime"
@@ -26,53 +22,106 @@
     </div>
     <!--列表 -->
     <div class="main-list">
-      <el-tabs v-model="status" type="card" class="spwork" @tab-click="getDeptWork()">
-        <el-tab-pane
-          v-for="(obj,index) in depts"
-          :key="index"
-          :label="obj.deptName"
-          :name="''+index"
-        >
-          <div class="main-list-box">
-            <!-- 步骤条 -->
-            <el-steps direction="vertical" class="step-box" :active="3" space="155px">
-              <el-step v-for="(obj,index) in deptActityList" :key="index" :title="obj.stepName"></el-step>
-            </el-steps>
-            <!-- 步骤列表 -->
-            <ul class="step-list-box">
-              <li class="step-list" v-for="(obj,index) in deptActityList" :key="index">
-                <img
-                  :src="obj.imgUrl"
-                  alt
-                />
-                <div class="list-content">
-                  <div>{{obj.content}}</div>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </el-tab-pane>
-      </el-tabs>
+      <div class="main-list-box">
+        <!-- 步骤条 -->
+        <el-steps direction="vertical" class="step-box" :active="active" space="155px">
+          <el-step v-for="(obj,index) in deptActityList" :key="index" :title="obj.stepName"></el-step>
+        </el-steps>
+        <!-- 步骤列表 -->
+        <ul class="step-list-box">
+          <li v-for="(obj,index) in deptActityList" :key="index">
+            <div class="step-list" v-if="obj.count">
+              <img :src="obj.imgUrl" alt />
+              <div class="list-content">
+                <div v-html="obj.content"></div>
+              </div>
+            </div>
+            <div class="step-list-no" v-else>
+              <el-button
+                type="primary"
+                icon="el-icon-plus"
+                size="mini"
+                @click="edit(obj.stepId)"
+              >填报步骤总结</el-button>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
+    <el-dialog
+      title="填报步骤总结"
+      :visible.sync="stepDialogVisible"
+      width="1000px"
+      :before-close="handleClose"
+    >
+      <el-form ref="stepContent" :model="stepContent" :rules="rules" label-width="160px">
+        <el-form-item label="参加人数" label-width="100px" prop="count">
+          <el-input v-model="stepContent.count" style="width: 600px" placeholder="请输入参加人数"></el-input>
+        </el-form-item>
+        <el-form-item label="封面图片" label-width="100px" prop="img">
+          <Uploader v-on:getFile="getFileUrl(arguments)" :change="file.isChange" :name="file.name"></Uploader>
+        </el-form-item>
+        <el-form-item label="阶段总结" label-width="100px" prop="content">
+          <VueUeditorWrap :config="myConfig" v-model="stepContent.content" />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="stepDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveActivity()">确 定</el-button>
+      </span>
+    </el-dialog>
   </el-main>
 </template>
 
 <script>
 import echarts from "echarts";
 import iconImg from "@/assets/image/excel-icon.jpg";
-import { getDeptById, getActivityInfo, getDeptWork } from "@/api/worklist.js";
+import { getActivityByDeptId, saveActivity } from "@/api/worklist.js";
+import { dateFormat } from "@/utils/format.js";
+import VueUeditorWrap from "vue-ueditor-wrap";
+import Uploader from "@/components/Uploader";
 export default {
   data() {
     return {
-      status: "0",
       iconImg: iconImg,
       id: this.$route.query.id,
-      depts: [],
       steps: [],
       deptMap: {},
       barChart: [],
-      deptActityList:[]//部门活动列表
+      deptActityList: [], //部门活动列表
+      xAxisList: [], //步骤
+      seriesList: [], //数据
+      active: 0,
+      stepContent: {},
+      rules: {
+        count: [
+          { required: true, message: "请输入参加活动人数", trigger: "blur" }
+        ],
+        img: [{ required: true, message: "请选择图片", trigger: "blur" }],
+        content: [
+          { required: true, message: "请输入活动阶段总结", trigger: "blur" }
+        ]
+      },
+      myConfig: {
+        elementPathEnabled: false,
+        wordCount: false, //是否开启字数统计
+        // 初始容器高度
+        initialFrameHeight: 380,
+        // 初始容器宽度
+        initialFrameWidth: "100%",
+        // 上传文件接口（这个地址是我为了方便各位体验文件上传功能搭建的临时接口，请勿在生产环境使用！！！）
+        serverUrl: "http://www.gxxmglzx.com/tender/ueditor/controller.php",
+        // UEditor 资源文件的存放路径，如果你使用的是 vue-cli 生成的项目，通常不需要设置该选项，vue-ueditor-wrap 会自动处理常见的情况，如果需要特殊配置，参考下方的常见问题2
+        UEDITOR_HOME_URL: process.env.BASE_URL + "UEditor/"
+      },
+      file: {},
+      stepDialogVisible: false, // 添加步骤dialog
+      nowStep: 0
     };
+  },
+  components: {
+    VueUeditorWrap,
+    Uploader
   },
   methods: {
     initCharts() {
@@ -81,6 +130,7 @@ export default {
 
       // 指定图表的配置项和数据
       var option = {
+        // ----  标题 -----
         title: {
           text: "各连队检查情况",
           textStyle: {
@@ -91,59 +141,59 @@ export default {
           subtextStyle: {
             color: "#777c85"
           },
-          padding: [0, 0, 10, 70] // 位置
+          padding: [0, 0, 10, 10] // 位置
         },
-        legend: {
-          type: "scroll"
+        color: ["#4977fc"],
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: "none" // 默认为直线，可选为：'line' | 'shadow'
+          }
         },
-        tooltip: {},
-        dataset: {
-          source: this.barChart
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true
         },
-        xAxis: { type: "category", boundaryGap: true },
-        yAxis: {},
-        // Declare several bar series, each will be mapped
-        // to a column of dataset.source by default.
-        series: [
+        xAxis: [
           {
-            type: "bar",
-            barWidth: 25, // 柱形的宽度
-            barCategoryGap: "3%", // 柱形的间距
-            itemStyle: {
-              normal: {
-                color: "#4089ff"
-              }
-            }
-          },
-          {
-            type: "bar",
-            barWidth: 25, // 柱形的宽度
-            barCategoryGap: "3%", // 柱形的间距
-            itemStyle: {
-              normal: {
-                color: "#fecd5d"
-              }
-            }
-          },
-          {
-            type: "bar",
-            barWidth: 25, // 柱形的宽度
-            barCategoryGap: "3%", // 柱形的间距
-            itemStyle: {
-              normal: {
-                color: "#4ad030"
-              }
+            type: "category",
+            data: this.xAxisList,
+            axisTick: {
+              alignWithLabel: true
             }
           }
         ],
-        dataZoom: [
+        yAxis: [
           {
-            type: "slider", //slider表示有滑动块的，
-            show: true,
-            xAxisIndex: [0], //表示x轴折叠
-            start: 1, //数据窗口范围的起始百分比,表示1%
-            end: 50 //数据窗口范围的结束百分比,表示35%坐标
-            // zoomLock: true
+            type: "value",
+            nameGap: 15, // 坐标轴名称与轴线之间的距离
+            nameTextStyle: {
+              // 坐标轴名称样式
+              color: "#fff",
+              padding: [5, 0, 0, 5] // 坐标轴名称相对位置
+            }
+          }
+        ],
+        series: [
+          {
+            name: "不合格数量：",
+            type: "bar",
+            legendHoverLink: true, // 是否启用图列 hover 时的联动高亮
+            barWidth: "60%",
+            data: this.seriesList,
+            barWidth: 25, // 柱形的宽度
+            barCategoryGap: "5%", // 柱形的间距
+            itemStyle: {
+              normal: {
+                color: "#4977fc"
+              },
+              emphasis: {
+                color: "#4ad030"
+              }
+            }
           }
         ]
       };
@@ -151,59 +201,73 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    // 获取连队列表
-    async getDept() {
-      const res = await getDeptById();
-      this.depts = res.data;
-    },
     // 获取详情页详情
-    async getActivityInfo() {
-      const res = await getActivityInfo(this.id);
-      this.steps = res.data.step;
-      this.deptMap = res.data.deptMap;
-      this.scope = res.data.scope;
+    async getActivityByDeptId() {
+      const res = await getActivityByDeptId(this.id);
+      this.deptActityList = res.data;
+      // 计算完成进度
+      this.active = this.getStep();
+
       // 生成绘制柱状图的数据
       this.barChart = this.getChart();
-    },
-    // 点击连切换内容
-    async getDeptWork() {
-      let deptId = this.depts[this.status].deptId; // 部门id
-      let activityId = this.id; //活动id
-      const res = await getDeptWork(deptId, this.id);
-
-      this.deptActityList = res.data;
-
+      // 绘制柱状图
+      this.initCharts();
     },
     getChart() {
-      let chartList = [["product"]];
-      this.depts.forEach(obj => {
-        chartList[0].push(obj.deptName);
+      this.xAxisList = []; //步骤
+      this.seriesList = []; //数据
+      this.deptActityList.forEach(obj => {
+        this.xAxisList.push(obj.stepName);
+        this.seriesList.push(obj.count);
       });
-      for (let key in this.scope) {
-        let elem = this.scope[key];
-        let deptName = this.deptMap[key];
-
-        let arr = [deptName];
-        elem.forEach((obj, index) => {
-          arr.push(obj.count);
-        });
-        chartList.push(arr);
-        // ["product", "阶段1", "阶段2", "阶段3"],
-        // ["一连", 43.3, 85.8, 93.7],
-        // ["二连", 83.1, 73.4, 55.1],
-        // ["三连", 86.4, 65.2, 82.5],
-        // chartList.push([this.deptMap[],elem])
-      }
-      return chartList;
+      // return chartList;
     },
-    change() {}
-  },
-  mounted() {
-    this.initCharts();
+    getStep() {
+      let num = 1;
+      let nowDate = new Date();
+      for (var i = 0; i < this.deptActityList.length; i++) {
+        let obj = this.deptActityList[i];
+        //finishTime:"2020-12-15 00:00:00"
+        let finishDate = new Date(obj.finishTime);
+        if (nowDate.getTime() > finishDate.getTime()) {
+          num = i + 1;
+        }
+      }
+      return num;
+    },
+    edit(step) {
+      this.stepDialogVisible = true;
+      this.nowStep = step;
+    },
+    // 获取wFid和nFid
+    getFileUrl(args) {
+      this.file.url = args[1];
+      this.file.readUrl = args[2];
+      this.file.name = args[0];
+      this.file.isChange = true;
+      this.stepContent.imgUrl = args[1];
+    },
+    async saveActivity() {
+      const res = await saveActivity({
+        ...this.stepContent,
+        stepId: this.nowStep,
+        workId: this.id,
+        remark: ""
+      });
+      this.handleClose();
+      this.getActivityByDeptId();
+    },
+    handleClose() {
+      this.stepDialogVisible = false;
+      // this.worklist.step = ''
+      this.step = {
+        count: "",
+        content: ""
+      };
+    }
   },
   created() {
-    this.getDept();
-    this.getActivityInfo();
+    this.getActivityByDeptId();
   }
 };
 </script>
@@ -259,6 +323,11 @@ export default {
           line-height: 18px;
         }
       }
+    }
+    .step-list-no {
+      height: 150px;
+      line-height: 148px;
+      color: #888888;
     }
   }
 }

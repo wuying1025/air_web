@@ -80,24 +80,18 @@ export const constantRoutes = [{
     name: '我的专项检查详情',
     meta: { title: '我的专项检查详情' }
   },
-  // {
-  //   path: 'leaderinspect',
-  //   component: () => import('@/views/spwork/inspect/leaderDetail'),
-  //   name: '基层专项检查详情',
-  //   meta: { title: '基层专项检查详情' }
-  // },
+  {
+    path: 'leaderactivity',
+    component: () => import('@/views/spwork/activity/leaderDetail'),
+    name: '专项活动详情页',
+    meta: { title: '专项活动详情页' }
+  },
   {
     path: 'activity',
     component: () => import('@/views/spwork/activity/detail'),
     name: '专项活动详情',
     meta: { title: '专项活动详情' }
   },
-  // {
-  //   path: 'leaderactivity',
-  //   component: () => import('@/views/spwork/activity/detail'),
-  //   name: '专项活动详情',
-  //   meta: { title: '专项活动详情' }
-  // },
   {
     // editActivity
     path: 'editActivity',

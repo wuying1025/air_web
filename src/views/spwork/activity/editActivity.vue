@@ -1,40 +1,36 @@
 <template>
   <el-main>
     <div class="main-content">
-      <el-tabs tab-position="left" v-model="stepId">
+      <!-- <el-tabs tab-position="left" v-model="stepId">
         <el-tab-pane
           v-for="(obj,index) in steps"
           :key="index"
           :label="obj.stepName"
           :name="obj.id"
-        >
-          <el-form ref="stepContent" :model="stepContent" :rules="rules" label-width="160px">
-            <el-form-item label="参加人数" label-width="100px" prop="count">
-              <el-input v-model="stepContent.count" style="width: 600px" placeholder="请输入参加人数"></el-input>
-            </el-form-item>
-            <el-form-item label="封面图片" label-width="100px" prop="img">
-              <Uploader
-                v-on:getFile="getFileUrl(arguments)"
-                :change="file.isChange"
-                :name="file.name"
-              ></Uploader>
-            </el-form-item>
-            <el-form-item label="阶段总结" label-width="100px" prop="content">
-              <VueUeditorWrap :config="myConfig" v-model="stepContent.content" />
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="saveActivity()">确定</el-button>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-      </el-tabs>
+      >-->
+      <el-form ref="stepContent" :model="stepContent" :rules="rules" label-width="160px">
+        <el-form-item label="参加人数" label-width="100px" prop="count">
+          <el-input v-model="stepContent.count" style="width: 600px" placeholder="请输入参加人数"></el-input>
+        </el-form-item>
+        <el-form-item label="封面图片" label-width="100px" prop="img">
+          <Uploader v-on:getFile="getFileUrl(arguments)" :change="file.isChange" :name="file.name"></Uploader>
+        </el-form-item>
+        <el-form-item label="阶段总结" label-width="100px" prop="content">
+          <VueUeditorWrap :config="myConfig" v-model="stepContent.content" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="saveActivity()">确定</el-button>
+        </el-form-item>
+      </el-form>
+      <!-- </el-tab-pane>
+      </el-tabs>-->
     </div>
   </el-main>
 </template>
 
 <script>
 import VueUeditorWrap from "vue-ueditor-wrap";
-import { getStep, saveActivity } from "@/api/worklist.js";
+import { saveActivity } from "@/api/worklist.js";
 import Uploader from "@/components/Uploader";
 
 export default {
@@ -62,10 +58,8 @@ export default {
         // UEditor 资源文件的存放路径，如果你使用的是 vue-cli 生成的项目，通常不需要设置该选项，vue-ueditor-wrap 会自动处理常见的情况，如果需要特殊配置，参考下方的常见问题2
         UEDITOR_HOME_URL: process.env.BASE_URL + "UEditor/"
       },
-      steps: [],
-      id: this.$route.query.id,
       file: {},
-      stepId: "0"
+      id: this.$route.query.id
     };
   },
   components: {
@@ -73,11 +67,6 @@ export default {
     Uploader
   },
   methods: {
-    // 根据活动id获取步骤
-    async getSteps() {
-      const res = await getStep(this.id);
-      this.steps = res.data;
-    },
     // 获取wFid和nFid
     getFileUrl(args) {
       this.file.url = args[1];
@@ -93,11 +82,7 @@ export default {
         workId: this.id,
         remark: ""
       });
-      console.log(res);
     }
-  },
-  created() {
-    this.getSteps();
   }
 };
 </script>
