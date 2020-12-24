@@ -1,13 +1,13 @@
 <template>
-  <div style="padding-left: 15px;"  class="bread-container">
-    <span class="iconfont icon-santiaoxian"></span>
+  <div style="padding-left: 15px;" class="bread-container">
+    <span class="iconfont icon-santiaoxian" @click="toggleClick"></span>
     <span>位置：</span>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Hamburger',
+  name: "Hamburger",
   props: {
     isActive: {
       type: Boolean,
@@ -15,8 +15,11 @@ export default {
     }
   },
   methods: {
+    toggleClick() {
+      this.$emit("toggleClick");
+    }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -30,8 +33,8 @@ export default {
 .hamburger.is-active {
   transform: rotate(180deg);
 }
-.bread-container{
+.bread-container {
   font-size: 19px;
-  color:#fff;
+  color: #fff;
 }
 </style>

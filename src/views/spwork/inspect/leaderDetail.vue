@@ -2,63 +2,108 @@
   <el-main>
     <!-- 进度和图标 -->
     <div class="main-content">
-      <div class="down-box">
+      <!-- <div class="down-box">
         <div class="check-icon">
           <img :src="iconImg" class="check-icon-img" alt />
           <span class="check-icon-txt">方案一</span>
         </div>
         <div class="down">查看详细表格下载</div>
-      </div>
-      <el-steps :space="350" :active="3" align-center finish-status="success">
-        <el-step title="准备" description="2020-10-02"></el-step>
-        <el-step title="下发" description="2020-10-02"></el-step>
-        <el-step title="检查" description="2020-10-02"></el-step>
-        <el-step title="完成" description="2020-10-02"></el-step>
+      </div> -->
+      <el-steps :space="350" :active="activeStep" align-center finish-status="success">
+        <el-step
+          v-for="(obj,index) in worklist.steps"
+          :key="index"
+          :title="obj.stepName"
+          :description="obj.finishTime"
+        ></el-step>
       </el-steps>
       <div id="main"></div>
       <!-- tab切换 -->
     </div>
     <!--列表 -->
     <div class="main-list">
-      <el-tabs v-model="status" type="card" class="spwork" @tab-click="change()">
-        <el-tab-pane label="一连" name="1">
+      <el-tabs v-model="status" type="card" class="spwork">
+        <el-tab-pane :label="item.deptName" v-for="(item, index) in this.detail" :key="index">
           <div class="main-list-box">
             <ul class="specialCheck">
-              <li>特殊检查项一</li>
-              <li>特殊检查项二</li>
-              <li>特殊检查项三</li>
+              <li @click="tabTable(0)">普通检查项</li>
+              <li
+                v-for="(spec, specIndex) in special[index]"
+                @click="tabTable(specIndex+1)"
+                :key="specIndex"
+              >特殊检查项{{specIndex+1}}</li>
             </ul>
             <div>
               <el-table
-                ref="multipleTable"
-                :data="list"
+                v-if="common && common[index] && showTableIndex == 0"
+                :data="common[index].values"
                 tooltip-effect="dark"
                 style="width: 100%"
                 border
                 :header-cell-style="{background:'#fafafa'}"
-                @selection-change="handleSelectionChange"
+                v-loading="loading"
               >
-                <el-table-column type="selection" width="55"></el-table-column>
+                <el-table-column type="selection" width="55" label="全选"></el-table-column>
                 <el-table-column
-                  type="index"
-                  width="80"
-                  label="序号"
-                  :index="(currentPage-1)*pageSize+1"
+                  v-for="(item, columnsIndex) in common[index].columns"
+                  :key="columnsIndex"
+                  :prop="item.enName"
+                  :label="item.cnName"
+                  align="center"
                 ></el-table-column>
-                <el-table-column prop="title" label="项目" width="120"></el-table-column>
-                <el-table-column prop="categoryName" label="内容" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="deptName" label="标准检查" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="finishTime" label="完成时间" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="name" label="状态" show-overflow-tooltip>
+                <el-table-column label="状态" width="180" align="center" fixed="right">
                   <template slot-scope="scope">
-                    <a href="javascript:;" @click.stop="downHandle(scope.row)">{{ scope.row.name }}</a>
+                    <span
+                      v-if="common[index].commonScore[scope.$index].status"
+                      class="isdone qualified"
+                    >合格</span>
+                    <span v-else class="isdone unqualified">不合格</span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="content" label="备注" show-overflow-tooltip></el-table-column>
+                <el-table-column label="备注" width="220" align="center" fixed="right">
+                  <template slot-scope="scope">
+                    <!-- v-model="commonScore[(index* common[index].values.length + scope.$index)].remark" -->
+                    <el-input v-model="common[index].commonScore[scope.$index].remark" disabled></el-input>
+                  </template>
+                </el-table-column>
               </el-table>
+              <div v-for="(spec, specIndex) in special[index]" :key="specIndex">
+                <el-table
+                  v-if="showTableIndex == specIndex+1"
+                  :data="spec.values"
+                  style="width: 100%"
+                   tooltip-effect="dark"
+                  border
+                  :header-cell-style="{background:'#fafafa'}"
+                  v-loading="loading"
+                >
+                  <el-table-column
+                    v-for="(item, columnsIndex) in spec.columns"
+                    :key="columnsIndex"
+                    :prop="item.enName"
+                    :label="item.cnName"
+                    align="center"
+                  ></el-table-column>
+                  <el-table-column label="状态" width="180" align="center">
+                    <template slot-scope="scope">
+                      <!-- :active-text="'合格'+ spec.specialScore[scope.$index].status" -->
+                      <span
+                        v-if="spec.specialScore[scope.$index].status"
+                        class="isdone qualified"
+                      >合格</span>
+                      <span v-else class="isdone unqualified">不合格</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="备注" width="220" align="center">
+                    <template slot-scope="scope">
+                      <el-input v-model="spec.specialScore[scope.$index].remark" disabled></el-input>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
             </div>
 
-            <div class="page-box">
+            <!-- <div class="page-box">
               <el-pagination
                 layout="total, prev, pager, next, jumper"
                 :total="total"
@@ -66,54 +111,7 @@
                 :page-size="pageSize"
                 @current-change="handleCurrentChange"
               ></el-pagination>
-            </div>
-          </div>
-        </el-tab-pane>
-        <el-tab-pane label="二连" name="2">
-          <div class="main-list-box">
-            <ul class="specialCheck">
-              <li>特殊检查项一</li>
-              <li>特殊检查项二</li>
-              <li>特殊检查项三</li>
-            </ul>
-            <div>
-              <el-table
-                ref="multipleTable"
-                :data="list"
-                tooltip-effect="dark"
-                style="width: 100%"
-                border
-                :header-cell-style="{background:'#fafafa'}"
-                @selection-change="handleSelectionChange"
-              >
-                <el-table-column type="selection" width="55"></el-table-column>
-                <el-table-column
-                  type="index"
-                  width="80"
-                  label="序号"
-                  :index="(currentPage-1)*pageSize+1"
-                ></el-table-column>
-                <el-table-column prop="title" label="项目" width="120"></el-table-column>
-                <el-table-column prop="categoryName" label="内容" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="deptName" label="标准检查" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="finishTime" label="完成时间" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="name" label="状态" show-overflow-tooltip>
-                  <template slot-scope="scope">
-                    <a href="javascript:;" @click.stop="downHandle(scope.row)">{{ scope.row.name }}</a>
-                  </template>
-                </el-table-column>
-                <el-table-column prop="content" label="备注" show-overflow-tooltip></el-table-column>
-              </el-table>
-            </div>
-            <div class="page-box">
-              <el-pagination
-                layout="total, prev, pager, next, jumper"
-                :total="total"
-                :current-page.sync="currentPage"
-                :page-size="pageSize"
-                @current-change="handleCurrentChange"
-              ></el-pagination>
-            </div>
+            </div>-->
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -124,11 +122,23 @@
 <script>
 import echarts from "echarts";
 import iconImg from "@/assets/image/excel-icon.jpg";
+import { getInspectById, queryScore } from "@/api/worklist";
 export default {
   data() {
     return {
-      status: "1",
-      iconImg: iconImg
+      status: 0,
+      activeStep: 1,
+      worklist: [],
+      iconImg: iconImg,
+      commonTableData: [],
+      commonColumns: [],
+      loading: false,
+      detail: [],
+      common: [],
+      special: [],
+      numData: [], //记录不合格项
+      deptsData: [], //记录连队
+      showTableIndex: 0
     };
   },
   methods: {
@@ -168,22 +178,8 @@ export default {
         xAxis: [
           {
             type: "category",
-            data: [
-              "一连",
-              "二连",
-              "三连",
-              "四连",
-              "五连",
-              "六连",
-              "七连",
-              "八连",
-              "九连",
-              "十连",
-              "十一连",
-              "十二连",
-              "十三连",
-              "十四连"
-            ],
+            // deptsData
+            data: this.deptsData,
             axisTick: {
               alignWithLabel: true
             }
@@ -206,7 +202,8 @@ export default {
             type: "bar",
             legendHoverLink: true, // 是否启用图列 hover 时的联动高亮
             barWidth: "60%",
-            data: [30, 20, 40, 60, 80, 50, 40, 20, 40, 60, 80, 50, 20, 40],
+            // numData
+            data: this.numData,
             barWidth: 25, // 柱形的宽度
             barCategoryGap: "5%", // 柱形的间距
             itemStyle: {
@@ -224,10 +221,119 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    change() {}
+    async queryScoreHandler() {
+      this.common = [];
+      this.special = [];
+      const res = await queryScore({ specialWorkId: this.id });
+      if (res && res.code === "200") {
+        this.detail = res.data;
+        res.data.forEach((item, index) => {
+          const { columns: commonColumns, values: commonValues } = JSON.parse(
+            item.commonJson
+          );
+          let count = 0; //记录连队不合格数量
+          this.deptsData.push(item.deptName); //记录连队
+
+          const commonScore = [];
+          // console.log(commonValues,commonColumns);
+          commonValues.forEach((cv, index) => {
+            // 如果已经打过分，直接读取
+            if (item.commonScores && item.commonScores.length > 0) {
+              let status =
+                item.commonScores[index].colStatusValue == "合格"
+                  ? true
+                  : false;
+              if (!status) {
+                count++;
+              }
+              commonScore.push({
+                status,
+                remark: item.commonScores[index].colRemarkValue
+              });
+            } else {
+              commonScore.push({
+                status: true,
+                remark: ""
+              });
+            }
+          });
+
+          this.common.push({
+            columns: commonColumns,
+            values: commonValues,
+            commonScore
+          });
+
+          const { specialFiles } = item;
+          const s = [];
+          specialFiles.forEach(sf => {
+            const {
+              columns: specialColumns,
+              values: specialValues
+            } = JSON.parse(sf.specialJson);
+            const specialScore = [];
+            specialValues.forEach((sv, index) => {
+              if (sf.scores && sf.scores.length > 0) {
+                let status =
+                  sf.scores[index].colStatusValue == "合格" ? true : false;
+                if (!status) {
+                  count++;
+                }
+                specialScore.push({
+                  status,
+                  remark: sf.scores[index].colRemarkValue
+                });
+              } else {
+                specialScore.push({
+                  status: true,
+                  remark: ""
+                });
+              }
+            });
+            s.push({
+              columns: specialColumns,
+              values: specialValues,
+              specialScore
+            });
+          });
+
+          this.special.push(s);
+          this.numData.push(count);
+        });
+        console.log(this.detail);
+      }
+    },
+    getStep() {
+      this.worklist.steps.forEach((obj, index) => {
+        if (obj.stepStatus == 1) {
+          this.activeStep = index + 1;
+        }
+      });
+    },
+    tabTable(index) {
+      this.showTableIndex = index;
+    }
   },
-  mounted() {
-    this.initCharts();
+  async mounted() {
+    this.loading = true;
+    this.id = this.$route.query.id;
+    if (this.id) {
+      const res = await getInspectById(this.id);
+      if (res && res.code === "200") {
+        this.worklist = res.data;
+        // 计算步骤进度
+        this.getStep();
+      }
+      await this.queryScoreHandler();
+      this.initCharts();
+    } else {
+      this.$message({
+        message: "读取失败",
+        type: "error"
+      });
+    }
+
+    this.loading = false;
   }
 };
 </script>
@@ -292,5 +398,21 @@ export default {
     margin-left: 20px;
     cursor: pointer;
   }
+}
+.isdone {
+  border-radius: 40px;
+  color: #fff;
+  display: inline-block;
+  padding: 0px 12px;
+  font-size: 12px;
+  &.unqualified {
+    background: #f61717;
+  }
+  &.qualified {
+    background: #8a8a8a;
+  }
+}
+.el-input.is-disabled .el-input__inner{
+  background: #fff !important;
 }
 </style>

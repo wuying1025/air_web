@@ -2,13 +2,13 @@
   <el-main>
     <!-- 进度和图标 -->
     <div class="main-content">
-      <div class="down-box">
+      <!-- <div class="down-box">
         <div class="check-icon">
           <img :src="iconImg" class="check-icon-img" alt />
           <span class="check-icon-txt">方案一</span>
         </div>
         <div class="down">查看详细表格下载</div>
-      </div>
+      </div> -->
       <el-steps :space="350" :active="activeStep" align-center finish-status="success">
         <el-step
           v-for="(obj,index) in worklist.steps"
@@ -37,6 +37,7 @@
               <el-table
                 v-if="common && common[index] && showTableIndex == 0"
                 :data="common[index].values"
+                tooltip-effect="dark"
                 style="width: 100%"
                 border
                 :header-cell-style="{background:'#fafafa'}"
@@ -71,6 +72,7 @@
                   v-if="showTableIndex == specIndex+1"
                   :data="spec.values"
                   style="width: 100%"
+                   tooltip-effect="dark"
                   border
                   :header-cell-style="{background:'#fafafa'}"
                   v-loading="loading"
@@ -120,7 +122,7 @@
 <script>
 import echarts from "echarts";
 import iconImg from "@/assets/image/excel-icon.jpg";
-import { getInspectById, queryScore } from "@/api/worklist";
+import { getInspectById, queryMyScore } from "@/api/worklist";
 export default {
   data() {
     return {
@@ -222,10 +224,11 @@ export default {
     async queryScoreHandler() {
       this.common = [];
       this.special = [];
-      const res = await queryScore({ specialWorkId: this.id });
+      const res = await queryMyScore({ specialWorkId: this.id });
       if (res && res.code === "200") {
-        this.detail = res.data;
-        res.data.forEach((item, index) => {
+        this.detail = [res.data];
+        let item = res.data;
+        // res.data.forEach((item, index) => {
           const { columns: commonColumns, values: commonValues } = JSON.parse(
             item.commonJson
           );
@@ -236,6 +239,8 @@ export default {
           // console.log(commonValues,commonColumns);
           commonValues.forEach((cv, index) => {
             // 如果已经打过分，直接读取
+            console.log(commonValues,cv,11)
+            console.log(item,item.commonScores[index])
             if (item.commonScores && item.commonScores.length > 0) {
               let status =
                 item.commonScores[index].colStatusValue == "合格"
@@ -297,8 +302,8 @@ export default {
 
           this.special.push(s);
           this.numData.push(count);
-        });
-        // console.log(this.detail);
+        // });
+        console.log(this.detail);
       }
     },
     getStep() {

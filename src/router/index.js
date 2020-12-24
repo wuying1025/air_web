@@ -73,31 +73,49 @@ export const constantRoutes = [{
 {
   path: '/work',
   component: Layout,
+  redirect: 'index',
+  hidden: true,
+  children: [
+    {
+      path: 'leaderactivity',
+      component: () => import('@/views/spwork/activity/leaderDetail'),
+      name: '专项活动详情页',
+      meta: { title: '专项活动详情页' }
+    },
+    {
+      path: 'activity',
+      component: () => import('@/views/spwork/activity/detail'),
+      name: '专项活动详情',
+      meta: { title: '专项活动详情' }
+    },
+    {
+      // editActivity
+      path: 'editActivity',
+      component: () => import('@/views/spwork/activity/editActivity'),
+      name: '编辑填报活动',
+      meta: { title: '编辑填报活动' }
+    }, {
+      path: 'inspect',
+      component: () => import('@/views/spwork/inspect/detail'),
+      name: '检查活动详情',
+      meta: { title: '检查活动详情' }
+    },
+    {
+      path: 'leaderinspect',
+      component: () => import('@/views/spwork/inspect/leaderDetail'),
+      name: '检查活动详情页',
+      meta: { title: '填报检查活动详情页活动' }
+    }
+  ]
+},
+{
+  path: '/release',
+  component: Layout,
   hidden: true,
   children: [{
-    path: 'inspect',
-    component: () => import('@/views/spwork/inspect/detail'),
-    name: '我的专项检查详情',
-    meta: { title: '我的专项检查详情' }
-  },
-  {
-    path: 'leaderactivity',
-    component: () => import('@/views/spwork/activity/leaderDetail'),
-    name: '专项活动详情页',
-    meta: { title: '专项活动详情页' }
-  },
-  {
-    path: 'activity',
-    component: () => import('@/views/spwork/activity/detail'),
-    name: '专项活动详情',
-    meta: { title: '专项活动详情' }
-  },
-  {
-    // editActivity
-    path: 'editActivity',
-    component: () => import('@/views/spwork/activity/editActivity'),
-    name: '填报活动',
-    meta: { title: '填报活动' }
+    path: 'lawdetail/:id',
+    component: () => import('@/views/law/lawDetail'),
+    hidden: true,
   }]
 },
 {
@@ -155,6 +173,7 @@ export const constantRoutes = [{
     }
   }]
 },
+
 ]
 
 export default new Router({
@@ -164,5 +183,3 @@ export default new Router({
   }),
   routes: constantRoutes
 })
-
-

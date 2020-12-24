@@ -111,3 +111,10 @@ export const queryScore = (data = {}) => request({
     method: 'post',
     data
 })
+
+export const queryMyScore = (data = {}) => request({
+    url: '/special/mycheckscore',
+    method: 'post',
+    data
+})
+

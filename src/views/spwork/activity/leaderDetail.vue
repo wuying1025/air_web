@@ -2,13 +2,13 @@
   <el-main>
     <!-- 进度和图标 -->
     <div class="main-content">
-      <div class="down-box">
+      <!-- <div class="down-box">
         <div class="check-icon">
           <img :src="iconImg" class="check-icon-img" alt />
           <span class="check-icon-txt">方案一</span>
         </div>
-        <!-- <div class="down">查看详细表格下载</div> -->
-      </div>
+        <div class="down">查看详细表格下载</div>
+      </div> -->
       <el-steps :space="350" :active="3" align-center finish-status="success">
         <!-- <el-step title="准备" description="2020-10-02"></el-step>
         <el-step title="下发" description="2020-10-02"></el-step>

@@ -108,7 +108,21 @@ export default {
         }
       } else {
         // 检查类 type 0
-        this.$router.push({ path: "/work/inspect", query: { id: data.id } });
+        if (this.$store.getters.roles[0] == "user") {
+          let link = this.$router.resolve({
+            path: "/work/inspect",
+            query: { id: data.id }
+          });
+          window.open(link.href, "_blank");
+          // this.$router.push({ path: "/work/inspect", query: { id: data.id } });
+        } else if (this.$store.getters.roles[0] == "leader") {
+          let link = this.$router.resolve({
+            path: "/work/leaderinspect",
+            query: { id: data.id }
+          });
+          window.open(link.href, "_blank");
+          // this.$router.push({ path: "/work/leaderinspect", query: { id: data.id } });
+        }
       }
     },
     edit(data) {

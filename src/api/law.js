@@ -7,6 +7,13 @@ export function addContent(data) {
         data: data
     })
 }
+// 根据法规名称获取法规列表
+export function getByTitle(title) {
+    return request({
+        url: '/rawrule/getRaw/'+title,
+        method: 'get'
+    })
+}
 // 获取法规列表
 export function getRawList() {
     return request({

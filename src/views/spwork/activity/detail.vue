@@ -2,13 +2,13 @@
   <el-main>
     <!-- 进度和图标 -->
     <div class="main-content">
-      <div class="down-box">
+      <!-- <div class="down-box">
         <div class="check-icon">
           <img :src="iconImg" class="check-icon-img" alt />
           <span class="check-icon-txt">方案一</span>
         </div>
-        <!-- <div class="down">查看详细表格下载</div> -->
-      </div>
+        <div class="down">查看详细表格下载</div>
+      </div> -->
       <el-steps :space="350" :active="active" align-center finish-status="success">
         <el-step
           v-for="(obj,index) in deptActityList"
