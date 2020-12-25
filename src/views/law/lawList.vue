@@ -14,6 +14,7 @@
           </el-input>
         </li>
         <li class="export-btn" @click="searchTitle">搜索</li>
+        <li class="export-btn" @click="getList">重置</li>
       </ul>
     </div>
 
