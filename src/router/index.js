@@ -109,6 +109,20 @@ export const constantRoutes = [{
   ]
 },
 {
+  path: '/out',
+  component: Layout,
+  redirect: 'index',
+  hidden: true,
+  children: [
+    {
+      path: 'detail',
+      component: () => import('@/views/goout/detail'),
+      name: '外来人员详情页',
+      meta: { title: '外来人员详情页' }
+    }
+  ]
+},
+{
   path: '/release',
   component: Layout,
   hidden: true,
