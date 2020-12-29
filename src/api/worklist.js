@@ -85,7 +85,7 @@ export const getActivityInfo = (id) => {
     })
 }
 // 点击连 切换详情
-export const getDeptWork = (deptId,activityId) => {
+export const getDeptWork = (deptId, activityId) => {
     return request({
         url: `/special/getDeptWork/${deptId}/${activityId}`,
         method: 'get'
@@ -118,3 +118,13 @@ export const queryMyScore = (data = {}) => request({
     data
 })
 
+
+// 下载
+export const exportCheckScore = (data = {}) => {
+    return request({
+        url: '/special/exportCheckScore',
+        method: 'post',
+        responseType: 'blob',
+        data
+    })
+}

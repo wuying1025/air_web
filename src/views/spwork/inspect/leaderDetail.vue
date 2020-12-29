@@ -8,7 +8,7 @@
           <span class="check-icon-txt">方案一</span>
         </div>
         <div class="down">查看详细表格下载</div>
-      </div> -->
+      </div>-->
       <el-steps :space="350" :active="activeStep" align-center finish-status="success">
         <el-step
           v-for="(obj,index) in worklist.steps"
@@ -33,7 +33,11 @@
                 :key="specIndex"
               >特殊检查项{{specIndex+1}}</li>
             </ul>
-            <div>
+            <div class="content-box">
+              <div class="download">
+                <span>打印</span>
+                <span @click="downLoad(item.deptId)">下载</span>
+              </div>
               <el-table
                 v-if="common && common[index] && showTableIndex == 0"
                 :data="common[index].values"
@@ -43,7 +47,7 @@
                 :header-cell-style="{background:'#fafafa'}"
                 v-loading="loading"
               >
-                <el-table-column type="selection" width="55" label="全选"></el-table-column>
+                <!-- <el-table-column type="selection" width="55" label="全选"></el-table-column> -->
                 <el-table-column
                   v-for="(item, columnsIndex) in common[index].columns"
                   :key="columnsIndex"
@@ -72,7 +76,7 @@
                   v-if="showTableIndex == specIndex+1"
                   :data="spec.values"
                   style="width: 100%"
-                   tooltip-effect="dark"
+                  tooltip-effect="dark"
                   border
                   :header-cell-style="{background:'#fafafa'}"
                   v-loading="loading"
@@ -122,7 +126,8 @@
 <script>
 import echarts from "echarts";
 import iconImg from "@/assets/image/excel-icon.jpg";
-import { getInspectById, queryScore } from "@/api/worklist";
+import { getInspectById, queryScore ,exportCheckScore} from "@/api/worklist";
+
 export default {
   data() {
     return {
@@ -138,7 +143,9 @@ export default {
       special: [],
       numData: [], //记录不合格项
       deptsData: [], //记录连队
-      showTableIndex: 0
+      showTableIndex: 0,
+      deptId:0,
+      specialWorkId:0
     };
   },
   methods: {
@@ -300,7 +307,6 @@ export default {
           this.special.push(s);
           this.numData.push(count);
         });
-        console.log(this.detail);
       }
     },
     getStep() {
@@ -312,6 +318,14 @@ export default {
     },
     tabTable(index) {
       this.showTableIndex = index;
+    },
+    async downLoad() {
+      console.log(111,this.detail[0].deptId,this.detail[0].common.specialworkId);
+      const res = await exportCheckScore({
+        deptId: this.detail[0].deptId,
+        specialWorkId: this.detail[0].common.specialworkId
+      });
+      console.log(222, res);
     }
   },
   async mounted() {
@@ -412,7 +426,15 @@ export default {
     background: #8a8a8a;
   }
 }
-.el-input.is-disabled .el-input__inner{
+.el-input.is-disabled .el-input__inner {
   background: #fff !important;
+}
+.content-box{
+  position: relative;
+}
+.download{
+  position: absolute;
+  top:-50px;
+  right:0px;
 }
 </style>
