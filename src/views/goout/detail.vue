@@ -12,11 +12,14 @@
           <el-form-item label="开始时间：">{{ todaywork.startTime }}</el-form-item>
           <el-form-item label="结束时间：">{{ todaywork.endTime }}</el-form-item>
           <el-form-item label="来访人员：">
-            <span
+            <div
               class="out-item"
               v-for="(obj,index) in todaywork.persons"
               :key="index"
-            >{{obj.name}}({{obj.tel}})</span>
+            >{{obj.name}}
+            身份证号：{{obj.idCard}}
+            电话：{{obj.tel}}
+            </div>
           </el-form-item>
           <el-form-item label="来访车辆：">
             <span class="out-item" v-for="(obj,index) in todaywork.cars" :key="index">{{obj.carNum}}</span>
@@ -37,7 +40,7 @@
               v-model="todaywork.leaveTime"
               type="datetime"
               placeholder="选择日期时间"
-              :default-time="new Date()"
+              :default-value="new Date()"
               value-format="yyyy-MM-dd hh:mm:ss"
             ></el-date-picker>
             <el-button type="success" @click="enter(2)">离开</el-button>
@@ -53,13 +56,14 @@
 </template>
 
 <script>
+import {dateFormat} from '@/utils/format.js'
 import { getDetailById, saveRecord } from "@/api/goout.js";
 export default {
   data() {
     return {
       id: this.$route.query.id,
       todaywork: {
-        enterTime:new Date() ,
+        enterTime:'2020-10-20 12:00:01',
         leaveTime:new Date()
       },
       fullscreenLoading: true,
@@ -80,7 +84,6 @@ export default {
       const res = await getDetailById(this.id);
       if (res.code === "200") {
         this.todaywork = res.data;
-        console.log(this.todaywork);
         this.fullscreenLoading = false;
       }
     },
@@ -119,6 +122,6 @@ export default {
   margin-top: 20px;
 }
 .out-item {
-  margin: 0 10px;
+  margin-right:  10px;
 }
 </style>

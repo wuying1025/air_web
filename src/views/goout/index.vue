@@ -29,6 +29,7 @@
         >
           <el-table-column align="center" label="序号" width="120" type="index"></el-table-column>
           <el-table-column align="center" prop="contacts" label="联系人" show-overflow-tooltip></el-table-column>
+          <el-table-column align="center" prop="name" label="来访人员" show-overflow-tooltip></el-table-column>
           <el-table-column align="center" prop="startTime" label="开始时间" show-overflow-tooltip></el-table-column>
           <el-table-column align="center" prop="endTime" label="结束时间" show-overflow-tooltip></el-table-column>
           <el-table-column align="center" prop="title" label="来访事由" show-overflow-tooltip></el-table-column>
