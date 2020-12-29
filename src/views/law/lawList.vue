@@ -8,7 +8,7 @@
             size="medium"
             clearable
             @clear="clearInp"
-            placeholder="请输入搜索内容"
+            placeholder="可根据名称和简介搜索"
           >
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
