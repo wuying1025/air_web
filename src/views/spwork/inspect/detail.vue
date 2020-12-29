@@ -8,7 +8,7 @@
           <span class="check-icon-txt">方案一</span>
         </div>
         <div class="down">查看详细表格下载</div>
-      </div> -->
+      </div>-->
       <el-steps :space="350" :active="activeStep" align-center finish-status="success">
         <el-step
           v-for="(obj,index) in worklist.steps"
@@ -33,7 +33,11 @@
                 :key="specIndex"
               >特殊检查项{{specIndex+1}}</li>
             </ul>
-            <div>
+            <div class="content-box">
+              <div class="download">
+                <span>打印</span>
+                <span @click="downLoad()">下载</span>
+              </div>
               <el-table
                 v-if="common && common[index] && showTableIndex == 0"
                 :data="common[index].values"
@@ -72,7 +76,7 @@
                   v-if="showTableIndex == specIndex+1"
                   :data="spec.values"
                   style="width: 100%"
-                   tooltip-effect="dark"
+                  tooltip-effect="dark"
                   border
                   :header-cell-style="{background:'#fafafa'}"
                   v-loading="loading"
@@ -122,7 +126,7 @@
 <script>
 import echarts from "echarts";
 import iconImg from "@/assets/image/excel-icon.jpg";
-import { getInspectById, queryMyScore } from "@/api/worklist";
+import { getInspectById, queryMyScore, exportCheckScore } from "@/api/worklist";
 export default {
   data() {
     return {
@@ -229,79 +233,76 @@ export default {
         this.detail = [res.data];
         let item = res.data;
         // res.data.forEach((item, index) => {
-          const { columns: commonColumns, values: commonValues } = JSON.parse(
-            item.commonJson
-          );
-          let count = 0; //记录连队不合格数量
-          this.deptsData.push(item.deptName); //记录连队
+        const { columns: commonColumns, values: commonValues } = JSON.parse(
+          item.commonJson
+        );
+        let count = 0; //记录连队不合格数量
+        this.deptsData.push(item.deptName); //记录连队
 
-          const commonScore = [];
-          // console.log(commonValues,commonColumns);
-          commonValues.forEach((cv, index) => {
-            // 如果已经打过分，直接读取
-            console.log(commonValues,cv,11)
-            console.log(item,item.commonScores[index])
-            if (item.commonScores && item.commonScores.length > 0) {
+        const commonScore = [];
+        // console.log(commonValues,commonColumns);
+        commonValues.forEach((cv, index) => {
+          // 如果已经打过分，直接读取
+          console.log(commonValues, cv, 11);
+          console.log(item, item.commonScores[index]);
+          if (item.commonScores && item.commonScores.length > 0) {
+            let status =
+              item.commonScores[index].colStatusValue == "合格" ? true : false;
+            if (!status) {
+              count++;
+            }
+            commonScore.push({
+              status,
+              remark: item.commonScores[index].colRemarkValue
+            });
+          } else {
+            commonScore.push({
+              status: true,
+              remark: ""
+            });
+          }
+        });
+
+        this.common.push({
+          columns: commonColumns,
+          values: commonValues,
+          commonScore
+        });
+
+        const { specialFiles } = item;
+        const s = [];
+        specialFiles.forEach(sf => {
+          const { columns: specialColumns, values: specialValues } = JSON.parse(
+            sf.specialJson
+          );
+          const specialScore = [];
+          specialValues.forEach((sv, index) => {
+            if (sf.scores && sf.scores.length > 0) {
               let status =
-                item.commonScores[index].colStatusValue == "合格"
-                  ? true
-                  : false;
+                sf.scores[index].colStatusValue == "合格" ? true : false;
               if (!status) {
                 count++;
               }
-              commonScore.push({
+              specialScore.push({
                 status,
-                remark: item.commonScores[index].colRemarkValue
+                remark: sf.scores[index].colRemarkValue
               });
             } else {
-              commonScore.push({
+              specialScore.push({
                 status: true,
                 remark: ""
               });
             }
           });
-
-          this.common.push({
-            columns: commonColumns,
-            values: commonValues,
-            commonScore
+          s.push({
+            columns: specialColumns,
+            values: specialValues,
+            specialScore
           });
+        });
 
-          const { specialFiles } = item;
-          const s = [];
-          specialFiles.forEach(sf => {
-            const {
-              columns: specialColumns,
-              values: specialValues
-            } = JSON.parse(sf.specialJson);
-            const specialScore = [];
-            specialValues.forEach((sv, index) => {
-              if (sf.scores && sf.scores.length > 0) {
-                let status =
-                  sf.scores[index].colStatusValue == "合格" ? true : false;
-                if (!status) {
-                  count++;
-                }
-                specialScore.push({
-                  status,
-                  remark: sf.scores[index].colRemarkValue
-                });
-              } else {
-                specialScore.push({
-                  status: true,
-                  remark: ""
-                });
-              }
-            });
-            s.push({
-              columns: specialColumns,
-              values: specialValues,
-              specialScore
-            });
-          });
-
-          this.special.push(s);
-          this.numData.push(count);
+        this.special.push(s);
+        this.numData.push(count);
         // });
         console.log(this.detail);
       }
@@ -315,6 +316,48 @@ export default {
     },
     tabTable(index) {
       this.showTableIndex = index;
+    },
+    // async exportDataList() {
+    //   console.log("导出数据");
+    //   console.log(this.currentQuery);
+    //   const res = await exportData(this.currentQuery);
+    //   const blob = res;
+    //   console.log(typeof res);
+    //   const reader = new FileReader();
+    //   reader.readAsDataURL(blob);
+    //   reader.onload = e => {
+    //     console.log(e);
+    //     const a = document.createElement("a");
+    //     a.download = `知晓导出.xlsx`;
+    //     // 后端设置的文件名称在res.headers的 "content-disposition": "form-data; name=\"attachment\"; filename=\"20181211191944.zip\"",
+    //     a.href = e.target.result;
+    //     console.log(a);
+    //     document.body.appendChild(a);
+    //     a.click();
+    //     document.body.removeChild(a);
+    //   };
+    // },
+    async downLoad() {
+      console.log(1);
+      const res = await exportCheckScore({
+        deptId: this.detail[0].deptId,
+        specialWorkId: this.detail[0].common.specialworkId
+      });
+
+      console.log(2);
+      // const reader = new FileReader();
+      // reader.readAsDataURL(blob);
+      // reader.onload = e => {
+      //   console.log(e);
+      //   const a = document.createElement("a");
+      //   a.download = `知晓导出.xlsx`;
+      //   // 后端设置的文件名称在res.headers的 "content-disposition": "form-data; name=\"attachment\"; filename=\"20181211191944.zip\"",
+      //   a.href = e.target.result;
+      //   console.log(a);
+      //   document.body.appendChild(a);
+      //   a.click();
+      //   document.body.removeChild(a);
+      // };
     }
   },
   async mounted() {
@@ -415,7 +458,15 @@ export default {
     background: #8a8a8a;
   }
 }
-.el-input.is-disabled .el-input__inner{
+.el-input.is-disabled .el-input__inner {
   background: #fff !important;
+}
+.content-box {
+  position: relative;
+}
+.download {
+  position: absolute;
+  top: -50px;
+  right: 0px;
 }
 </style>
