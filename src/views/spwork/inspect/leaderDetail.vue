@@ -22,7 +22,7 @@
     </div>
     <!--列表 -->
     <div class="main-list">
-      <el-tabs v-model="status" type="card" class="spwork">
+      <el-tabs v-model="status" type="card" class="spwork" @tab-click="handleClick">
         <el-tab-pane :label="item.deptName" v-for="(item, index) in this.detail" :key="index">
           <div class="main-list-box">
             <ul class="specialCheck">
@@ -35,7 +35,7 @@
             </ul>
             <div class="content-box">
               <div class="download">
-                <span>打印</span>
+                <!-- <span>打印</span> -->
                 <span @click="downLoad(item.deptId)">下载</span>
               </div>
               <el-table
@@ -58,10 +58,13 @@
                 <el-table-column label="状态" width="180" align="center" fixed="right">
                   <template slot-scope="scope">
                     <span
-                      v-if="common[index].commonScore[scope.$index].status"
+                      v-if="common[index].commonScore[scope.$index].status == 1"
                       class="isdone qualified"
                     >合格</span>
-                    <span v-else class="isdone unqualified">不合格</span>
+                    <span v-else-if="common[index].commonScore[scope.$index].status == 2" class="isdone unqualified">不合格</span>
+                    <span v-else-if="common[index].commonScore[scope.$index].status == 3"
+                      class="isdone qualified"
+                    >未评分</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="备注" width="220" align="center" fixed="right">
@@ -126,7 +129,7 @@
 <script>
 import echarts from "echarts";
 import iconImg from "@/assets/image/excel-icon.jpg";
-import { getInspectById, queryScore ,exportCheckScore} from "@/api/worklist";
+import { getInspectById, queryScore, exportCheckScore } from "@/api/worklist";
 
 export default {
   data() {
@@ -144,8 +147,8 @@ export default {
       numData: [], //记录不合格项
       deptsData: [], //记录连队
       showTableIndex: 0,
-      deptId:0,
-      specialWorkId:0
+      deptId: 0,
+      specialWorkId: 0
     };
   },
   methods: {
@@ -242,14 +245,14 @@ export default {
           this.deptsData.push(item.deptName); //记录连队
 
           const commonScore = [];
-          // console.log(commonValues,commonColumns);
+          // console.log(commonValues,commonColumns,item.commonScores);
           commonValues.forEach((cv, index) => {
-            // 如果已经打过分，直接读取
+            // 如果已经打过分，直接读取  1 合格 2 不合格  3 未打分
             if (item.commonScores && item.commonScores.length > 0) {
               let status =
                 item.commonScores[index].colStatusValue == "合格"
-                  ? true
-                  : false;
+                  ? 1
+                  : 2;
               if (!status) {
                 count++;
               }
@@ -259,7 +262,7 @@ export default {
               });
             } else {
               commonScore.push({
-                status: true,
+                status: 3,
                 remark: ""
               });
             }
@@ -319,13 +322,16 @@ export default {
     tabTable(index) {
       this.showTableIndex = index;
     },
-    async downLoad() {
-      console.log(111,this.detail[0].deptId,this.detail[0].common.specialworkId);
+    handleClick() {
+      this.showTableIndex = 0;
+    },
+    async downLoad(deptId) {
+      console.log(deptId, this.id)
       const res = await exportCheckScore({
-        deptId: this.detail[0].deptId,
-        specialWorkId: this.detail[0].common.specialworkId
+        deptId: deptId,
+        specialWorkId: this.$route.query.id
       });
-      console.log(222, res);
+      console.log(222);
     }
   },
   async mounted() {
@@ -429,12 +435,12 @@ export default {
 .el-input.is-disabled .el-input__inner {
   background: #fff !important;
 }
-.content-box{
+.content-box {
   position: relative;
 }
-.download{
+.download {
   position: absolute;
-  top:-50px;
-  right:0px;
+  top: -50px;
+  right: 0px;
 }
 </style>

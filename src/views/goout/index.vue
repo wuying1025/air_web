@@ -2,14 +2,15 @@
   <div>
     <el-main>
       <div class="main-content">
-        <el-form ref="queryForm" align="right" :inline="true">
+        <el-form ref="queryForm" align="right" :inline="true" @submit.native.prevent>
           <el-form-item  prop="name">
             <el-input
               v-model="search.name"
               placeholder="请输入人员姓名"
-              clearable
               size="small"
               style="width: 240px"
+              @submit.native.prevent
+              v-on:keyup.13="onSearch"
             />
           </el-form-item>
           <el-form-item>

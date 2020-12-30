@@ -35,7 +35,7 @@
             </ul>
             <div class="content-box">
               <div class="download">
-                <span>打印</span>
+                <!-- <span>打印</span> -->
                 <span @click="downLoad()">下载</span>
               </div>
               <el-table
@@ -142,7 +142,8 @@ export default {
       special: [],
       numData: [], //记录不合格项
       deptsData: [], //记录连队
-      showTableIndex: 0
+      showTableIndex: 0,
+      id:this.$route.query.id
     };
   },
   methods: {
@@ -317,47 +318,28 @@ export default {
     tabTable(index) {
       this.showTableIndex = index;
     },
-    // async exportDataList() {
-    //   console.log("导出数据");
-    //   console.log(this.currentQuery);
-    //   const res = await exportData(this.currentQuery);
-    //   const blob = res;
-    //   console.log(typeof res);
-    //   const reader = new FileReader();
-    //   reader.readAsDataURL(blob);
-    //   reader.onload = e => {
-    //     console.log(e);
-    //     const a = document.createElement("a");
-    //     a.download = `知晓导出.xlsx`;
-    //     // 后端设置的文件名称在res.headers的 "content-disposition": "form-data; name=\"attachment\"; filename=\"20181211191944.zip\"",
-    //     a.href = e.target.result;
-    //     console.log(a);
-    //     document.body.appendChild(a);
-    //     a.click();
-    //     document.body.removeChild(a);
-    //   };
-    // },
     async downLoad() {
       console.log(1);
       const res = await exportCheckScore({
         deptId: this.detail[0].deptId,
         specialWorkId: this.detail[0].common.specialworkId
       });
+      const blob = res;
 
       console.log(2);
-      // const reader = new FileReader();
-      // reader.readAsDataURL(blob);
-      // reader.onload = e => {
-      //   console.log(e);
-      //   const a = document.createElement("a");
-      //   a.download = `知晓导出.xlsx`;
-      //   // 后端设置的文件名称在res.headers的 "content-disposition": "form-data; name=\"attachment\"; filename=\"20181211191944.zip\"",
-      //   a.href = e.target.result;
-      //   console.log(a);
-      //   document.body.appendChild(a);
-      //   a.click();
-      //   document.body.removeChild(a);
-      // };
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onload = e => {
+        console.log(e);
+        const a = document.createElement("a");
+        a.download = `知晓导出.xlsx`;
+        // 后端设置的文件名称在res.headers的 "content-disposition": "form-data; name=\"attachment\"; filename=\"20181211191944.zip\"",
+        a.href = e.target.result;
+        console.log(a);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      };
     }
   },
   async mounted() {
