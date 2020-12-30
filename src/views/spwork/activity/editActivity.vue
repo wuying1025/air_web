@@ -76,6 +76,13 @@ export default {
       this.stepContent.imgUrl = args.url;
     },
     async saveActivity() {
+      console.log(123);
+      console.log({
+        ...this.stepContent,
+        stepId: this.stepId,
+        workId: this.id,
+        remark: ""
+      },1111)
       const res = await saveActivity({
         ...this.stepContent,
         stepId: this.stepId,

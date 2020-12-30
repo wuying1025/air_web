@@ -54,7 +54,7 @@ export default {
   props: ["change", "name"], //change true 代表修改|false代表添加
   methods: {
     onFileSuccess(rootFile, file, response, chunk) {
-      console.log("file-success", response, file);
+      // console.log("file-success", response, file);
       let result = JSON.parse(response);
       let obj = {
         wFid: result.data.wFid,

@@ -166,6 +166,12 @@ export default {
       this.checkList = val;
     },
     donwloadAll() {
+      if(this.checkList.length == 0){
+        this.$message({
+          message: "请勾选需要下载的法规文件",
+          type: "warning"
+        });
+      }
       // 循环选中列表下载
       this.checkList.forEach(item => {
         this.downHandle(item);

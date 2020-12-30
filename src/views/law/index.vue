@@ -44,27 +44,27 @@
                   :header-cell-style="{background:'#fafafa'}"
                   @selection-change="handleSelectionChange"
                   >
-                  <el-table-column type="selection" width="55"></el-table-column>
+                  <el-table-column type="selection" width="40"></el-table-column>
                   <el-table-column
                     type="index"
                      width="50"
                     label="序号"
                     :index="(currentPage-1)*pageSize+1"
                   ></el-table-column>
-                  <el-table-column prop="title" label="名称" width="120"></el-table-column>
-                  <el-table-column prop="categoryName" label="分类" show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="deptName" label="部门" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="title" label="名称" width="160"></el-table-column>
+                  <el-table-column prop="categoryName" label="分类"  width="120" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="deptName" label="发文部门" width="80"  show-overflow-tooltip></el-table-column>
                   <el-table-column prop="finishTime" label="截止时间" show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="name" label="下载" show-overflow-tooltip>
+                  <el-table-column prop="name" label="下载" width="60" show-overflow-tooltip>
                     <template slot-scope="scope">
                       <a
                         href="javascript:;"
                         @click.stop="downHandle(scope.row)"
-                      >{{ scope.row.name }}</a>
+                      >下载</a>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="content" label="条令内容" show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="isDone" label="相关工作落实" show-overflow-tooltip>
+                  <el-table-column prop="content" label="内容" width="300" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="isDone" label="相关工作落实" width="100" show-overflow-tooltip>
                     <template slot-scope="scope">
                       <span v-if="scope.row.isDone == 1" class="isdone finish" @click="goUnFinish(scope.row)">已落实</span>
                       <!-- isTimeout  1|0 是否超时 不超时判断是否落实 -->
@@ -100,27 +100,27 @@
                   border
                   :header-cell-style="{background:'#fafafa'}"
                 >
-                  <el-table-column type="selection" width="55"></el-table-column>
+                  <el-table-column type="selection" width="40"></el-table-column>
                   <el-table-column
                     type="index"
-                    width="80"
+                     width="50"
                     label="序号"
                     :index="(currentPage-1)*pageSize+1"
                   ></el-table-column>
-                  <el-table-column prop="title" label="法规名称" width="120"></el-table-column>
-                  <el-table-column prop="categoryName" label="法规分类" show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="deptName" label="部门" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="title" label="名称" width="160"></el-table-column>
+                  <el-table-column prop="categoryName" label="分类"  width="120" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="deptName" label="发文部门" width="80"  show-overflow-tooltip></el-table-column>
                   <el-table-column prop="finishTime" label="截止时间" show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="name" label="下载" show-overflow-tooltip>
+                  <el-table-column prop="name" label="下载" width="60" show-overflow-tooltip>
                     <template slot-scope="scope">
                       <a
-                        href="javasvript:;"
+                        href="javascript:;"
                         @click.stop="downHandle(scope.row)"
-                      >{{ scope.row.name }}</a>
+                      >下载</a>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="content" label="条令内容" show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="isDone" label="相关工作落实" show-overflow-tooltip>
+                  <el-table-column prop="content" label="内容" width="300" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="isDone" label="相关工作落实" width="100" show-overflow-tooltip>
                     <template slot-scope="scope">
                       <!-- isTimeout  1|0 是否超时 不超时判断是否落实 -->
                       <span v-if="scope.row.isDone == 1" class="isdone finish"  @click="goUnFinish(scope.row)">已落实</span>
@@ -152,27 +152,27 @@
                   border
                   :header-cell-style="{background:'#fafafa'}"
                 >
-                  <el-table-column type="selection" width="55"></el-table-column>
+                  <el-table-column type="selection" width="40"></el-table-column>
                   <el-table-column
                     type="index"
-                    width="80"
+                     width="50"
                     label="序号"
                     :index="(currentPage-1)*pageSize+1"
                   ></el-table-column>
-                  <el-table-column prop="title" label="法规名称" width="120"></el-table-column>
-                  <el-table-column prop="categoryName" label="法规分类" show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="deptName" label="部门" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="title" label="名称" width="160"></el-table-column>
+                  <el-table-column prop="categoryName" label="分类"  width="120" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="deptName" label="发文部门" width="80"  show-overflow-tooltip></el-table-column>
                   <el-table-column prop="finishTime" label="截止时间" show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="name" label="下载" show-overflow-tooltip>
+                  <el-table-column prop="name" label="下载" width="60" show-overflow-tooltip>
                     <template slot-scope="scope">
                       <a
                         href="javascript:;"
                         @click.stop="downHandle(scope.row)"
-                      >{{ scope.row.name }}</a>
+                      >下载</a>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="content" label="条令内容" show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="isDone" label="相关工作落实" show-overflow-tooltip>
+                  <el-table-column prop="content" label="内容" width="300" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="isDone" label="相关工作落实" width="100" show-overflow-tooltip>
                     <template slot-scope="scope">
                       <!-- isTimeout  1|0 是否超时 不超时判断是否落实 -->
                       <span
@@ -208,27 +208,27 @@
                   border
                   :header-cell-style="{background:'#fafafa'}"
                 >
-                  <el-table-column type="selection" width="55"></el-table-column>
+                  <el-table-column type="selection" width="40"></el-table-column>
                   <el-table-column
                     type="index"
-                    width="80"
+                     width="50"
                     label="序号"
                     :index="(currentPage-1)*pageSize+1"
                   ></el-table-column>
-                  <el-table-column prop="title" label="法规名称" width="120"></el-table-column>
-                  <el-table-column prop="categoryName" label="法规分类" show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="deptName" label="部门" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="title" label="名称" width="160"></el-table-column>
+                  <el-table-column prop="categoryName" label="分类"  width="120" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="deptName" label="发文部门" width="80"  show-overflow-tooltip></el-table-column>
                   <el-table-column prop="finishTime" label="截止时间" show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="name" label="下载" show-overflow-tooltip>
+                  <el-table-column prop="name" label="下载" width="60" show-overflow-tooltip>
                     <template slot-scope="scope">
                       <a
                         href="javascript:;"
                         @click.stop="downHandle(scope.row)"
-                      >{{ scope.row.name }}</a>
+                      >下载</a>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="content" label="条令内容" show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="isDone" label="相关工作落实" show-overflow-tooltip>
+                  <el-table-column prop="content" label="内容" width="300" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="isDone" label="相关工作落实" width="100" show-overflow-tooltip>
                     <template slot-scope="scope">
                       <!-- isTimeout  1|0 是否超时 不超时判断是否落实 -->
                       <span v-if="scope.row.isTimeout > 0" class="isdone overtime">超时</span>
@@ -350,6 +350,12 @@ export default {
       this.checkList = val;
     },
     donwloadAll() {
+      if(this.checkList.length == 0){
+        this.$message({
+          message: "请勾选需要下载的法规文件",
+          type: "warning"
+        });
+      }
       // 循环选中列表下载
       this.checkList.forEach(item => {
         this.downHandle(item);
