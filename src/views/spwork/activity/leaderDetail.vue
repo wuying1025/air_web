@@ -35,7 +35,7 @@
         >
           <div class="main-list-box">
             <!-- 步骤条 -->
-            <el-steps direction="vertical" class="step-box" :active="3" space="155px">
+            <el-steps direction="vertical" class="step-box" :active="active" space="155px">
               <el-step v-for="(obj,index) in deptActityList" :key="index" :title="obj.stepName"></el-step>
             </el-steps>
             <!-- 步骤列表 -->
@@ -71,6 +71,7 @@ export default {
       steps: [],
       deptMap: {},
       barChart: [],
+      active:0,
       deptActityList: [] //部门活动列表
     };
   },
@@ -164,6 +165,9 @@ export default {
       this.steps = res.data.step;
       this.deptMap = res.data.deptMap;
       this.scope = res.data.scope;
+
+      // 计算完成进度
+      this.active = this.getStep();
       // 生成绘制柱状图的数据
       this.barChart = this.getChart();
       // 初始化柱状图
@@ -175,6 +179,19 @@ export default {
       let activityId = this.id; //活动id
       const res = await getDeptWork(deptId, this.id);
       this.deptActityList = res.data;
+    },
+    getStep() {
+      let num = 1;
+      let nowDate = new Date();
+      for (var i = 0; i < this.deptActityList.length; i++) {
+        let obj = this.deptActityList[i];
+        //finishTime:"2020-12-15 00:00:00"
+        let finishDate = new Date(obj.finishTime);
+        if (nowDate.getTime() > finishDate.getTime()) {
+          num = i + 1;
+        }
+      }
+      return num;
     },
     getChart() {
       let chartList = [["product"]];

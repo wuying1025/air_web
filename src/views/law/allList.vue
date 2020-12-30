@@ -45,32 +45,32 @@
                   :header-cell-style="{background:'#fafafa'}"
                   @selection-change="handleSelectionChange"
                 >
-                  <el-table-column type="selection" width="55"></el-table-column>
+                  <el-table-column type="selection" width="40" ></el-table-column>
                   <el-table-column
                     type="index"
-                    width="80"
+                    width="50"
                     label="序号"
                     :index="(currentPage-1)*pageSize+1"
                   ></el-table-column>
-                  <el-table-column prop="title" label="法规名称" width="120"></el-table-column>
-                  <el-table-column prop="categoryName" label="法规分类" show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="deptName" label="部门" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="title" label="名称" width="160"></el-table-column>
+                  <el-table-column prop="categoryName" label="分类"  width="120" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="deptName" label="发文部门" width="80"  show-overflow-tooltip></el-table-column>
                   <el-table-column prop="finishTime" label="截止时间" show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="name" label="下载" show-overflow-tooltip>
+                  <el-table-column prop="name" label="下载" width="50" show-overflow-tooltip>
                     <template slot-scope="scope">
                       <a
                         href="javascript:;"
                         @click.stop="downHandle(scope.row)"
-                      >{{ scope.row.name }}</a>
+                      >下载</a>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="content" label="条令内容" show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="content" label="完成详情" show-overflow-tooltip>
+                  <el-table-column prop="content" label="内容" width="270" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="content" label="完成详情" width="80" show-overflow-tooltip>
                     <template slot-scope="scope">
                       <span>{{scope.row.doneCount}}/{{scope.row.deptCount}}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="isDone" label="相关工作落实" show-overflow-tooltip>
+                  <el-table-column prop="isDone" label="相关工作落实" width="100" show-overflow-tooltip>
                     <template slot-scope="scope">
                       <span class="detail-btn" @click="go(scope.row.id)">查看</span>
                     </template>

@@ -47,12 +47,12 @@
                   <el-table-column type="selection" width="55"></el-table-column>
                   <el-table-column
                     type="index"
-                    width="80"
+                     width="50"
                     label="序号"
                     :index="(currentPage-1)*pageSize+1"
                   ></el-table-column>
-                  <el-table-column prop="title" label="法规名称" width="120"></el-table-column>
-                  <el-table-column prop="categoryName" label="法规分类" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="title" label="名称" width="120"></el-table-column>
+                  <el-table-column prop="categoryName" label="分类" show-overflow-tooltip></el-table-column>
                   <el-table-column prop="deptName" label="部门" show-overflow-tooltip></el-table-column>
                   <el-table-column prop="finishTime" label="截止时间" show-overflow-tooltip></el-table-column>
                   <el-table-column prop="name" label="下载" show-overflow-tooltip>
