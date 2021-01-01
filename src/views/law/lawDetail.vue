@@ -113,7 +113,7 @@ export default {
         let end = 0;
         start = first - 20 > 0 ? first - 20 : first;
         end = first + 20 < non_html.length ? first + 20 : first + all.length;
-        res = `<span data-ref="a${indexArr[i++]}">${non_html.substring(
+        res = `<span style="display:block" data-ref="a${indexArr[i++]}">${non_html.substring(
           start,
           end
         )}</span>`;
@@ -136,9 +136,11 @@ export default {
     },
     // 测试滚动
     testScroll(event) {
-      let thisRef = event.target.dataset.ref;
-      let thisTop = document.getElementById(thisRef).offsetTop;
-      this.$refs.textContent.scrollTo(0, thisTop - 230);
+      if (event.target.dataset.ref) {
+        let thisRef = event.target.dataset.ref;
+        let thisTop = document.getElementById(thisRef).offsetTop;
+        this.$refs.textContent.scrollTo(0, thisTop - 230);
+      }
     },
     // 获取法规列表数据
     getList() {
