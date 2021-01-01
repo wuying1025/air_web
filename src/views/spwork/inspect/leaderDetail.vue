@@ -34,10 +34,10 @@
               >特殊检查项{{specIndex+1}}</li>
             </ul>
             <div class="content-box">
-              <div class="download">
-                <!-- <span>打印</span> -->
+              <!-- <div class="download">
+                <span>打印</span>
                 <span @click="downLoad(item.deptId)">下载</span>
-              </div>
+              </div> -->
               <el-table
                 v-if="common && common[index] && showTableIndex == 0"
                 :data="common[index].values"

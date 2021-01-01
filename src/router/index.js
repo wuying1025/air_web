@@ -55,8 +55,14 @@ export const constantRoutes = [{
   redirect: 'index',
   children: [{
     path: 'index',
-    component: () => import('@/views/law'),
+    component: () => import('@/views/index'),
     name: '首页',
+    meta: {
+      title: '首页',
+      icon: 'dashboard',
+      noCache: true,
+      affix: true
+    }
   }]
 },
 {
@@ -119,6 +125,12 @@ export const constantRoutes = [{
       component: () => import('@/views/goout/detail'),
       name: '外来人员详情页',
       meta: { title: '外来人员详情页' }
+    },
+    {
+      path: 'leaderdetail',
+      component: () => import('@/views/goout/leaderDetail'),
+      name: '外来人员详情',
+      meta: { title: '外来人员详情' }
     }
   ]
 },

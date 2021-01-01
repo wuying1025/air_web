@@ -31,7 +31,7 @@
         <div class="login-code">
           <img :src="codeUrl" @click="getCode" />
         </div>
-      </el-form-item> -->
+      </el-form-item>-->
       <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
       <el-form-item style="width:100%;">
         <el-button
@@ -75,9 +75,7 @@ export default {
         username: [
           { required: true, trigger: "blur", message: "用户名不能为空" }
         ],
-        password: [
-          { required: true, trigger: "blur", message: "密码不能为空" }
-        ],
+        password: [{ required: true, trigger: "blur", message: "密码不能为空" }]
         // code: [{ required: true, trigger: "change", message: "验证码不能为空" }]
       },
       loading: false,
@@ -133,7 +131,7 @@ export default {
           }
           this.$store
             .dispatch("Login", this.loginForm)
-            .then((res) => {
+            .then(res => {
               if (res == 2) {
                 this.$message({
                   message: "验证码错误",
@@ -143,6 +141,7 @@ export default {
                 this.loading = false;
                 // this.getCode();
               } else {
+                
                 this.$router.push('/');
               }
             })

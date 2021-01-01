@@ -8,6 +8,13 @@ export const selectIn = (data = {}) => request({
     data
 })
 
+// 领导查询外来记录
+export const selectInLeader = (data = {}) => request({
+    url: '/in/selectInLeader',
+    method: 'post',
+    data
+})
+
 // 根据id查询进入记录
 export const getDetailById = (id) => request({
     url: `/in/getInById/${id}`,

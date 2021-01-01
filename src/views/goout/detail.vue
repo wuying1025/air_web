@@ -6,7 +6,7 @@
         v-loading.fullscreen.lock="fullscreenLoading"
         v-if="!fullscreenLoading"
       >
-        <el-form :rules="rules" ref="form" :model="todaywork" label-width="100px" size="medium">
+        <el-form  ref="form" :model="todaywork" label-width="100px" size="medium">
           <el-form-item label="联系人：">{{ todaywork.contacts }}</el-form-item>
           <el-form-item label="来访事由：">{{ todaywork.title }}</el-form-item>
           <el-form-item label="来访时段">{{ todaywork.startTime }} 至 {{ todaywork.endTime }}</el-form-item>

@@ -3,7 +3,7 @@
     <el-main>
       <div class="main-content">
         <el-form ref="queryForm" align="right" :inline="true" @submit.native.prevent>
-          <el-form-item  prop="name">
+          <el-form-item prop="name">
             <el-input
               v-model="search.name"
               placeholder="请输入人员姓名"
@@ -14,7 +14,13 @@
             />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search" style="background:rgb(74, 119, 252)" size="mini" @click="onSearch">搜索</el-button>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              style="background:rgb(74, 119, 252)"
+              size="mini"
+              @click="onSearch"
+            >搜索</el-button>
             <el-button icon="el-icon-refresh" size="mini" @click="onReset">重置</el-button>
           </el-form-item>
         </el-form>
@@ -70,13 +76,19 @@ export default {
       currentPage: 0, //分页当前页
       pageSize: 10,
       total: 0, //总页数
-      search:{
-          name:''
+      search: {
+        name: ""
       }
     };
   },
   methods: {
-    async selectIn(searchData = {...this.search,size:this.pageSize,current:this.currentPage}) {
+    async selectIn(
+      searchData = {
+        ...this.search,
+        size: this.pageSize,
+        current: this.currentPage
+      }
+    ) {
       this.loading = true;
       const res = await selectIn(searchData);
       // console.log(res)
@@ -86,18 +98,18 @@ export default {
       this.loading = false;
     },
     showDetail(data) {
-      this.$router.push({path:"/out/detail",query:{id:data.id}});
+      this.$router.push({ path: "/out/detail", query: { id: data.id } });
     },
     handleCurrentChange(value) {
       this.currentPage = value;
       this.selectIn();
     },
-    onSearch(){
-        this.selectIn();
+    onSearch() {
+      this.selectIn();
     },
-    onReset(){
-        this.search.name = "";
-        this.selectIn();
+    onReset() {
+      this.search.name = "";
+      this.selectIn();
     }
   },
   created() {
