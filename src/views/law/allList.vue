@@ -52,10 +52,10 @@
                     label="序号"
                     :index="(currentPage-1)*pageSize+1"
                   ></el-table-column>
-                  <el-table-column prop="title" label="名称" width="160"></el-table-column>
+                  <el-table-column prop="title" label="名称" ></el-table-column>
                   <el-table-column prop="categoryName" label="分类"  width="120" show-overflow-tooltip></el-table-column>
                   <el-table-column prop="deptName" label="发文部门" width="80"  show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="finishTime" label="截止时间" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="content" label="内容"  show-overflow-tooltip></el-table-column>
                   <el-table-column prop="name" label="下载" width="50" show-overflow-tooltip>
                     <template slot-scope="scope">
                       <a
@@ -64,7 +64,7 @@
                       >下载</a>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="content" label="内容" width="270" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="finishTime" label="截止时间" width="250" show-overflow-tooltip></el-table-column>
                   <el-table-column prop="content" label="完成详情" width="80" show-overflow-tooltip>
                     <template slot-scope="scope">
                       <span>{{scope.row.doneCount}}/{{scope.row.deptCount}}</span>

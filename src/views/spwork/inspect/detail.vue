@@ -34,10 +34,12 @@
               >特殊检查项{{specIndex+1}}</li>
             </ul>
             <div class="content-box">
-              <!-- <div class="download">
-                <span>打印</span>
-                <span @click="downLoad()">下载</span>
-              </div> -->
+               <div class="download">
+                <!-- <span>打印</span>
+                <i class="el-icon-printer"></i> -->
+                <span @click="downLoad(item.deptId)">下载</span>
+                <i class="el-icon-download"></i>
+              </div>
               <el-table
                 v-if="common && common[index] && showTableIndex == 0"
                 :data="common[index].values"
@@ -58,10 +60,13 @@
                 <el-table-column label="状态" width="180" align="center" fixed="right">
                   <template slot-scope="scope">
                     <span
-                      v-if="common[index].commonScore[scope.$index].status"
+                      v-if="common[index].commonScore[scope.$index].status == 1"
                       class="isdone qualified"
                     >合格</span>
-                    <span v-else class="isdone unqualified">不合格</span>
+                    <span v-else-if="common[index].commonScore[scope.$index].status == 2" class="isdone unqualified">不合格</span>
+                    <span v-else-if="common[index].commonScore[scope.$index].status == 3"
+                      class="isdone qualified"
+                    >未评分</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="备注" width="220" align="center" fixed="right">
@@ -143,7 +148,7 @@ export default {
       numData: [], //记录不合格项
       deptsData: [], //记录连队
       showTableIndex: 0,
-      id:this.$route.query.id
+      id: this.$route.query.id
     };
   },
   methods: {
@@ -248,7 +253,7 @@ export default {
           console.log(item, item.commonScores[index]);
           if (item.commonScores && item.commonScores.length > 0) {
             let status =
-              item.commonScores[index].colStatusValue == "合格" ? true : false;
+              item.commonScores[index].colStatusValue == "合格" ? 1 : 2;
             if (!status) {
               count++;
             }
@@ -258,7 +263,7 @@ export default {
             });
           } else {
             commonScore.push({
-              status: true,
+              status: 3,
               remark: ""
             });
           }
@@ -319,20 +324,17 @@ export default {
       this.showTableIndex = index;
     },
     async downLoad() {
-      console.log(1);
       const res = await exportCheckScore({
         deptId: this.detail[0].deptId,
         specialWorkId: this.detail[0].common.specialworkId
       });
       const blob = res;
-      
-      console.log(2);
+
       const reader = new FileReader();
       reader.readAsDataURL(blob);
       reader.onload = e => {
-        console.log(e);
         const a = document.createElement("a");
-        a.download = `知晓导出.xlsx`;
+        a.download = `检查.xlsx`;
         // 后端设置的文件名称在res.headers的 "content-disposition": "form-data; name=\"attachment\"; filename=\"20181211191944.zip\"",
         a.href = e.target.result;
         console.log(a);
@@ -448,7 +450,12 @@ export default {
 }
 .download {
   position: absolute;
-  top: -50px;
+  top: -40px;
   right: 0px;
+  color:#8a8a8a;
+  cursor: pointer;
+  .el-icon-printer{
+    margin-right: 8px;
+  }
 }
 </style>

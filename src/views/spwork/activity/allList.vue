@@ -87,41 +87,41 @@ export default {
       // 活动类type 1 跳转活动详情页
       if (data.type == 1) {
         if (this.$store.getters.roles[0] == "user") {
-          // 小兵
-          let link = this.$router.resolve({
-            path: "/work/activity",
-            query: { id: data.id }
-          });
-          window.open(link.href, "_blank");
-          // this.$router.push({ path: "/work/activity", query: { id: data.id } });
+          // // 小兵
+          // let link = this.$router.resolve({
+          //   path: "/work/activity",
+          //   query: { id: data.id }
+          // });
+          // window.open(link.href, "_blank");
+          this.$router.push({ path: "/work/activity", query: { id: data.id } });
         } else if (this.$store.getters.roles[0] == "leader") {
-          let link = this.$router.resolve({
-            path: "/work/leaderactivity",
-            query: { id: data.id }
-          });
-          window.open(link.href, "_blank");
-          //领导
-          // this.$router.push({
+          // let link = this.$router.resolve({
           //   path: "/work/leaderactivity",
           //   query: { id: data.id }
           // });
+          // window.open(link.href, "_blank");
+          //领导
+          this.$router.push({
+            path: "/work/leaderactivity",
+            query: { id: data.id }
+          });
         }
       } else {
         // 检查类 type 0
         if (this.$store.getters.roles[0] == "user") {
-          let link = this.$router.resolve({
-            path: "/work/inspect",
-            query: { id: data.id }
-          });
-          window.open(link.href, "_blank");
-          // this.$router.push({ path: "/work/inspect", query: { id: data.id } });
+          // let link = this.$router.resolve({
+          //   path: "/work/inspect",
+          //   query: { id: data.id }
+          // });
+          // window.open(link.href, "_blank");
+          this.$router.push({ path: "/work/inspect", query: { id: data.id } });
         } else if (this.$store.getters.roles[0] == "leader") {
-          let link = this.$router.resolve({
-            path: "/work/leaderinspect",
-            query: { id: data.id }
-          });
-          window.open(link.href, "_blank");
-          // this.$router.push({ path: "/work/leaderinspect", query: { id: data.id } });
+          // let link = this.$router.resolve({
+          //   path: "/work/leaderinspect",
+          //   query: { id: data.id }
+          // });
+          // window.open(link.href, "_blank");
+          this.$router.push({ path: "/work/leaderinspect", query: { id: data.id } });
         }
       }
     },
