@@ -91,7 +91,6 @@ export default {
     ) {
       this.loading = true;
       const res = await selectInLeader(searchData);
-      // console.log(res)
       if (res && res.code === "200") {
         this.list = res.data.records;
       }

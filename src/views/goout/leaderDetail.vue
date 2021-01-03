@@ -84,7 +84,6 @@ export default {
   },
   methods: {
     async getListDetail() {
-      console.log(this.id,111)
       const res = await getDetailById(this.id);
       if (res.code === "200") {
         this.outsider = res.data;
