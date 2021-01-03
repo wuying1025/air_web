@@ -33,7 +33,8 @@
             <span class="out-item" v-for="(obj,index) in todaywork.cars" :key="index">{{obj.carNum}}</span>
           </el-form-item>
           <el-form-item label="备注:">{{ todaywork.remark }}</el-form-item>
-          <el-form-item label="进入时间:">
+          
+          <el-form-item label="进入时间:" v-if="todaywork.records[0].type == 2">
             <el-date-picker
               v-model="enterTime"
               type="datetime"
@@ -42,7 +43,7 @@
             ></el-date-picker>
             <el-button type="warning" @click="enter(1)">进入</el-button>
           </el-form-item>
-          <el-form-item label="离开时间:">
+          <el-form-item label="离开时间:" v-else-if="todaywork.records[0].type == 1">
             <el-date-picker
               v-model="leaveTime"
               type="datetime"
@@ -70,7 +71,8 @@ export default {
       id: this.$route.query.id,
       enterTime: "",
       leaveTime: "",
-      fullscreenLoading: true
+      fullscreenLoading: true,
+      todaywork:{}
     };
   },
   methods: {
@@ -94,6 +96,9 @@ export default {
           message: "记录成功",
           type: "success"
         });
+        
+        this.initTime();
+        this.getListDetail();
       }
     },
     async openTabWin(url, type) {

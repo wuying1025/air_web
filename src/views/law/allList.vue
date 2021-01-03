@@ -207,7 +207,6 @@ export default {
             resolve(nodes);
           });
         } else if (level == 1) {
-          console.log(1, level);
 
           getSubCate({ id: node.value }).then(res => {
             const nodes = res.data.map(item => ({

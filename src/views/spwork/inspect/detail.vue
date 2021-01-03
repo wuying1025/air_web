@@ -249,8 +249,6 @@ export default {
         // console.log(commonValues,commonColumns);
         commonValues.forEach((cv, index) => {
           // 如果已经打过分，直接读取
-          console.log(commonValues, cv, 11);
-          console.log(item, item.commonScores[index]);
           if (item.commonScores && item.commonScores.length > 0) {
             let status =
               item.commonScores[index].colStatusValue == "合格" ? 1 : 2;
@@ -310,7 +308,6 @@ export default {
         this.special.push(s);
         this.numData.push(count);
         // });
-        console.log(this.detail);
       }
     },
     getStep() {
@@ -337,7 +334,6 @@ export default {
         a.download = `检查.xlsx`;
         // 后端设置的文件名称在res.headers的 "content-disposition": "form-data; name=\"attachment\"; filename=\"20181211191944.zip\"",
         a.href = e.target.result;
-        console.log(a);
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
