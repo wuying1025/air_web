@@ -93,6 +93,7 @@ export default {
       const res = await selectIn(searchData);
       if (res && res.code === "200") {
         this.list = res.data.records;
+        this.total = res.data.total;
       }
       this.loading = false;
     },
