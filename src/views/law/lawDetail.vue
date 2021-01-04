@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" v-loading="loading">
+  <div class="app-container law-detail-xf" v-loading="loading">
     <div class="content">
       <div class="control-content">
       <div class="search-form">
@@ -166,6 +166,7 @@ export default {
           thisContent += item.content;
         });
         this.content = decode(thisContent);
+        console.log(this.content)
         this.htmlContent = this.content
         this.loading = false;
       });
@@ -181,7 +182,15 @@ export default {
   components: { Tinymce },
 };
 </script>
-<style scoped>
+<style lang="scss">
+.law-detail-xf{
+.textContent > div{
+  width: 100px !important;
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
 h3 {
   font-size: 30px;
   margin:20px 0;
@@ -295,4 +304,6 @@ h3 {
 .control-bar span{
   cursor: pointer;
 }
+}
+
 </style>
