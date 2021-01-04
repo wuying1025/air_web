@@ -9,6 +9,7 @@
       </div>
       <div class="control-bar">
         <el-button @click="printTest" size="small" type="text" icon="el-icon-printer">打印</el-button>
+        <el-button @click="closePage" size="small" type="text" icon="el-icon-close">关闭</el-button>
       </div>
     </div>
     <div class="app-container">
@@ -141,6 +142,10 @@ export default {
         let thisTop = document.getElementById(thisRef).offsetTop;
         this.$refs.textContent.scrollTo(0, thisTop - 230);
       }
+    },
+    //关闭页面
+    closePage(){
+      this.$router.push("/law/lawlist")
     },
     // 获取法规列表数据
     getList() {
