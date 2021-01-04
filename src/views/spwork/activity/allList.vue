@@ -80,6 +80,7 @@ export default {
       // console.log(res)
       if (res && res.code === "200") {
         this.workList = res.data.records;
+        this.total = res.data.total;
       }
       this.loading = false;
     },

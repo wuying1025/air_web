@@ -34,7 +34,7 @@
           </el-form-item>
           <el-form-item label="备注:">{{ todaywork.remark }}</el-form-item>
           
-          <el-form-item label="进入时间:" v-if="todaywork.records[0].type == 2">
+          <el-form-item label="进入时间:" v-if="todaywork.records.length == 0 || todaywork.records[0].type == 2 ">
             <el-date-picker
               v-model="enterTime"
               type="datetime"
