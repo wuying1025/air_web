@@ -19,12 +19,14 @@
     </div>
 
     <div class="content">
-      <el-table @row-click="checkLine" :data="dataList" style="width: 100%" v-loading="loading">
-        <el-table-column
-          type="index"
-          width="50"
-          label="序号">
-          </el-table-column>
+      <el-table
+        @row-click="checkLine"
+        :data="dataList"
+        style="width: 100%"
+        v-loading="loading"
+      >
+        <el-table-column type="index" width="50" label="序号">
+        </el-table-column>
         <el-table-column prop="name" label="名称" width="130"></el-table-column>
         <el-table-column prop="createTime" label="添加时间"></el-table-column>
         <el-table-column prop="remark" label="法规简介"></el-table-column>
@@ -35,10 +37,20 @@
               type="text"
               icon="el-icon-view"
               @click.stop="showDetail(scope.row)"
-              >详情</el-button>
+              >详情</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
+      <div class="page-box">
+        <el-pagination
+          layout="total, prev, pager, next, jumper"
+          :total="total"
+          :current-page.sync="currentPage"
+          :page-size="pageSize"
+          @current-change="handleCurrentChange"
+        ></el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -50,6 +62,9 @@ export default {
       searchText: "",
       dataList: [],
       loading: false,
+      currentPage: 1, //分页当前页
+      pageSize: 10,
+      total: 0, //总页数
     };
   },
   methods: {
@@ -61,7 +76,7 @@ export default {
     // 按标题搜索内容
     searchTitle() {
       this.loading = true;
-      getByTitle(this.searchText).then((res)=>{
+      getByTitle(this.searchText).then((res) => {
         let thisData = [];
         this.loading = false;
         thisData = res.data.map((item) => {
@@ -80,10 +95,14 @@ export default {
     // 获取法规列表数据
     getList() {
       this.loading = true;
-      getRawList().then((res) => {
+      getRawList({
+        current: this.currentPage,
+        size: this.pageSize,
+      }).then((res) => {
         let thisData = [];
         this.loading = false;
-        thisData = res.data.map((item) => {
+        this.total = res.data.total
+        thisData = res.data.records.map((item) => {
           item.createTime = item.createTime.split(" ")[0];
           return item;
         });
@@ -120,6 +139,10 @@ export default {
       this.$router.push({
         path: "/release/lawdetail/" + _data.id,
       });
+    },
+    handleCurrentChange(value) {
+      this.currentPage = value;
+      this.getData();
     },
   },
   created() {
