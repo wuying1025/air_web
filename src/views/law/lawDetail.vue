@@ -84,7 +84,6 @@ export default {
     },
     // 清空搜索框
     clearInp(){
-      console.log("come")
       this.htmlContent = this.content;
       this.hrefList = [];
       this.$refs.textContent.scrollTo(0,0);
@@ -166,7 +165,6 @@ export default {
           thisContent += item.content;
         });
         this.content = decode(thisContent);
-        console.log(this.content)
         this.htmlContent = this.content
         this.loading = false;
       });
@@ -185,7 +183,7 @@ export default {
 <style lang="scss">
 .law-detail-xf{
 .textContent > div{
-  width: 100px !important;
+  width: unset !important;
   margin-bottom: 0 !important;
   margin-top: 0 !important;
   margin-left: 0 !important;
