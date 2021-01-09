@@ -26,9 +26,10 @@
         <el-tab-pane :label="item.deptName" v-for="(item, index) in this.detail" :key="index">
           <div class="main-list-box">
             <ul class="specialCheck">
-              <li @click="tabTable(0)">普通检查项</li>
+              <li @click="tabTable(0)" :class="{'active':showTableIndex == 0}">普通检查项</li>
               <li
                 v-for="(spec, specIndex) in special[index]"
+                :class="{'active':showTableIndex == specIndex+1}"
                 @click="tabTable(specIndex+1)"
                 :key="specIndex"
               >特殊检查项{{specIndex+1}}</li>
@@ -252,7 +253,7 @@ export default {
           if (item.commonScores && item.commonScores.length > 0) {
             let status =
               item.commonScores[index].colStatusValue == "合格" ? 1 : 2;
-            if (!status) {
+            if (status == 2) {
               count++;
             }
             commonScore.push({
@@ -390,7 +391,7 @@ export default {
   padding-bottom: 15px;
   li {
     padding: 5px 10px;
-    background: #f00;
+     background: #FA8072;
     border-radius: 200px;
     color: #fff;
     font-weight: 600;
@@ -398,6 +399,9 @@ export default {
     font-size: 12px;
     margin: 0 15px;
     cursor: pointer;
+    &.active{
+      background: #f00;
+    }
   }
 }
 .down-box {

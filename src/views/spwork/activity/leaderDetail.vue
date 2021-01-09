@@ -72,7 +72,8 @@ export default {
       deptMap: {},
       barChart: [],
       active:0,
-      deptActityList: [] //部门活动列表
+      deptActityList: [], //部门活动列表
+      series:[]
     };
   },
   methods: {
@@ -88,7 +89,7 @@ export default {
             color: "#777c85",
             fontSize: "12px"
           },
-          subtext: "（单位个）",
+          subtext: "（单位人）",
           subtextStyle: {
             color: "#777c85"
           },
@@ -105,38 +106,7 @@ export default {
         yAxis: {},
         // Declare several bar series, each will be mapped
         // to a column of dataset.source by default.
-        series: [
-          {
-            type: "bar",
-            barWidth: 25, // 柱形的宽度
-            barCategoryGap: "3%", // 柱形的间距
-            itemStyle: {
-              normal: {
-                color: "#4089ff"
-              }
-            }
-          },
-          {
-            type: "bar",
-            barWidth: 25, // 柱形的宽度
-            barCategoryGap: "3%", // 柱形的间距
-            itemStyle: {
-              normal: {
-                color: "#fecd5d"
-              }
-            }
-          },
-          {
-            type: "bar",
-            barWidth: 25, // 柱形的宽度
-            barCategoryGap: "3%", // 柱形的间距
-            itemStyle: {
-              normal: {
-                color: "#4ad030"
-              }
-            }
-          }
-        ],
+        series:this.series,
         dataZoom: [
           {
             type: "slider", //slider表示有滑动块的，
@@ -170,6 +140,8 @@ export default {
       this.active = this.getStep();
       // 生成绘制柱状图的数据
       this.barChart = this.getChart();
+      // 根据步骤生成柱状个数
+      this.series = this.getSeries();
       // 初始化柱状图
       this.initCharts();
     },
@@ -210,6 +182,81 @@ export default {
       }
       return chartList;
     },
+    getSeries(){
+      let defaultServers = [
+          {
+            type: "bar",
+            barWidth: 25, // 柱形的宽度
+            barCategoryGap: "3%", // 柱形的间距
+            itemStyle: {
+              normal: {
+                color: "#4089ff"
+              }
+            }
+          },
+          {
+            type: "bar",
+            barWidth: 25, // 柱形的宽度
+            barCategoryGap: "3%", // 柱形的间距
+            itemStyle: {
+              normal: {
+                color: "#fecd5d"
+              }
+            }
+          },
+          {
+            type: "bar",
+            barWidth: 25, // 柱形的宽度
+            barCategoryGap: "3%", // 柱形的间距
+            itemStyle: {
+              normal: {
+                color: "#4ad030"
+              }
+            }
+          },
+          {
+            type: "bar",
+            barWidth: 25, // 柱形的宽度
+            barCategoryGap: "3%", // 柱形的间距
+            itemStyle: {
+              normal: {
+                color: "#00FFFF"
+              }
+            }
+          },
+          {
+            type: "bar",
+            barWidth: 25, // 柱形的宽度
+            barCategoryGap: "3%", // 柱形的间距
+            itemStyle: {
+              normal: {
+                color: "#FF6347"
+              }
+            }
+          },
+          {
+            type: "bar",
+            barWidth: 25, // 柱形的宽度
+            barCategoryGap: "3%", // 柱形的间距
+            itemStyle: {
+              normal: {
+                color: "#7B68EE"
+              }
+            }
+          },
+          {
+            type: "bar",
+            barWidth: 25, // 柱形的宽度
+            barCategoryGap: "3%", // 柱形的间距
+            itemStyle: {
+              normal: {
+                color: "#FF69B4"
+              }
+            }
+          }
+        ]
+      return defaultServers.slice(0,this.steps.length);
+    }
   },
   created() {
     // 获取部门

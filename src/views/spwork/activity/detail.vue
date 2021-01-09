@@ -132,12 +132,12 @@ export default {
       var option = {
         // ----  标题 -----
         title: {
-          text: "各连队检查情况",
+          text: "连队参加活动人数",
           textStyle: {
             color: "#777c85",
             fontSize: "12px"
           },
-          subtext: "（单位个）",
+          subtext: "（单位人）",
           subtextStyle: {
             color: "#777c85"
           },
@@ -179,7 +179,7 @@ export default {
         ],
         series: [
           {
-            name: "不合格数量：",
+            name: "人数",
             type: "bar",
             legendHoverLink: true, // 是否启用图列 hover 时的联动高亮
             barWidth: "60%",
