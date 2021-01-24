@@ -75,16 +75,24 @@ export default {
     },
     // 按标题搜索内容
     searchTitle() {
-      this.loading = true;
-      getByTitle(this.searchText).then((res) => {
-        let thisData = [];
-        this.loading = false;
-        thisData = res.data.map((item) => {
-          item.createTime = item.createTime.split(" ")[0];
-          return item;
-        });
-        this.dataList = thisData;
-      })
+      // this.loading = true;
+      // getByTitle(this.searchText).then((res) => {
+      //   let thisData = [];
+      //   this.loading = false;
+      //   thisData = res.data.map((item) => {
+      //     item.createTime = item.createTime.split(" ")[0];
+      //     return item;
+      //   });
+      //   this.dataList = thisData;
+      // })
+
+      this.$router.push({
+        path: "/release/lawdetail/0",
+        query: {
+            search: this.searchText
+          }
+      });
+
     },
     //单行选中
     checkLine(row) {

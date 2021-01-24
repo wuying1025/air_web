@@ -12,29 +12,37 @@ export function getByTitle(title) {
     return request({
         url: '/rawrule/getRaw',
         method: 'post',
-        data:{
-            name:title
+        data: {
+            name: title
         }
     })
 }
+// 根据法规内容搜索
+export function getByContent(data) {
+    return request({
+        url: '/rawrule/getRawByKeywords',
+        method: 'post',
+        data
+    })
+}
 // 获取法规列表
-export function getRawList({current, size}) {
+export function getRawList({ current, size }) {
     return request({
         url: `/rawrule/raw/list/${current}/${size}`,
         method: 'get'
     })
 }
 // 获取法规列表
-export function delLaw({id}) {
+export function delLaw({ id }) {
     return request({
-        url: '/rawrule/domdel/'+id,
+        url: '/rawrule/domdel/' + id,
         method: 'get'
     })
 }
 // 获取法规详情
-export function getLawDetail({id}) {
+export function getLawDetail({ id }) {
     return request({
-        url: '/rawrule/dom/'+id,
+        url: '/rawrule/dom/' + id,
         method: 'get'
     })
 }
@@ -67,7 +75,7 @@ export function getCate(params) {
 // 查看二级分类列表
 export function getSubCate(params) {
     return request({
-        url: '/resourcesCate/getSubCate/'+params.id,
+        url: '/resourcesCate/getSubCate/' + params.id,
         method: 'get',
     })
 }
