@@ -20,9 +20,32 @@ export const getDetailById = (id) => request({
     url: `/in/getInById/${id}`,
     method: 'get',
 })
-// 添加外来人员出入记录
-export const saveRecord = (data = {}) => request({
-    url: '/in/saveRecord',
+
+// 添加内部人员外出记录
+export const savePersonout = (data = {}) => request({
+    url: '/personout/save',
+    method: 'post',
+    data
+})
+
+export const selectPersonByDept = () => request({
+    url: '/person/selectPersonByDept',
+    method: 'get',
+})
+
+export const getPersonById = (id) => request({
+    url: `/person/getPersonById/${id}`,
+    method: 'get',
+})
+
+export const selectPersonOut = (data = {}) => request({
+    url: '/personout/selectPersonOut',
+    method: 'post',
+    data
+})
+
+export const selectInfo = (data = {}) => request({
+    url: '/personout/selectInfo',
     method: 'post',
     data
 })

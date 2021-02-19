@@ -131,6 +131,11 @@ export const constantRoutes = [{
       component: () => import('@/views/goout/leaderDetail'),
       name: '外来人员详情',
       meta: { title: '外来人员详情' }
+    }, {
+      path: 'stationApply',
+      component: () => import('@/views/goout/stationApply'),
+      name: '驻地人员外出申请',
+      meta: { title: '驻地人员外出申请' }
     }
   ]
 },
