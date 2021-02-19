@@ -11,7 +11,6 @@
           <el-input
             v-model="search.name"
             placeholder="请输入人员姓名"
-            size="small"
             style="width: 240px"
             @submit.native.prevent
             v-on:keyup.13="onSearch"
@@ -22,13 +21,10 @@
             type="primary"
             icon="el-icon-search"
             style="background: rgb(74, 119, 252)"
-            size="mini"
             @click="onSearch"
             >搜索</el-button
           >
-          <el-button icon="el-icon-refresh" size="mini" @click="onReset"
-            >重置</el-button
-          >
+          <el-button icon="el-icon-refresh" @click="onReset">重置</el-button>
         </el-form-item>
       </el-form>
 
@@ -170,5 +166,8 @@ export default {
   min-height: calc(100vh - 210px);
   padding: 20px;
   box-sizing: border-box;
+}
+.el-form-item{
+  margin-bottom: 0!important;
 }
 </style>
