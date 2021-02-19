@@ -29,9 +29,16 @@
             disabled
           ></el-input>
         </el-form-item>
-        <el-form-item label="职级" prop="jobName">
+        <el-form-item label="部职别" prop="jobName">
           <el-input
             v-model="station.jobName"
+            style="width: 400px"
+            disabled
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="军衔" prop="remark1">
+          <el-input
+            v-model="station.remark1"
             style="width: 400px"
             disabled
           ></el-input>
@@ -92,7 +99,7 @@
           style="width: 100%"
         >
           <!-- <el-table-column type="selection" width="55"></el-table-column> -->
-          <el-table-column label="序号" type="index"></el-table-column>
+          <el-table-column label="序号" type="index" width="50"></el-table-column>
           <el-table-column
             align="center"
             prop="name"
@@ -102,6 +109,7 @@
             align="center"
             prop="idCard"
             label="身份证号"
+            width="180"
           ></el-table-column>
           <el-table-column
             align="center"
@@ -111,9 +119,14 @@
           <el-table-column
             align="center"
             prop="jobName"
-            label="职级"
+            label="部职别"
           ></el-table-column>
-          <el-table-column label="操作" width="220" align="center">
+          <el-table-column
+            align="center"
+            prop="remark1"
+            label="军衔"
+          ></el-table-column>
+          <el-table-column label="操作" width="120" align="center">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -156,7 +169,8 @@ export default {
         name: [{ required: true, message: '请输入姓名', trigger: 'change' }],
         idCard: [{ required: true, message: '请输入身份证号', trigger: 'blur' }],
         jobTypeName: [{ required: true, message: '请输入身份', trigger: 'blur' }],
-        jobName: [{ required: true, message: '请输入职级', trigger: 'blur' }],
+        jobName: [{ required: true, message: '请输入部职别', trigger: 'blur' }],
+        remark1: [{ required: true, message: '请输入军衔', trigger: 'blur' }],
         home: [{ required: true, message: '请输入居住地点', trigger: 'blur' }],
         leaveTime: [{ required: true, message: '请输入计划离队时间', trigger: 'blur' }],
         backTime: [{ required: true, message: '请输入计划归队时间', trigger: 'blur' }],
