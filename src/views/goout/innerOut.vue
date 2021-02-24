@@ -25,13 +25,8 @@
           <el-form-item label="时间筛选">
             <el-date-picker
               v-model="search.time"
-              size="large"
-              style="width: 300px"
-              value-format="yyyy-MM-dd"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
+              type="date"
+              placeholder="选择日期时间"
             ></el-date-picker>
           </el-form-item>
           <el-form-item>
@@ -50,6 +45,7 @@
         </div>
       </div>
       <div class="main-list">
+        <h4 style="margin-bottom: 5px">不在岗人员列表</h4>
         <el-table
           ref="multipleTable"
           :data="personData"
@@ -60,13 +56,13 @@
           <el-table-column label="序号" type="index"></el-table-column>
           <el-table-column
             align="center"
-            prop="name"
+            prop="userName"
             label="姓名"
           ></el-table-column>
           <el-table-column
             align="center"
-            prop="idCard"
-            label="身份证号"
+            prop="deptName"
+            label="所属连队"
           ></el-table-column>
           <el-table-column
             align="center"
@@ -75,10 +71,21 @@
           ></el-table-column>
           <el-table-column
             align="center"
-            prop="jobName"
-            label="职级"
+            prop="startTime"
+            label="离队时间"
           ></el-table-column>
-          <el-table-column label="操作" width="220" align="center">
+          <el-table-column
+            align="center"
+            prop="endTime"
+            label="归队时间"
+          ></el-table-column>
+          <el-table-column
+            align="center"
+            prop="title"
+            label="外出事由"
+          ></el-table-column>
+
+          <!-- <el-table-column label="操作" width="220" align="center">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -88,7 +95,7 @@
                 >申请外出</el-button
               >
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
         <div class="page-box">
           <el-pagination
@@ -115,7 +122,7 @@ export default {
       deptList: [],
       search: {
         deptId: 0,
-        time: ''
+        time: new Date()
       },
       personData: [],
       loading: false,
@@ -125,6 +132,101 @@ export default {
     }
   },
   methods: {
+    chartSetOption({ chartId, text = '在岗情况', percent = 100, color = '#EF263D', outCount, inCount }) {
+      const myChart = echarts.init(document.getElementById(chartId));
+
+      const option = {
+        color: ['#D3D3D3', color],　　　　//环形图两部分的颜色
+        title: {
+          show: true,
+          text: text,
+          x: 'center',
+          y: 'bottom',
+          textStyle: {
+            fontSize: 16,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+          },
+        },
+        tooltip: {
+          trigger: 'item'
+        },
+        graphic: [{　　　　　　　　　　　　　　　　//环形图中间添加文字
+          type: 'text',　　　　　　　　　　　　//通过不同top值可以设置上下显示
+          left: 'center',
+          top: '30%',
+          style: {
+            text: percent + '%',
+            textAlign: 'center',
+            fill: '#000',　　　　　　　　//文字的颜色
+            width: 30,
+            height: 30,
+            fontSize: 24,
+            color: "#333739",
+            fontFamily: "Microsoft YaHei"
+          }
+        }, {　　　　　　　　　　　　　　　　//环形图中间添加文字
+          type: 'text',　　　　　　　　　　　　//通过不同top值可以设置上下显示
+          left: 'center',
+          top: '38%',
+          style: {
+            text: "———",
+            textAlign: 'center',
+            fill: '#000',　　　　　　　　//文字的颜色
+            width: 30,
+            height: 30,
+            fontSize: 20,
+            color: "#333739",
+            fontFamily: "Microsoft YaHei"
+          }
+        }, {
+          type: 'text',
+          left: 'center',
+          top: '46%',
+          style: {
+            text: inCount + '人',
+            textAlign: 'center',
+            fill: '#333739',
+            width: 30,
+            height: 30,
+            fontSize: 20,
+          }
+        }],
+        series: [　　　　　　　　　　　　　　//配置数据啥的
+          {
+            // name: '达标率',
+            type: 'pie',　　　　　　　　//设为饼图
+            radius: ['60%', '70%'],　　//设置内半径和外半径，形成环状
+            // minAngle: 15,　　　　　　　　　//设置最小角度
+            startAngle: 270,　　　　　　　//设置起始角度
+            // clockWise: false,　　　　　　　　//默认逆时针
+            // avoidLabelOverlap: false,　　　//避免标注重叠
+            // hoverAnimation: true,　　　　//移入放大
+            // silent: true,
+            center: ['50%', '40%'],
+            label: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              label: {
+                show: false,
+                fontSize: '40',
+                fontWeight: 'bold'
+              }
+            },
+            labelLine: {
+              show: false
+            },
+            data: [
+              { value: outCount, name: '不在岗' },
+              { value: inCount, name: '在岗' },
+            ]
+          }
+        ]
+      };
+      myChart.setOption(option)
+    },
     initCharts1() {
       const myChart = echarts.init(document.getElementById("chart1"));
 
@@ -212,8 +314,8 @@ export default {
               show: false
             },
             data: [
-              { value: 4, name: '不在岗' },
-              { value: 20, name: '在岗' },
+              { value: this.pieData1.outCount, name: '不在岗' },
+              { value: this.pieData1.totalCount - this.pieData1.outCount, name: '在岗' },
             ]
           }
         ]
@@ -410,14 +512,38 @@ export default {
       };
       myChart.setOption(option)
     },
-    clickChart1() {
-      console.log('clickChart1');
+    async clickChart1() {
+      this.setPersonData(1)
     },
-    clickChart2() {
-      console.log('clickChart2');
+    async clickChart2() {
+      this.setPersonData(2)
     },
-    clickChart3() {
-      console.log('clickChart3');
+    async clickChart3() {
+      this.setPersonData(3)
+    },
+    async setPersonData(jobType) {
+      const res = await selectInfo({
+        ...this.search,
+        jobType
+      })
+      if (res && res.code === '200') {
+        res.data.pos.records.map(item => {
+          switch (item.jobType) {
+            case 1:
+              item.jobTypeName = '主官'
+              break
+            case 2:
+              item.jobTypeName = '干部'
+              break
+            case 3:
+              item.jobTypeName = '义务兵'
+              break
+            default:
+              item.jobTypeName = '义务兵'
+          }
+        })
+        this.personData = res.data.pos.records
+      }
     },
     async getDeptList() {
       const res = await lastDept()
@@ -426,9 +552,72 @@ export default {
         this.deptList.unshift({ deptId: 0, deptName: "全部连队" });
       }
     },
-    async selectInfo() {
-      const res = await selectInfo()
+    async selectInfo(jobType = 0) {
+      // pos是表格  
+      // ps是三个饼  1主官 2干部 3义务兵
+
+      // const res = await selectInfo({
+      //   deptId: 0,
+      //   // startTime: '', 
+      //   // endTime: '',
+      //   jobType: 0, // 1\2\3
+      // })
+      const res = await selectInfo({
+        ...this.search,
+        jobType
+      })
       // todo
+      console.log(res);
+      if (res && res.code === '200') {
+        res.data.pos.records.map(item => {
+          switch (item.jobType) {
+            case 1:
+              item.jobTypeName = '主官'
+              break
+            case 2:
+              item.jobTypeName = '干部'
+              break
+            case 3:
+              item.jobTypeName = '义务兵'
+              break
+            default:
+              item.jobTypeName = '义务兵'
+          }
+        })
+        this.personData = res.data.pos.records
+
+        res.data.ps.forEach((elem, index) => {
+          if (elem.id === 1) {
+            this.chartSetOption({
+              chartId: 'chart1',
+              text: '主官在岗情况',
+              percent: elem.totalCount == 0 ? 0 : ((elem.totalCount - elem.outCount) / elem.totalCount * 100).toFixed(0),
+              color: elem.pass ? '#2975EC' : '#EF263D',
+              outCount: elem.outCount,
+              inCount: elem.totalCount - elem.outCount
+            })
+          } else if (elem.id === 2) {
+            this.chartSetOption({
+              chartId: 'chart2',
+              text: '领导在岗情况',
+              percent: elem.totalCount == 0 ? 0 : ((elem.totalCount - elem.outCount) / elem.totalCount * 100).toFixed(0),
+              color: elem.pass ? '#2975EC' : '#EF263D',
+              outCount: elem.outCount,
+              inCount: elem.totalCount - elem.outCount
+            })
+          } else if (elem.id === 3) {
+            this.chartSetOption({
+              chartId: 'chart3',
+              text: '义务兵在岗情况',
+              percent: elem.totalCount == 0 ? 0 : ((elem.totalCount - elem.outCount) / elem.totalCount * 100).toFixed(0),
+              color: elem.pass ? '#2975EC' : '#EF263D',
+              outCount: elem.outCount,
+              inCount: elem.totalCount - elem.outCount
+            })
+          }
+        });
+
+      }
 
     },
     handleCurrentChange(value) {
@@ -436,22 +625,23 @@ export default {
       this.selectInfo();
     },
     handleQuery() {
-      console.log(this.search);
+      this.selectInfo(0)
     },
     resetQuery() {
       this.search = {
         deptId: 0,
-        time: ''
+        time: new Date()
       }
       // 重新查询数据
+      this.selectInfo(0)
     },
   },
   mounted() {
-    this.initCharts1()
-    this.initCharts2()
-    this.initCharts3()
+    // this.initCharts1()
+    // this.initCharts2()
+    // this.initCharts3()
     this.getDeptList();
-    this.selectInfo()
+    this.selectInfo(0)
   }
 }
 </script>

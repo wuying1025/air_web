@@ -51,23 +51,23 @@
         <el-table-column label="序号" type="index"></el-table-column>
         <el-table-column
           align="center"
-          prop="name"
+          prop="userName"
           label="姓名"
         ></el-table-column>
         <el-table-column
           align="center"
-          prop="idCard"
-          label="身份证号"
+          prop="title"
+          label="请假事由"
         ></el-table-column>
         <el-table-column
           align="center"
-          prop="jobTypeName"
-          label="身份"
+          prop="startTime"
+          label="计划离队时间"
         ></el-table-column>
         <el-table-column
           align="center"
-          prop="jobName"
-          label="职级"
+          prop="endTime"
+          label="计划离队时间"
         ></el-table-column>
         <el-table-column label="操作" width="220" align="center">
           <template slot-scope="scope">
@@ -75,8 +75,8 @@
               size="mini"
               type="text"
               icon="el-icon-edit"
-              @click="apply(scope.row)"
-              >申请外出</el-button
+              @click="update(scope.row)"
+              >修改</el-button
             >
           </template>
         </el-table-column>
@@ -120,7 +120,7 @@ export default {
         status: 0
       })
       console.log(res);
-      if (res && res.data) {
+      if (res && res.data && res.data.records) {
         // res.data.map(item => {
         //   switch (item.jobType) {
         //     case '1':
@@ -136,11 +136,11 @@ export default {
         //       item.jobTypeName = '义务兵'
         //   }
         // })
-        this.personData = res.data
+        this.personData = res.data.records
       }
       this.loading = false;
     },
-    apply(person) {
+    update(person) {
       this.$router.push(`/out/stationApply/${person.id}`)
     },
     handleCurrentChange(value) {

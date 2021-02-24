@@ -43,6 +43,12 @@
             disabled
           ></el-input>
         </el-form-item>
+         <el-form-item label="外出事由" prop="title">
+          <el-input
+            v-model="station.title"
+            style="width: 400px"
+          ></el-input>
+        </el-form-item>
         <el-form-item label="居住地点" prop="home">
           <el-input
             v-model="station.home"
@@ -50,17 +56,17 @@
             placeholder="请输入居住地点"
           ></el-input>
         </el-form-item>
-        <el-form-item label="计划离队时间" prop="leaveTime">
+        <el-form-item label="计划离队时间" prop="startTime">
           <el-date-picker
-            v-model="station.leaveTime"
+            v-model="station.startTime"
             type="datetime"
             placeholder="请选择计划离队时间"
             style="width: 400px"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item label="计划归队时间" prop="backTime">
+        <el-form-item label="计划归队时间" prop="endTime">
           <el-date-picker
-            v-model="station.backTime"
+            v-model="station.endTime"
             type="datetime"
             placeholder="请选择计划归队时间"
             style="width: 400px"
@@ -149,6 +155,8 @@
 <script>
 // import { savePersonout, updateOutType, getOutTypeById } from '@/api/goout'
 import { savePersonout, getPersonById, selectPersonByDept } from '@/api/goout'
+import { dateFormat } from "@/utils/format";
+
 export default {
   data() {
     return {
@@ -157,8 +165,8 @@ export default {
         userId: '', // 用户Id
         job: '', // 职务
         home: '', // 居住地点
-        leaveTime: '', // 计划离队时间
-        backTime: '', // 计划归队时间
+        startTime: '', // 计划离队时间
+        endTime: '', // 计划归队时间
         carNum: '', // 车牌号
         remark: '' //  备注
       },
@@ -172,8 +180,9 @@ export default {
         jobName: [{ required: true, message: '请输入部职别', trigger: 'blur' }],
         remark1: [{ required: true, message: '请输入军衔', trigger: 'blur' }],
         home: [{ required: true, message: '请输入居住地点', trigger: 'blur' }],
-        leaveTime: [{ required: true, message: '请输入计划离队时间', trigger: 'blur' }],
-        backTime: [{ required: true, message: '请输入计划归队时间', trigger: 'blur' }],
+        title: [{ required: true, message: '请输入外出事由', trigger: 'blur' }],
+        startTime: [{ required: true, message: '请输入计划离队时间', trigger: 'blur' }],
+        endTime: [{ required: true, message: '请输入计划归队时间', trigger: 'blur' }],
       },
     }
   },
@@ -218,6 +227,10 @@ export default {
     async addHandle() {
       // 驻地外出 type = 2
       this.station.typeId = 2
+      this.station.startTime =  dateFormat("YYYY-mm-dd HH:MM:SS", this.station.startTime)
+      this.station.endTime =  dateFormat("YYYY-mm-dd HH:MM:SS", this.station.endTime)
+      this.station.id =  ''
+
       const res = await savePersonout(this.station)
       console.log(res);
       if (res && res.code === '200') {
@@ -225,7 +238,7 @@ export default {
           message: '添加成功',
           type: 'success'
         })
-        // this.$router.push('/insiderManage/type')
+        this.$router.push('/goout/station')
       } else {
         this.$message({
           message: '添加失败',
@@ -260,6 +273,7 @@ export default {
     },
     apply(person) {
       this.station = person
+      this.station.userId = person.id
       this.dialogVisible = false
     }
   },
