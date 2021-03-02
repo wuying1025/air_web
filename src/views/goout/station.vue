@@ -69,7 +69,17 @@
           prop="endTime"
           label="计划离队时间"
         ></el-table-column>
-        <el-table-column label="操作" width="220" align="center">
+        <el-table-column
+          align="center"
+          prop="statusStr"
+          label="状态"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="remark"
+          label="备注"
+        ></el-table-column>
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -81,7 +91,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <!-- <div class="page-box">
+      <div class="page-box">
         <el-pagination
           layout="total, prev, pager, next, jumper"
           :total="total"
@@ -89,7 +99,7 @@
           :page-size="pageSize"
           @current-change="handleCurrentChange"
         ></el-pagination>
-      </div> -->
+      </div>
     </div>
   </el-main>
 </template>
@@ -121,22 +131,23 @@ export default {
       })
       console.log(res);
       if (res && res.data && res.data.records) {
-        // res.data.map(item => {
-        //   switch (item.jobType) {
-        //     case '1':
-        //       item.jobTypeName = '主官'
-        //       break
-        //     case '2':
-        //       item.jobTypeName = '干部'
-        //       break
-        //     case '3':
-        //       item.jobTypeName = '义务兵'
-        //       break
-        //     default:
-        //       item.jobTypeName = '义务兵'
-        //   }
-        // })
+        res.data.records.map(item => {
+          switch (item.status) {
+            case 1:
+              item.statusStr = '待审批'
+              break
+            case 2:
+              item.statusStr = '通过'
+              break
+            case 3:
+              item.statusStr = '不通过'
+              break
+            default:
+              item.statusStr = '待审批'
+          }
+        })
         this.personData = res.data.records
+        this.total = res.data.total
       }
       this.loading = false;
     },

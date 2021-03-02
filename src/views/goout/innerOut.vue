@@ -24,8 +24,8 @@
           </el-form-item>
           <el-form-item label="时间筛选">
             <el-date-picker
-              v-model="search.time"
-              type="date"
+              v-model="search.startTime"
+              type="datetime"
               placeholder="选择日期时间"
             ></el-date-picker>
           </el-form-item>
@@ -115,6 +115,7 @@
 import echarts from "echarts"
 import { lastDept } from "@/api/system/dept";
 import { selectInfo } from "@/api/goout.js";
+import { dateFormat } from "@/utils/format";
 
 export default {
   data() {
@@ -122,7 +123,7 @@ export default {
       deptList: [],
       search: {
         deptId: 0,
-        time: new Date()
+        startTime: dateFormat("YYYY-mm-dd HH:MM:SS", new Date())
       },
       personData: [],
       loading: false,
@@ -562,6 +563,7 @@ export default {
       //   // endTime: '',
       //   jobType: 0, // 1\2\3
       // })
+      this.search.startTime =  dateFormat("YYYY-mm-dd HH:MM:SS", this.search.startTime)
       const res = await selectInfo({
         ...this.search,
         jobType
@@ -630,7 +632,7 @@ export default {
     resetQuery() {
       this.search = {
         deptId: 0,
-        time: new Date()
+        startTime: dateFormat("YYYY-mm-dd HH:MM:SS", new Date())
       }
       // 重新查询数据
       this.selectInfo(0)
