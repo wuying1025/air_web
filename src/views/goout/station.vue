@@ -1,7 +1,7 @@
 <template>
   <el-main>
     <div class="main-content">
-      <el-form
+      <!-- <el-form
         ref="queryForm"
         align="right"
         :inline="true"
@@ -26,7 +26,7 @@
           >
           <el-button icon="el-icon-refresh" @click="onReset">重置</el-button>
         </el-form-item>
-      </el-form>
+      </el-form> -->
 
       <el-row :gutter="10" class="mb8">
         <el-col :span="1.5">
@@ -127,7 +127,8 @@ export default {
         current: this.currentPage,
         size: this.pageSize,
         deptId: 0,
-        status: 0
+        status: 0,
+        typeId: 2 // 驻地外出2
       })
       console.log(res);
       if (res && res.data && res.data.records) {
