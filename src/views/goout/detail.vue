@@ -7,6 +7,7 @@
         v-if="!fullscreenLoading"
       >
         <el-form  ref="form" :model="todaywork" label-width="100px" size="medium">
+          <el-form-item label="联系人单位：">{{ todaywork.company }}</el-form-item>
           <el-form-item label="联系人：">{{ todaywork.contacts }}</el-form-item>
           <el-form-item label="来访事由：">{{ todaywork.title }}</el-form-item>
           <el-form-item label="来访时段">{{ todaywork.startTime }} 至 {{ todaywork.endTime }}</el-form-item>
@@ -32,6 +33,7 @@
           <el-form-item label="来访车辆：">
             <span class="out-item" v-for="(obj,index) in todaywork.cars" :key="index">{{obj.carNum}}</span>
           </el-form-item>
+          <el-form-item label="近七天行程:">{{ todaywork.journey }}</el-form-item>
           <el-form-item label="备注:">{{ todaywork.remark }}</el-form-item>
           
           <el-form-item label="进入时间:" v-if="todaywork.records.length == 0 || todaywork.records[0].type == 2 ">

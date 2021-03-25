@@ -49,3 +49,9 @@ export const selectInfo = (data = {}) => request({
     method: 'post',
     data
 })
+
+export const updateStatus = (data = {}) => request({
+    url: '/personout/updateStatus',
+    method: 'post',
+    data
+})

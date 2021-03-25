@@ -34,12 +34,14 @@
           v-loading="loading"
           :header-cell-style="{background:'#4a77fc',color:'#fff'}"
         >
-          <el-table-column align="center" label="序号" width="120" type="index"></el-table-column>
-          <el-table-column align="center" prop="contacts" label="联系人" show-overflow-tooltip></el-table-column>
+          <el-table-column align="center" label="序号" width="50" type="index"></el-table-column>
           <el-table-column align="center" prop="name" label="来访人员" show-overflow-tooltip></el-table-column>
           <el-table-column align="center" prop="startTime" label="开始时间" show-overflow-tooltip></el-table-column>
           <el-table-column align="center" prop="endTime" label="结束时间" show-overflow-tooltip></el-table-column>
           <el-table-column align="center" prop="title" label="来访事由" show-overflow-tooltip></el-table-column>
+          <el-table-column align="center" prop="contacts" label="联系人" show-overflow-tooltip></el-table-column>
+          <el-table-column align="center" prop="company" label="联系人单位" show-overflow-tooltip></el-table-column>
+          
           <el-table-column align="center" prop="remark" label="备注" show-overflow-tooltip></el-table-column>
           <el-table-column align="center" label="操作" show-overflow-tooltip>
             <template slot-scope="scope">
