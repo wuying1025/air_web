@@ -21,6 +21,13 @@ export const getDetailById = (id) => request({
     method: 'get',
 })
 
+// 添加外来人员出入记录
+export const saveRecord = (data = {}) => request({
+    url: '/in/saveRecord',
+    method: 'post',
+    data
+})
+
 // 添加内部人员外出记录
 export const savePersonout = (data = {}) => request({
     url: '/personout/save',

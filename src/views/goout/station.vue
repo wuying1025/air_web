@@ -79,7 +79,7 @@
           prop="remark"
           label="备注"
         ></el-table-column>
-        <el-table-column label="操作" align="center">
+        <!-- <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -89,7 +89,7 @@
               >修改</el-button
             >
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <div class="page-box">
         <el-pagination
@@ -142,6 +142,9 @@ export default {
               break
             case 3:
               item.statusStr = '不通过'
+              break
+            case 4:
+              item.statusStr = '已销假'
               break
             default:
               item.statusStr = '待审批'
