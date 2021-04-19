@@ -137,10 +137,20 @@ export const constantRoutes = [{
       name: '驻地人员外出申请',
       meta: { title: '驻地人员外出申请' }
     }, {
+      path: 'stationApply/:id',
+      component: () => import('@/views/goout/stationApply'),
+      name: '驻地人员外出修改',
+      meta: { title: '驻地人员外出修改' }
+    }, {
       path: 'leaveApply',
       component: () => import('@/views/goout/leaveApply'),
       name: '请假外出申请',
       meta: { title: '请假外出申请' }
+    }, {
+      path: 'leaveApply/:id',
+      component: () => import('@/views/goout/leaveApply'),
+      name: '请假外出修改',
+      meta: { title: '请假外出修改' }
     }
   ]
 },

@@ -62,3 +62,14 @@ export const updateStatus = (data = {}) => request({
     method: 'post',
     data
 })
+
+export const getPersonOutById = (id) => request({
+    url: `/personout/getPersonOutById/${id}`,
+    method: 'get',
+})
+
+export const updateOut = (data = {}) => request({
+    url: '/personout/updateOut',
+    method: 'post',
+    data
+})

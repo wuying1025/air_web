@@ -41,7 +41,7 @@
               v-model="enterTime"
               type="datetime"
               placeholder="选择日期时间"
-              value-format="yyyy-MM-dd hh:mm:ss"
+              value-format="yyyy-MM-dd HH:mm:ss"
             ></el-date-picker>
             <el-button type="warning" @click="enter(1)">进入</el-button>
           </el-form-item>
@@ -50,7 +50,7 @@
               v-model="leaveTime"
               type="datetime"
               placeholder="选择日期时间"
-              value-format="yyyy-MM-dd hh:mm:ss"
+              value-format="yyyy-MM-dd HH:mm:ss"
             ></el-date-picker>
             <el-button type="success" @click="enter(2)">离开</el-button>
           </el-form-item>

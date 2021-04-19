@@ -22,13 +22,13 @@
             disabled
           ></el-input>
         </el-form-item>
-        <el-form-item label="身份" prop="jobTypeName">
+        <!-- <el-form-item label="身份" prop="jobTypeName">
           <el-input
             v-model="station.jobTypeName"
             style="width: 400px"
             disabled
           ></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="部职别" prop="jobName">
           <el-input
             v-model="station.jobName"
@@ -43,11 +43,8 @@
             disabled
           ></el-input>
         </el-form-item>
-         <el-form-item label="外出事由" prop="title">
-          <el-input
-            v-model="station.title"
-            style="width: 400px"
-          ></el-input>
+        <el-form-item label="外出事由" prop="title">
+          <el-input v-model="station.title" style="width: 400px"></el-input>
         </el-form-item>
         <el-form-item label="居住地点" prop="home">
           <el-input
@@ -85,7 +82,13 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="addHandle('station')"
+          <el-button
+            v-if="$route.params.id"
+            type="primary"
+            @click="updateHandle('station')"
+            >确定修改</el-button
+          >
+          <el-button v-else type="primary" @click="addHandle('station')"
             >提交申请</el-button
           >
           <el-button @click="$router.go(-1)">返回</el-button>
@@ -105,7 +108,11 @@
           style="width: 100%"
         >
           <!-- <el-table-column type="selection" width="55"></el-table-column> -->
-          <el-table-column label="序号" type="index" width="50"></el-table-column>
+          <el-table-column
+            label="序号"
+            type="index"
+            width="50"
+          ></el-table-column>
           <el-table-column
             align="center"
             prop="name"
@@ -154,7 +161,7 @@
 
 <script>
 // import { savePersonout, updateOutType, getOutTypeById } from '@/api/goout'
-import { savePersonout, getPersonById, selectPersonByDept } from '@/api/goout'
+import { savePersonout, getPersonById, selectPersonByDept, getPersonOutById, updateOut } from '@/api/goout'
 import { dateFormat } from "@/utils/format";
 
 export default {
@@ -227,9 +234,9 @@ export default {
     async addHandle() {
       // 驻地外出 type = 2
       this.station.typeId = 2
-      this.station.startTime =  dateFormat("YYYY-mm-dd HH:MM:SS", this.station.startTime)
-      this.station.endTime =  dateFormat("YYYY-mm-dd HH:MM:SS", this.station.endTime)
-      this.station.id =  ''
+      this.station.startTime = dateFormat("YYYY-mm-dd HH:MM:SS", this.station.startTime)
+      this.station.endTime = dateFormat("YYYY-mm-dd HH:MM:SS", this.station.endTime)
+      this.station.id = ''
 
       const res = await savePersonout(this.station)
       console.log(res);
@@ -248,21 +255,25 @@ export default {
       }
     },
     async updateHandle() {
-      //   const res = await updateOutType(this.station)
-      //   // console.log(res);
-      //   if (res && res.code === '200') {
-      //     this.$message({
-      //       message: '修改成功',
-      //       type: 'success'
-      //     })
-      //     this.$router.go(-1)
-      //   } else {
-      //     this.$message({
-      //       message: '修改失败',
-      //       type: 'error'
-      //     })
-      //     console.error(res)
-      //   }
+      this.station.typeId = 2
+      this.station.startTime = dateFormat("YYYY-mm-dd HH:MM:SS", this.station.startTime)
+      this.station.endTime = dateFormat("YYYY-mm-dd HH:MM:SS", this.station.endTime)
+
+      const res = await updateOut(this.station)
+      console.log(res);
+      if (res && res.code === '200') {
+        this.$message({
+          message: '修改成功',
+          type: 'success'
+        })
+        this.$router.push('/goout/station')
+      } else {
+        this.$message({
+          message: '修改失败',
+          type: 'error'
+        })
+        console.error(res)
+      }
     },
     handleClose(done) {
       // this.$confirm('确认关闭？')
@@ -277,29 +288,48 @@ export default {
       this.dialogVisible = false
     }
   },
-  mounted() {
+  async mounted() {
     this.selectPerson()
-    /* const { id } = this.$route.params
+    const { id } = this.$route.params
     if (id) {
-      const res = await getPersonById(id)
-      console.log(res)
-      if (res && res.code === '200') {
-        switch (res.data.jobType) {
-          case '1':
-            res.data.jobTypeName = '主官'
-            break
-          case '2':
-            res.data.jobTypeName = '干部'
-            break
-          case '3':
-            res.data.jobTypeName = '义务兵'
-            break
-          default:
-            res.data.jobTypeName = '义务兵'
-        }
-        this.station = res.data
+      const res = await getPersonOutById(id)
+      const personRes = await getPersonById(res.data.userId)
+      this.station = Object.assign(personRes.data, res.data);
+
+      switch (personRes.data.jobType) {
+        case '1':
+          this.station.jobTypeName = '主官'
+          break
+        case '2':
+          this.station.jobTypeName = '干部'
+          break
+        case '3':
+          this.station.jobTypeName = '义务兵'
+          break
+        default:
+          this.station.jobTypeName = ''
       }
-    } */
+      console.log(306);
+      console.log(this.station);
+      // this.station = res.data
+
+      // if (res && res.code === '200') {
+      //   switch (res.data.jobType) {
+      //     case '1':
+      //       res.data.jobTypeName = '主官'
+      //       break
+      //     case '2':
+      //       res.data.jobTypeName = '干部'
+      //       break
+      //     case '3':
+      //       res.data.jobTypeName = '义务兵'
+      //       break
+      //     default:
+      //       res.data.jobTypeName = ''
+      //   }
+      //   this.station = res.data
+      // }
+    }
   }
 };
 </script>

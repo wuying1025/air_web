@@ -153,7 +153,7 @@ export default {
       this.loading = false;
     },
     update(person) {
-      this.$router.push(`/out/stationApply/${person.id}`)
+      this.$router.push(`/out/leaveApply/${person.id}`)
     },
     handleCurrentChange(value) {
       this.currentPage = value;

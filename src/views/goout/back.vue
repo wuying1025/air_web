@@ -207,7 +207,7 @@ export default {
               item.statusStr = '已销假'
               break
             default:
-              item.statusStr = '待审批'
+              item.statusStr = ''
           }
         })
         this.personData = res.data.records
