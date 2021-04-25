@@ -6,19 +6,32 @@
         v-loading.fullscreen.lock="fullscreenLoading"
         v-if="!fullscreenLoading"
       >
-        <el-form  ref="form" :model="todaywork" label-width="100px" size="medium">
-          <el-form-item label="联系人单位：">{{ todaywork.company }}</el-form-item>
+        <el-form
+          ref="form"
+          :model="todaywork"
+          label-width="100px"
+          size="medium"
+        >
+          <el-form-item label="联系人单位：">{{
+            todaywork.company
+          }}</el-form-item>
           <el-form-item label="联系人：">{{ todaywork.contacts }}</el-form-item>
           <el-form-item label="来访事由：">{{ todaywork.title }}</el-form-item>
-          <el-form-item label="来访时段">{{ todaywork.startTime }} 至 {{ todaywork.endTime }}</el-form-item>
+          <el-form-item label="来访时段"
+            >{{ todaywork.startTime }} 至 {{ todaywork.endTime }}</el-form-item
+          >
           <el-form-item label="来访人员：">
-            <div class="out-item" v-for="(obj, index) in todaywork.persons" :key="index">
+            <div
+              class="out-item"
+              v-for="(obj, index) in todaywork.persons"
+              :key="index"
+            >
               姓名：{{
-              obj.name
+                obj.name
               }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;手机号：{{
-              obj.tel
+                obj.tel
               }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;身份证号：{{
-              obj.idCard
+                obj.idCard
               }}
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <el-button
@@ -27,32 +40,52 @@
                 icon="el-icon-view"
                 size="small"
                 type="primary"
-              >查看附件</el-button>
+                >查看附件</el-button
+              >
             </div>
           </el-form-item>
           <el-form-item label="来访车辆：">
-            <span class="out-item" v-for="(obj,index) in todaywork.cars" :key="index">{{obj.carNum}}</span>
+            <span
+              class="out-item"
+              v-for="(obj, index) in todaywork.cars"
+              :key="index"
+              >{{ obj.carNum }}</span
+            >
           </el-form-item>
-          <el-form-item label="近七天行程:">{{ todaywork.journey }}</el-form-item>
+          <el-form-item label="近七天行程:">{{
+            todaywork.journey
+          }}</el-form-item>
           <el-form-item label="备注:">{{ todaywork.remark }}</el-form-item>
-          
-          <el-form-item label="进入时间:" v-if="todaywork.records.length == 0 || todaywork.records[0].type == 2 ">
+
+          <el-form-item
+            label="进入时间:"
+            v-if="
+              todaywork.records.length == 0 || todaywork.records[0].type == 2
+            "
+          >
             <el-date-picker
               v-model="enterTime"
               type="datetime"
               placeholder="选择日期时间"
               value-format="yyyy-MM-dd HH:mm:ss"
             ></el-date-picker>
-            <el-button type="warning" @click="enter(1)">进入</el-button>
+            <el-button type="warning" :disabled="!clickFlag" @click="enter(1)"
+              >进入</el-button
+            >
           </el-form-item>
-          <el-form-item label="离开时间:" v-else-if="todaywork.records[0].type == 1">
+          <el-form-item
+            label="离开时间:"
+            v-else-if="todaywork.records[0].type == 1"
+          >
             <el-date-picker
               v-model="leaveTime"
               type="datetime"
               placeholder="选择日期时间"
               value-format="yyyy-MM-dd HH:mm:ss"
             ></el-date-picker>
-            <el-button type="success" @click="enter(2)">离开</el-button>
+            <el-button type="success" :disabled="!clickFlag" @click="enter(2)"
+              >离开</el-button
+            >
           </el-form-item>
           <el-form-item>
             <!-- <el-button type="primary" @click="$router.go(-1)">确定</el-button> -->
@@ -74,7 +107,8 @@ export default {
       enterTime: "",
       leaveTime: "",
       fullscreenLoading: true,
-      todaywork:{}
+      todaywork: {},
+      clickFlag: true
     };
   },
   methods: {
@@ -86,22 +120,33 @@ export default {
       }
     },
     async enter(type) {
-      let time = type == 1 ? this.enterTime : this.leaveTime;
-      // 调用进入接口
-      const res = await saveRecord({
-        time,
-        type, //1进入 2 出
-        inId: this.id
-      });
-      if (res.code === "200") {
-        this.$message({
-          message: "记录成功",
-          type: "success"
+      if (this.clickFlag) {
+        this.clickFlag = false
+        let time = type == 1 ? this.enterTime : this.leaveTime;
+        // 调用进入接口
+        const res = await saveRecord({
+          time,
+          type, //1进入 2 出
+          inId: this.id
         });
-        
-        this.initTime();
-        this.getListDetail();
+        if (res.code === "200") {
+          this.$message({
+            message: "记录成功",
+            type: "success"
+          });
+          this.initTime();
+          this.getListDetail();
+        } else {
+          this.$message({
+            message: "记录失败",
+            type: "error"
+          });
+        }
+        setTimeout(() => {
+          this.clickFlag = true
+        }, 3000);
       }
+
     },
     async openTabWin(url, type) {
       // if (type == "view") {
