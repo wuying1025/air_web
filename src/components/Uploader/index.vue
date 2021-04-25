@@ -5,24 +5,32 @@
       class="uploader-example"
       @complete="complete"
       @file-success="onFileSuccess"
+      @file-error="onFileError"
       :file="file"
       :list="true"
     >
       <uploader-unsupport></uploader-unsupport>
       <uploader-drop>
         <!-- <span>将文件拖拽到此或点击选择文件按钮上传文件</span> -->
-        <uploader-btn :attrs="attrs" single v-if="!change">上传文件</uploader-btn>
+        <uploader-btn :attrs="attrs" single v-if="!change"
+          >上传文件</uploader-btn
+        >
         <uploader-btn :attrs="attrs" single v-else>修改文件</uploader-btn>
         <br />
         <span class="file-tip">* 注：一次只能上传一个文件</span>
       </uploader-drop>
       <uploader-list>
-        <uploader-file :class="'file_' + file.id" v-if="file" :file="file" :list="true"></uploader-file>
+        <uploader-file
+          :class="'file_' + file.id"
+          v-if="file"
+          :file="file"
+          :list="true"
+        ></uploader-file>
         <div class="file-list no-file" v-if="!change">
           <i class="nucfont inuc-empty-file"></i> 暂无待上传文件
         </div>
         <div class="file-list" v-else>
-          <div v-if="!file">已上传文件: {{name}}</div>
+          <div v-if="!file">已上传文件: {{ name }}</div>
         </div>
       </uploader-list>
     </uploader>
@@ -54,7 +62,11 @@ export default {
   props: ["change", "name"], //change true 代表修改|false代表添加
   methods: {
     onFileSuccess(rootFile, file, response, chunk) {
-      // console.log("file-success", response, file);
+      console.log("file-success", response, file);
+      this.$message({
+        message: "上传成功",
+        type: "success"
+      });
       let result = JSON.parse(response);
       let obj = {
         wFid: result.data.wFid,
@@ -70,6 +82,13 @@ export default {
         result.data.nFid
       );
       // alert(result.data.wFid);
+    },
+    onFileError(rootFile, file, response, chunk) {
+      console.log("onFileError", response, file);
+      this.$message({
+        message: "上传失败",
+        type: "error"
+      });
     },
     complete(rootFile, file, response, chunk) {
       console.log("complete");
