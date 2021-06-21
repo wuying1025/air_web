@@ -218,7 +218,11 @@ export const constantRoutes = [{
       title: '修改生成配置'
     }
   }]
-},
+}, {
+  path: '/questionnaireLogin',
+  component: () => import('@/views/questionnaire/login'),
+  hidden: true
+}
 
 ]
 
