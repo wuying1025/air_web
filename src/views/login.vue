@@ -72,7 +72,7 @@
     </el-form>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>Copyright © 2019-2020</span>
+      <!-- <span>Copyright © 2019-2020</span> -->
     </div>
   </div>
 </template>
