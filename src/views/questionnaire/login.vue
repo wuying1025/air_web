@@ -145,7 +145,7 @@ export default {
     handleLogin(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$router.push({ name: 'questionnaireTest', params: { ...this.loginForm } })
+          this.$router.push({ path: '/questionnaireTest', query: { ...this.loginForm } })
         } else {
           console.log("error submit!!");
           return false;

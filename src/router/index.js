@@ -224,7 +224,6 @@ export const constantRoutes = [{
   hidden: true
 }, {
   path: '/questionnaireTest',
-  name: 'questionnaireTest',
   component: () => import('@/views/questionnaire/test'),
   hidden: true
 }

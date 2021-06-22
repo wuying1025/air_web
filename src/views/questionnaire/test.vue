@@ -81,7 +81,7 @@ export default {
   methods: {
     async getData() {
       const res = await getQueList({
-        naireId: this.$route.params.questionId
+        naireId: this.$route.query.questionId
       })
       console.log(res);
       if (res && res.code === '200' && res.data) {
@@ -103,17 +103,17 @@ export default {
       this.form.choice.forEach(data => {
         result.push({
           questionId: data.id,
-          naireId: this.$route.params.questionId,
+          naireId: this.$route.query.questionId,
           userAnswer: data.answer,
-          userId: this.$route.params.userId
+          userId: this.$route.query.userId
         })
       })
       this.form.essay.forEach(data => {
         result.push({
           questionId: data.id,
-          naireId: this.$route.params.questionId,
+          naireId: this.$route.query.questionId,
           userAnswer: data.answer,
-          userId: this.$route.params.userId
+          userId: this.$route.query.userId
         })
       })
       // console.log(result);
@@ -130,7 +130,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$route.params);
+    console.log(this.$route.query);
     this.getData()
   }
 }
@@ -138,6 +138,7 @@ export default {
 
 <style lang="scss" scoped>
 .test-container {
+  height: 100%;
   background: #eaeff3 url(../../assets/image/bg.jpg) 0 0 no-repeat;
   background-size: cover;
   display: flex;
