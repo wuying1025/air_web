@@ -1,18 +1,18 @@
 <template>
   <div class="test-container">
     <div class="main-content">
-      <h1 class="main-title">XXXX调查问卷</h1>
-      <el-form ref="form">
+      <h1 class="main-title">{{ title }}</h1>
+      <el-form ref="form" :model="form">
         <h2 class="label">选择题</h2>
         <el-card
           class="card"
-          v-for="(choice, choiceIndex) in choiceQuestion"
+          v-for="(choice, choiceIndex) in form.choice"
           :key="choice.id"
         >
           <h4 class="sub-title">
             第{{ choiceIndex + 1 }}题 {{ choice.title }}
           </h4>
-          <el-radio-group v-model="userAnswer">
+          <el-radio-group v-model="form.choice[choiceIndex].answer">
             <el-radio class="radio" :label="'A'"
               >A.{{ choice.choiceA }}</el-radio
             ><br />
@@ -31,7 +31,7 @@
         <h2 class="label">简答题</h2>
         <el-card
           class="card"
-          v-for="(essay, essayIndex) in essayQuestion"
+          v-for="(essay, essayIndex) in form.essay"
           :key="essay.id"
         >
           <h4 class="sub-title">第{{ essayIndex + 1 }}题 {{ essay.title }}</h4>
@@ -39,7 +39,7 @@
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 4 }"
             placeholder="请输入答案"
-            v-model="essayAnswer"
+            v-model="form.essay[essayIndex].answer"
           ></el-input>
         </el-card>
 
@@ -65,32 +65,72 @@
 </template>
 
 <script>
-import { getQueList } from "@/api/question";
+import { getQueList, answer } from "@/api/question";
 
 export default {
   data() {
     return {
-      choiceQuestion: [],
-      essayQuestion: [],
-      userAnswer: '',
-      essayAnswer: '',
-      centerDialogVisible: false
+      title: '',
+      centerDialogVisible: false,
+      form: {
+        choice: [],
+        essay: []
+      }
     }
   },
   methods: {
     async getData() {
       const res = await getQueList({
-        // naireId: this.naireId
-        naireId: 11
+        naireId: this.$route.params.questionId
       })
-      this.choiceQuestion = res.data.choiceQuestion;
-      this.essayQuestion = res.data.essayQuestion;
+      console.log(res);
+      if (res && res.code === '200' && res.data) {
+        this.title = res.data.title
+
+        res.data.choiceQuestion.forEach((data, index) => {
+          this.$set(this.form.choice, index, data)
+          this.$set(this.form.choice[index], 'answer', '')
+        })
+
+        res.data.essayQuestion.forEach((data, index) => {
+          this.$set(this.form.essay, index, data)
+          this.$set(this.form.essay[index], 'answer', '')
+        })
+      }
     },
-    commitHandler() {
-      console.log('提交');
+    async commitHandler() {
+      const result = []
+      this.form.choice.forEach(data => {
+        result.push({
+          questionId: data.id,
+          naireId: this.$route.params.questionId,
+          userAnswer: data.answer,
+          userId: this.$route.params.userId
+        })
+      })
+      this.form.essay.forEach(data => {
+        result.push({
+          questionId: data.id,
+          naireId: this.$route.params.questionId,
+          userAnswer: data.answer,
+          userId: this.$route.params.userId
+        })
+      })
+      // console.log(result);
+      const res = await answer(result)
+      // console.log(res);
+      if (res && res.code === '200') {
+        this.$message({
+          message: "提交成功",
+          type: "success"
+        });
+        this.centerDialogVisible = false
+        this.$router.push('/login')
+      }
     }
   },
   mounted() {
+    console.log(this.$route.params);
     this.getData()
   }
 }

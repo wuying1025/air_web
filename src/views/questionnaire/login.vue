@@ -1,6 +1,12 @@
 <template>
   <div class="login-container">
-    <el-form :model="loginForm" class="login-form" label-width="60px">
+    <el-form
+      :model="loginForm"
+      :rules="rules"
+      class="login-form"
+      label-width="60px"
+      ref="question"
+    >
       <h3 class="title">问卷调查</h3>
       <el-form-item label="部门" prop="deptId">
         <el-select
@@ -50,7 +56,7 @@
           size="medium"
           type="primary"
           style="width: 230px"
-          @click.native.prevent="handleLogin"
+          @click.native.prevent="handleLogin('question')"
         >
           <span v-if="!loading">开始</span>
           <span v-else>登 录 中...</span>
@@ -63,7 +69,7 @@
 <script>
 import { lastDept } from "@/api/system/dept"
 import { selectPerson } from "@/api/insider"
-import { getAddList } from "@/api/question"
+import { findMyNaire } from "@/api/question"
 
 export default {
   data() {
@@ -76,11 +82,24 @@ export default {
       loading: false,
       deptList: [],
       personList: [],
-      questionList: []
+      questionList: [],
+      rules: {
+        deptId: [
+          { required: true, message: "请选择部门", trigger: "change" }
+        ],
+        userId: [
+          { required: true, message: "请选择姓名", trigger: "change" }
+        ],
+        questionId: [
+          { required: true, message: "请选择问卷", trigger: "change" }
+        ],
+      },
     }
   },
+
   computed: {
-    changeDeptId() { return this.loginForm.deptId }
+    changeDeptId() { return this.loginForm.deptId },
+    changeUserId() { return this.loginForm.userId },
   },
   watch: {
     changeDeptId(val) {
@@ -89,6 +108,12 @@ export default {
         this.loginForm.userId = ''
         this.getPersonInfoByDeptId(val)
       }
+    },
+    changeUserId(val) {
+      console.log(95, val);
+      this.questionList = []
+      this.loginForm.questionId = ''
+      this.getQuestionList(val)
     }
   },
   methods: {
@@ -108,21 +133,29 @@ export default {
         this.personList = res.data.records
       }
     },
-    async getData() {
-      const res = await getAddList({
+    async getQuestionList() {
+      const res = await findMyNaire({
+        userId: this.loginForm.userId,
         pageNum: 0,
         pageSize: 99999
       })
       console.log(res);
       this.questionList = res.data.records;
     },
-    handleLogin() {
-      this.$router.push('/questionnaireTest')
+    handleLogin(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$router.push({ name: 'questionnaireTest', params: { ...this.loginForm } })
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     }
   },
   mounted() {
     this.getDeptList();
-    // this.getData();
+    // this.getQuestionList();
   }
 }
 </script>
