@@ -253,6 +253,42 @@ export const constantRoutes = [{
     meta: { title: '会场详情' }
   }]
 }, {
+  path: '/plans',
+  component: Layout,
+  hidden: true,
+  children: [{
+    path: 'addWork',
+    component: () => import('@/views/plan/add/work'),
+    name: 'AddWork',
+    meta: {
+      title: '创建工作计划'
+    }
+  }, {
+    path: 'addWork/:id',
+    component: () => import('@/views/plan/add/work'),
+    name: 'EditWork',
+    meta: {
+      title: '修改工作计划'
+    }
+  },
+  {
+    path: 'getDetail/:id',
+    component: () => import('@/views/plan/list/detail'),
+    name: 'PlanDetail',
+    meta: {
+      title: '周工作计划详情'
+    }
+  }
+    // {
+    //   path: 'addStudy',
+    //   component: () => import('@/views/plan/add/study'),
+    //   name: 'AddStudy',
+    //   meta: {
+    //     title: '创建学习计划'
+    //   }
+    // }
+  ]
+}, {
   path: '/evaluation',
   component: Layout,
   redirect: 'index',
