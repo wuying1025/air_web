@@ -253,6 +253,24 @@ export const constantRoutes = [{
     meta: { title: '会场详情' }
   }]
 }, {
+  path: '/evaluation',
+  component: Layout,
+  redirect: 'index',
+  hidden: true,
+  children: [
+    {
+      path: 'leaderactivity',
+      component: () => import('@/views/evaluation/activityDetail'),
+      name: '专项活动评比',
+      meta: { title: '专项活动评比' }
+    }, {
+      path: 'leaderinspect',
+      component: () => import('@/views/evaluation/inspectDetail'),
+      name: '检查活动评比',
+      meta: { title: '检查活动评比' }
+    }
+  ]
+}, {
   path: '/questionnaireLogin',
   component: () => import('@/views/questionnaire/login'),
   hidden: true
