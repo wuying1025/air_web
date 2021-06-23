@@ -3,7 +3,7 @@
     <panel-group @handleSetLineChartData="handleSetLineChartData" />
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>本周工作计划</span>
+        <span>本周工作学习计划</span>
       </div>
       <el-table :data="workplanList" style="width: 100%" v-loading="loading">
         <el-table-column align="center" label="序号" type="index"> </el-table-column>
