@@ -219,6 +219,40 @@ export const constantRoutes = [{
     }
   }]
 }, {
+  path: '/meetings',
+  component: Layout,
+  hidden: true,
+  children: [{
+    path: 'detail',
+    component: () => import('@/views/meeting/addList/detail'),
+    meta: {
+      title: '会议详情',
+      icon: 'monitor',
+      noCache: true,
+      affix: true
+    },
+  }, {
+    path: 'detail',
+    component: () => import('@/views/meeting/list/detail'),
+    name: 'meeting',
+    meta: { title: '会议列表' }
+  }, {
+    path: 'addRoom',
+    component: () => import('@/views/meeting/room/add'),
+    name: 'AddRoom',
+    meta: { title: '添加会场' }
+  }, {
+    path: 'addRoom/:id',
+    component: () => import('@/views/meeting/room/add'),
+    name: 'UpdateRoom',
+    meta: { title: '修改会场' }
+  }, {
+    path: 'detailRoom/:id',
+    component: () => import('@/views/meeting/room/detail'),
+    name: 'DetailRoom',
+    meta: { title: '会场详情' }
+  }]
+}, {
   path: '/questionnaireLogin',
   component: () => import('@/views/questionnaire/login'),
   hidden: true
