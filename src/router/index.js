@@ -307,6 +307,18 @@ export const constantRoutes = [{
     }
   ]
 }, {
+  path: '/outsiders',
+  component: Layout,
+  hidden: true,
+  children: [{
+    path: 'getOutsiderDetail/:id',
+    component: () => import('@/views/outsider/list/detail'),
+    name: 'OutsiderDetail',
+    meta: {
+      title: '外来人员信息详情'
+    }
+  }]
+}, {
   path: '/questionnaireLogin',
   component: () => import('@/views/questionnaire/login'),
   hidden: true
