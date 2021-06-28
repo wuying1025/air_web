@@ -9,7 +9,7 @@
       <!-- 单选和判断模版 索引小于单选题  或者索引大于多选题数量显示 -->
       <el-main class="multiple-box">
         <el-form ref="form">
-          <h3>{{exerList[nowIndex].title}}</h3>
+          <h3 style="height:50px;">{{exerList[nowIndex].title}}</h3>
           <el-radio-group
             v-model="userAnswer"
             v-if="ExerType == 1 || ExerType == 3"
@@ -184,6 +184,9 @@ export default {
 </script>
 
 <style lang="scss" scoped >
+.app-container{
+  padding:60px 30px;
+}
 .line {
   text-align: center;
 }

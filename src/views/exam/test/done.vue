@@ -40,7 +40,7 @@ export default {
 <style lang="scss"  scoped>
 .done-container {
   background-color: #f0f2f5;
-  padding: 30px;
+  padding: 60px 30px;
   min-height: calc(100vh - 84px);
   .test-number-box {
     border-bottom: 1px solid #e6ebf5;
