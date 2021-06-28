@@ -326,7 +326,84 @@ export const constantRoutes = [{
   path: '/questionnaireTest',
   component: () => import('@/views/questionnaire/test'),
   hidden: true
-}
+}, {
+  path: '/examLogin',
+  component: () => import('@/views/exam/login'),
+  hidden: true
+},
+{
+  path: '/exams',
+  component: Layout,
+  hidden: true,
+  children: [{
+    path: 'add',
+    component: () => import('@/views/exam/add'),
+    // name: '发布考试',
+    meta: {
+      title: '发布考试',
+      icon: 'edit',
+    },
+    hidden: true
+  },
+  {
+    path: 'detail',
+    component: () => import('@/views/exam/addList/detail'),
+    name: '我的发布详情',
+    meta: {
+      title: '我的发布详情',
+      icon: 'build',
+    },
+    hidden: true
+  }, {
+    path: 'excises',
+    component: () => import('@/views/exam/excises'),
+    hidden: true
+  },
+  {
+    path: 'addCate',
+    component: () => import('@/views/exam/cate/add'),
+    name: 'AddTodayworkCate',
+    meta: {
+      title: '创建考试分类'
+    }
+  }, {
+    path: 'addCate/:id',
+    component: () => import('@/views/exam/cate/add'),
+    name: 'UpdateTodayworkCate',
+    meta: {
+      title: '修改考试分类'
+    }
+  }
+  ]
+},
+{
+  path:'/examList',
+  component: () => import('@/views/exam/examList/index'),
+  hidden: true
+}, 
+
+{
+  path: '/single',
+  component: () => import('@/views/exam/test/single'),
+  // // name: '单选题',
+  // meta: {
+  //   title: '单选题',
+  //   icon: 'monitor',
+  //   noCache: true
+  // },
+  hidden: true
+},
+{
+  path: '/analytic',
+  component: () => import('@/views/exam/test/analytic'),
+  // name: '判断题',
+  // meta: {
+  //   title: '考试结果',
+  //   icon: 'monitor',
+  //   noCache: true
+  // },
+  hidden: true
+},
 
 ]
 
