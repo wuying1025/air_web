@@ -53,7 +53,7 @@ export default {
 <style lang="scss"  scoped>
 .analytic-container {
   background-color: #f0f2f5;
-  padding: 30px;
+  padding: 60px 30px;
   min-height: calc(100vh - 84px);
   .el-icon-pie-chart {
     color: #47b893;

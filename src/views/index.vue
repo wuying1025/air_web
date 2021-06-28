@@ -141,6 +141,16 @@
       </el-table>
     </el-card>
 
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>安全管理责任图</span>
+      </div>
+      
+
+    </el-card>
+
+
+
     <!-- <el-row style="background: #fff; padding: 16px 16px 0; margin-bottom: 32px">
       <line-chart :chart-data="lineChartData" />
     </el-row>
