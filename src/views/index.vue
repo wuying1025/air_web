@@ -162,6 +162,9 @@
         </div>
       </el-col>
     </el-row> -->
+    <div v-for="(item,index) in 6" :key="index">
+      <indexList :type="item" />
+    </div>
   </div>
 </template>
 
@@ -171,6 +174,7 @@ import LineChart from './dashboard/LineChart'
 import RaddarChart from './dashboard/RaddarChart'
 import PieChart from './dashboard/PieChart'
 import BarChart from './dashboard/BarChart'
+import indexList from '@/views/components/indexList/index'
 import { selectWorkplan } from "@/api/workplan"
 import { getDutyList } from "@/api/duty"
 import { selectOutsider } from "@/api/outsider.js";
@@ -202,7 +206,8 @@ export default {
     LineChart,
     RaddarChart,
     PieChart,
-    BarChart
+    BarChart,
+    indexList
   },
   data() {
     return {
