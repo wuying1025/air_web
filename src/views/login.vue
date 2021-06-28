@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <router-link class="question" :to="{ path: '/questionnaireLogin' }" target="_blank">问卷调查</router-link>
-
+    <router-link class="exam" :to="{ path: '/examLogin' }" target="_blank">在线考试</router-link>
     <el-form
       ref="loginForm"
       :model="loginForm"
@@ -252,6 +252,15 @@ export default {
 }
 
 .question:hover {
+  color: #1890ff;
+}
+.exam{
+  position: absolute;
+  top: 50px;
+  right: 30px;
+  color: #bfbfbf;
+}
+.exam:hover {
   color: #1890ff;
 }
 </style>
