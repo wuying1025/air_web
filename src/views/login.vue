@@ -8,7 +8,7 @@
       :rules="loginRules"
       class="login-form"
     >
-      <h3 class="title">门户网站</h3>
+      <h3 class="title">门户系统</h3>
       <el-form-item prop="username">
         <el-input
           v-model="loginForm.username"
@@ -249,7 +249,7 @@ export default {
   top: 20px;
   right: 30px;
   color: #bfbfbf;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bolder;
 }
 
@@ -261,7 +261,7 @@ export default {
   top: 20px;
   right: 160px;
   color: #bfbfbf;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bolder;
 }
 .exam:hover {
