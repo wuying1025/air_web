@@ -28,7 +28,7 @@
             <el-button
               size="mini"
               type="text"
-              icon="el-icon-tickets"
+              icon="el-icon-view"
               @click="workplanDetail(scope.row)"
               >详情</el-button
             >
@@ -127,12 +127,12 @@
         width="180"
         label="创建时间"
       ></el-table-column> -->
-        <el-table-column  align="center" label="操作" width="220">
+        <el-table-column align="center" label="操作" width="220">
           <template slot-scope="scope">
             <el-button
               size="mini"
               type="text"
-              icon="el-icon-tickets"
+              icon="el-icon-view"
               @click="outSiderDetail(scope.row)"
               >详情</el-button
             >
@@ -146,10 +146,7 @@
         <span>安全管理责任图</span>
       </div>
       <div id="safeBox"></div>
-
     </el-card>
-
-
 
     <!-- <el-row style="background: #fff; padding: 16px 16px 0; margin-bottom: 32px">
       <line-chart :chart-data="lineChartData" />
@@ -172,7 +169,7 @@
         </div>
       </el-col>
     </el-row> -->
-    <div v-for="(item,index) in 6" :key="index">
+    <div v-for="(item, index) in 6" :key="index">
       <indexList :type="item" />
     </div>
   </div>
@@ -277,7 +274,7 @@ export default {
     outSiderDetail({ id }) {
       this.$router.push(`/outsiders/getOutsiderDetail/${id}`)
     },
-     drawSafe() {
+    drawSafe() {
       var myChart = echarts.init(document.getElementById("safeBox"));
       // var data = {
       //   name: "flare",
@@ -309,10 +306,10 @@ export default {
           var data = JSON.parse(res.data.records[0].url)[0];
           console.log(data[0]);
           var option = {
-            tooltip: {
-              trigger: "item",
-              triggerOn: "mousemove",
-            },
+            // tooltip: {
+            //   trigger: "item",
+            //   triggerOn: "mousemove",
+            // },
             series: [
               {
                 type: "tree",
@@ -325,28 +322,38 @@ export default {
                 bottom: "22%",
                 right: "20%",
 
-                symbolSize: 7,
+                // symbolSize: 7,
+                // symbol: 'none',
 
-                edgeShape: "polyline",
-                edgeForkPosition: "63%",
-                initialTreeDepth: 3,
+                orient: 'vertical',
 
-                lineStyle: {
-                  width: 2,
-                },
+                // edgeShape: "polyline",
+                // edgeForkPosition: "63%",
+                // initialTreeDepth: 3,
+
+                // lineStyle: {
+                //   width: 2,
+                // },
 
                 label: {
-                  backgroundColor: "#fff",
-                  position: "left",
-                  verticalAlign: "middle",
-                  align: "right",
+                  // backgroundColor: "#fff",
+                  // position: "left",
+                  // verticalAlign: "middle",
+                  // align: "right",
+                  position: 'top',
+                  verticalAlign: 'middle',
+                  align: 'center',
+                  fontSize: 16
                 },
 
                 leaves: {
                   label: {
-                    position: "right",
-                    verticalAlign: "middle",
-                    align: "left",
+                    // position: "right",
+                    // verticalAlign: "middle",
+                    // align: "left",
+                    position: 'bottom',
+                    verticalAlign: 'middle',
+                    align: 'center'
                   },
                 },
 
@@ -360,10 +367,10 @@ export default {
               },
             ],
           };
-          console.log(111);
+          // console.log(111);
 
           myChart.setOption(option);
-          console.log(222);
+          // console.log(222);
         }
       });
     },
