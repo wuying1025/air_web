@@ -145,7 +145,7 @@
       <div slot="header" class="clearfix">
         <span>安全管理责任图</span>
       </div>
-      
+      <div id="safeBox"></div>
 
     </el-card>
 
@@ -185,6 +185,8 @@ import { selectWorkplan } from "@/api/workplan"
 import { getDutyList } from "@/api/duty"
 import { selectOutsider } from "@/api/outsider.js";
 import { dateFormat } from "@/utils/format"
+import echarts from "echarts";
+import { selectSafety } from "@/api/safety.js";
 
 const lineChartData = {
   newVisitis: {
@@ -270,13 +272,103 @@ export default {
     outSiderDetail({ id }) {
       this.$router.push(`/outsiders/getOutsiderDetail/${id}`)
     },
+     drawSafe() {
+      var myChart = echarts.init(document.getElementById("safeBox"));
+      // var data = {
+      //   name: "flare",
+      //   children: [
+      //     {
+      //       name: "data",
+      //       children: [
+      //         {
+      //           name: "converters",
+      //           children: [
+      //             { name: "Converters", value: 721 },
+      //             { name: "DelimitedTextConverter", value: 4294 },
+      //           ],
+      //         },
+      //         {
+      //           name: "DataUtil",
+      //           value: 3322,
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // };
+      selectSafety({
+        size: 100,
+        current: 1,
+      }).then((res) => {
+        if (res.data.records.length > 0) {
+          // this.id = res.data.records[0].id;
+          var data = JSON.parse(res.data.records[0].url)[0];
+          console.log(data[0]);
+          var option = {
+            tooltip: {
+              trigger: "item",
+              triggerOn: "mousemove",
+            },
+            series: [
+              {
+                type: "tree",
+                id: 0,
+                name: "tree1",
+                data: [data],
+
+                top: "10%",
+                left: "8%",
+                bottom: "22%",
+                right: "20%",
+
+                symbolSize: 7,
+
+                edgeShape: "polyline",
+                edgeForkPosition: "63%",
+                initialTreeDepth: 3,
+
+                lineStyle: {
+                  width: 2,
+                },
+
+                label: {
+                  backgroundColor: "#fff",
+                  position: "left",
+                  verticalAlign: "middle",
+                  align: "right",
+                },
+
+                leaves: {
+                  label: {
+                    position: "right",
+                    verticalAlign: "middle",
+                    align: "left",
+                  },
+                },
+
+                emphasis: {
+                  focus: "descendant",
+                },
+
+                expandAndCollapse: true,
+                animationDuration: 550,
+                animationDurationUpdate: 750,
+              },
+            ],
+          };
+          console.log(111);
+
+          myChart.setOption(option);
+          console.log(222);
+        }
+      });
+    },
   },
   async mounted() {
     this.loading = true
     this.getWorkplan()
     this.getDutyList()
     this.getOutsider()
-
+    this.drawSafe();
     this.loading = false
 
   }
@@ -304,5 +396,8 @@ export default {
   .chart-wrapper {
     padding: 8px;
   }
+}
+#safeBox {
+  height: 300px;
 }
 </style>
