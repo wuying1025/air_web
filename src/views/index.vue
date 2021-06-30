@@ -28,7 +28,7 @@
             <el-button
               size="mini"
               type="text"
-              icon="el-icon-tickets"
+              icon="el-icon-view"
               @click="workplanDetail(scope.row)"
               >详情</el-button
             >
@@ -127,12 +127,12 @@
         width="180"
         label="创建时间"
       ></el-table-column> -->
-        <el-table-column  align="center" label="操作" width="220">
+        <el-table-column align="center" label="操作" width="220">
           <template slot-scope="scope">
             <el-button
               size="mini"
               type="text"
-              icon="el-icon-tickets"
+              icon="el-icon-view"
               @click="outSiderDetail(scope.row)"
               >详情</el-button
             >
@@ -145,11 +145,8 @@
       <div slot="header" class="clearfix">
         <span>安全管理责任图</span>
       </div>
-      
-
+      <div id="safeBox"></div>
     </el-card>
-
-
 
     <!-- <el-row style="background: #fff; padding: 16px 16px 0; margin-bottom: 32px">
       <line-chart :chart-data="lineChartData" />
@@ -172,7 +169,7 @@
         </div>
       </el-col>
     </el-row> -->
-    <div v-for="(item,index) in 6" :key="index">
+    <div v-for="(item, index) in 6" :key="index">
       <indexList :type="item" />
     </div>
   </div>
@@ -189,6 +186,8 @@ import { selectWorkplan } from "@/api/workplan"
 import { getDutyList } from "@/api/duty"
 import { selectOutsider } from "@/api/outsider.js";
 import { dateFormat } from "@/utils/format"
+import echarts from "echarts";
+import { selectSafety } from "@/api/safety.js";
 
 const lineChartData = {
   newVisitis: {
@@ -275,13 +274,113 @@ export default {
     outSiderDetail({ id }) {
       this.$router.push(`/outsiders/getOutsiderDetail/${id}`)
     },
+    drawSafe() {
+      var myChart = echarts.init(document.getElementById("safeBox"));
+      // var data = {
+      //   name: "flare",
+      //   children: [
+      //     {
+      //       name: "data",
+      //       children: [
+      //         {
+      //           name: "converters",
+      //           children: [
+      //             { name: "Converters", value: 721 },
+      //             { name: "DelimitedTextConverter", value: 4294 },
+      //           ],
+      //         },
+      //         {
+      //           name: "DataUtil",
+      //           value: 3322,
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // };
+      selectSafety({
+        size: 100,
+        current: 1,
+      }).then((res) => {
+        if (res.data.records.length > 0) {
+          // this.id = res.data.records[0].id;
+          var data = JSON.parse(res.data.records[0].url)[0];
+          console.log(data[0]);
+          var option = {
+            // tooltip: {
+            //   trigger: "item",
+            //   triggerOn: "mousemove",
+            // },
+            series: [
+              {
+                type: "tree",
+                id: 0,
+                name: "tree1",
+                data: [data],
+
+                top: "10%",
+                left: "8%",
+                bottom: "22%",
+                right: "20%",
+
+                // symbolSize: 7,
+                // symbol: 'none',
+
+                orient: 'vertical',
+
+                // edgeShape: "polyline",
+                // edgeForkPosition: "63%",
+                // initialTreeDepth: 3,
+
+                // lineStyle: {
+                //   width: 2,
+                // },
+
+                label: {
+                  // backgroundColor: "#fff",
+                  // position: "left",
+                  // verticalAlign: "middle",
+                  // align: "right",
+                  position: 'top',
+                  verticalAlign: 'middle',
+                  align: 'center',
+                  fontSize: 16
+                },
+
+                leaves: {
+                  label: {
+                    // position: "right",
+                    // verticalAlign: "middle",
+                    // align: "left",
+                    position: 'bottom',
+                    verticalAlign: 'middle',
+                    align: 'center'
+                  },
+                },
+
+                emphasis: {
+                  focus: "descendant",
+                },
+
+                expandAndCollapse: true,
+                animationDuration: 550,
+                animationDurationUpdate: 750,
+              },
+            ],
+          };
+          // console.log(111);
+
+          myChart.setOption(option);
+          // console.log(222);
+        }
+      });
+    },
   },
   async mounted() {
     this.loading = true
     this.getWorkplan()
     this.getDutyList()
     this.getOutsider()
-
+    this.drawSafe();
     this.loading = false
 
   }
@@ -309,5 +408,8 @@ export default {
   .chart-wrapper {
     padding: 8px;
   }
+}
+#safeBox {
+  height: 300px;
 }
 </style>

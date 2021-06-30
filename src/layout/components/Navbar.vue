@@ -26,11 +26,11 @@
         <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>-->
-        <a href="javascript:;" class="header-icons news">
+        <!-- <a href="javascript:;" class="header-icons news">
           <span class="icon" v-if="msgCount">{{msgCount}}</span>
         </a>
         <a href="#" class="header-icons message"></a>
-        <a href="#" class="header-icons mine"></a>
+        <a href="#" class="header-icons mine"></a> -->
         <a href="javascript:;" class="header-icons out" @click="logout"></a>
       </template>
     </div>

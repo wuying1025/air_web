@@ -1,14 +1,14 @@
 <template>
   <div class="login">
-    <router-link class="question" :to="{ path: '/questionnaireLogin' }" target="_blank">问卷调查</router-link>
-    <router-link class="exam" :to="{ path: '/examLogin' }" target="_blank">在线考试</router-link>
+    <router-link class="question" :to="{ path: '/questionnaireLogin' }" target="_blank">问卷调查系统</router-link>
+    <router-link class="exam" :to="{ path: '/examLogin' }" target="_blank">在线考试系统</router-link>
     <el-form
       ref="loginForm"
       :model="loginForm"
       :rules="loginRules"
       class="login-form"
     >
-      <h3 class="title">门户网站</h3>
+      <h3 class="title">门户系统</h3>
       <el-form-item prop="username">
         <el-input
           v-model="loginForm.username"
@@ -89,8 +89,8 @@ export default {
       codeUrl: "",
       cookiePassword: "",
       loginForm: {
-        username: "admin",
-        password: "admin123",
+        username: "",
+        password: "",
         rememberMe: false,
         code: "",
         uuid: ""
@@ -249,6 +249,8 @@ export default {
   top: 20px;
   right: 30px;
   color: #bfbfbf;
+  font-size: 18px;
+  font-weight: bolder;
 }
 
 .question:hover {
@@ -256,9 +258,11 @@ export default {
 }
 .exam{
   position: absolute;
-  top: 50px;
-  right: 30px;
+  top: 20px;
+  right: 160px;
   color: #bfbfbf;
+  font-size: 18px;
+  font-weight: bolder;
 }
 .exam:hover {
   color: #1890ff;

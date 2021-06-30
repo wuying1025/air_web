@@ -1,5 +1,5 @@
 module.exports = {
-  title: '门户网站',
+  title: '门户系统',
 
   /**
    * 是否系统布局配置
