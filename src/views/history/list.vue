@@ -11,7 +11,7 @@
         <el-table-column type="index" width="150" label="序号">
         </el-table-column>
         <el-table-column prop="title" label="名称"></el-table-column>
-        <el-table-column prop="createTime" label="添加时间"></el-table-column>
+        <el-table-column prop="time" label="历史时间"></el-table-column>
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button
@@ -38,6 +38,7 @@
   </div>
 </template>
 <script>
+import {dateFormat} from "../../utils/format";
 import { exposureList } from "@/api/exposure";
 export default {
   data() {
@@ -56,10 +57,12 @@ export default {
     
     // 获取法规列表数据
     getList() {
+      let timer = new Date();
       this.loading = true;
       exposureList({
         current: this.currentPage,
         size: this.pageSize,
+        time:dateFormat("YYYY-mm-dd HH:MM:SS", new Date()),
         type: 1,
       }).then((res) => {
         console.log(res);

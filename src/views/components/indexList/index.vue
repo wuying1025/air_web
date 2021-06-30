@@ -13,7 +13,8 @@
           <el-table-column type="index" width="150" label="序号">
           </el-table-column>
           <el-table-column prop="title" label="名称"></el-table-column>
-          <el-table-column prop="createTime" label="添加时间"></el-table-column>
+          <el-table-column v-if="type == 1" prop="time" label="历史时间"></el-table-column>
+          <el-table-column v-else prop="createTime" label="添加时间"></el-table-column>
           <el-table-column label="操作" width="200">
             <template slot-scope="scope">
               <el-button
@@ -72,6 +73,7 @@
   </div>
 </template>
 <script>
+import {dateFormat} from "../../../utils/format";
 import { exposureList } from "@/api/exposure";
 import { addAppeal } from "@/api/appeal";
 export default {
@@ -128,12 +130,16 @@ export default {
     },
     // 获取法规列表数据
     getList() {
-      this.loading = true;
-      exposureList({
+      let _data={
         current: this.currentPage,
         size: this.pageSize,
         type: this.type,
-      }).then((res) => {
+      }
+      if(this.type == 1){
+        _data.time = dateFormat("YYYY-mm-dd HH:MM:SS", new Date())
+      }
+      this.loading = true;
+      exposureList(_data).then((res) => {
         console.log(res);
         this.dataList = res.data.records;
         this.loading = false;
