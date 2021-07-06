@@ -276,35 +276,20 @@ export default {
     },
     drawSafe() {
       var myChart = echarts.init(document.getElementById("safeBox"));
-      // var data = {
-      //   name: "flare",
-      //   children: [
-      //     {
-      //       name: "data",
-      //       children: [
-      //         {
-      //           name: "converters",
-      //           children: [
-      //             { name: "Converters", value: 721 },
-      //             { name: "DelimitedTextConverter", value: 4294 },
-      //           ],
-      //         },
-      //         {
-      //           name: "DataUtil",
-      //           value: 3322,
-      //         },
-      //       ],
-      //     },
-      //   ],
-      // };
+      
       selectSafety({
         size: 100,
         current: 1,
       }).then((res) => {
         if (res.data.records.length > 0) {
           // this.id = res.data.records[0].id;
-          var data = JSON.parse(res.data.records[0].url)[0];
-          console.log(data[0]);
+          // var data = JSON.parse(res.data.records[0].url)[0];
+          var userData = JSON.parse(res.data.records[0].url);
+          var data = {
+            name:'安全责任图',
+            id:0,
+            children:userData
+          }
           var option = {
             // tooltip: {
             //   trigger: "item",
