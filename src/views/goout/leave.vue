@@ -36,7 +36,7 @@
             style="background: rgb(74, 119, 252)"
             size="mini"
             @click="$router.push('/out/leaveApply')"
-            >请假外出申请</el-button
+            >请假外出人员申请</el-button
           >
         </el-col>
       </el-row>

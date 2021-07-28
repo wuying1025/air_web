@@ -134,8 +134,8 @@ export const constantRoutes = [{
     }, {
       path: 'stationApply',
       component: () => import('@/views/goout/stationApply'),
-      name: '驻地人员外出申请',
-      meta: { title: '驻地人员外出申请' }
+      name: '驻地人员轮休申请',
+      meta: { title: '驻地人员轮休申请' }
     }, {
       path: 'stationApply/:id',
       component: () => import('@/views/goout/stationApply'),
@@ -144,13 +144,23 @@ export const constantRoutes = [{
     }, {
       path: 'leaveApply',
       component: () => import('@/views/goout/leaveApply'),
-      name: '请假外出申请',
-      meta: { title: '请假外出申请' }
+      name: '请假外出人员申请',
+      meta: { title: '请假外出人员申请' }
     }, {
       path: 'leaveApply/:id',
       component: () => import('@/views/goout/leaveApply'),
       name: '请假外出修改',
       meta: { title: '请假外出修改' }
+    }, {
+      path: 'vacationApply',
+      component: () => import('@/views/goout/vacationApply'),
+      name: '休假人员申请',
+      meta: { title: '休假人员申请' }
+    }, {
+      path: 'vacationApply/:id',
+      component: () => import('@/views/goout/vacationApply'),
+      name: '休假人员申请修改',
+      meta: { title: '休假人员申请修改' }
     }
   ]
 },
