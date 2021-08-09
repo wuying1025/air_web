@@ -14,10 +14,13 @@
             size="medium"
           >
             <el-form-item label="会议名称：">{{ meeting.title }}</el-form-item>
-            <el-form-item label="会议时间：">{{
+            <el-form-item label="开始时间：">{{
               meeting.startTime
             }}</el-form-item>
-            <el-form-item label="会议内容：">{{
+             <el-form-item label="结束时间：">{{
+              meeting.endTime
+            }}</el-form-item>
+            <el-form-item label="会议要求：">{{
               meeting.content
             }}</el-form-item>
           </el-form>
