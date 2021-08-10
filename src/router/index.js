@@ -398,6 +398,18 @@ export const constantRoutes = [{
       title: '文章详情'
     }
   }]
+},{
+  path: '/dynamic_',
+  component: Layout,
+  hidden: true,
+  children: [{
+    path: 'detail/:id',
+    component: () => import('@/views/dynamic/detail'),
+    name: 'dynamicDetail',
+    meta: {
+      title: '文章详情'
+    }
+  }]
 }, {
   path: '/examLogin',
   component: () => import('@/views/exam/login'),

@@ -8,11 +8,16 @@
         style="width: 100%"
         v-loading="loading"
       >
-        <el-table-column type="index" width="150" label="序号">
+        <el-table-column  align="center" type="index" width="150" label="序号">
         </el-table-column>
-        <el-table-column prop="title" label="名称"></el-table-column>
-        <el-table-column prop="createTime" label="添加时间"></el-table-column>
-        <el-table-column label="操作" width="200">
+        <el-table-column
+          align="center"
+          prop="cateName"
+          label="类型"
+        ></el-table-column>
+        <el-table-column  align="center" prop="title" label="名称"></el-table-column>
+        <el-table-column  align="center" prop="createTime" label="添加时间"></el-table-column>
+        <el-table-column  align="center" label="操作" width="200">
           <template slot-scope="scope">
             <el-button
               size="mini"

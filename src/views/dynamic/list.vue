@@ -28,6 +28,20 @@
               @click.stop="showDetail(scope.row)"
               >详情</el-button
             >
+            <!-- <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-delete"
+              @click.stop="delItem(scope.row)"
+              >删除</el-button
+            >
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click.stop="editItem(scope.row)"
+              >修改</el-button
+            > -->
           </template>
         </el-table-column>
       </el-table>
@@ -57,17 +71,54 @@ export default {
     };
   },
   methods: {
+    // 删除记录
+    delItem(item) {
+      this.$confirm("此操作将永久删除且无法恢复, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          console.log(item)
+          exposureDel(item.id).then((res) => {
+            this.$message({
+              message: "删除成功",
+              type: "success",
+            });
+            this.initData();
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+
+    },
+
+    // 修改记录
+    editItem(item) {
+      this.$router.push({
+        path: "/accident/add",
+        query: {
+          id: item.id
+        }
+      });
+    },
+
     // 获取法规列表数据
     getList() {
       this.loading = true;
       exposureList({
         current: this.currentPage,
         size: this.pageSize,
-        type: 4,
+        type: 7,
       }).then((res) => {
         console.log(res);
         this.dataList = res.data.records;
         this.loading = false;
+        this.total = res.data.total
       });
     },
     // 初始化数据

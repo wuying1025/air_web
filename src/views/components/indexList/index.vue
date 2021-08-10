@@ -1,6 +1,6 @@
 <template>
   <!-- 首页文章列表 -->
-  <!-- type 值1:历史今天，2：曝光问题，3：部门要事，4：事故通报，5：司机专栏，6：学习园地 -->
+  <!-- type 值1:历史今天，2：曝光问题，3：部门要事，4：事故通报，5：司机专栏，6：学习园地，7：部队管理动态 -->
   <div class="container">
     <div></div>
     <div class="content">
@@ -188,6 +188,9 @@ export default {
           break;
         case 6:
           _title = "学习园地";
+          break;
+        case 7:
+          _title = "部队管理动态";
           break;
         default:
           _title = "无";
