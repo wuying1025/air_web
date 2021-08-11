@@ -52,7 +52,7 @@
       ></el-table-column>
       <el-table-column
         prop="endDate"
-        label="结束时间"
+        label="截止时间"
         width="180"
       ></el-table-column>
       <el-table-column prop="categoryName" label="模块"></el-table-column>
@@ -66,7 +66,7 @@
             @click="
               $router.push({
                 path: '/single',
-                query: { id: scope.row.id ,userId:$route.query.userId},
+                query: { id: scope.row.id ,userId:$route.query.userId, duration: scope.row.duration},
               })
             "
             v-if="scope.row.isFinished == null"
