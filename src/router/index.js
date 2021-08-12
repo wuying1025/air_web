@@ -431,10 +431,10 @@ export const constantRoutes = [{
   },
   {
     path: 'detail',
-    component: () => import('@/views/exam/addList/detail'),
-    name: '我的发布详情',
+    component: () => import('@/views/exam/examList/detail'),
+    name: '详情',
     meta: {
-      title: '我的发布详情',
+      title: '详情',
       icon: 'build',
     },
     hidden: true
@@ -457,6 +457,11 @@ export const constantRoutes = [{
     meta: {
       title: '修改考试分类'
     }
+  }, {
+    path: 'testDetail',
+    component: () => import('@/views/exam/testDetail'),
+    meta: { title: '试卷详情' },
+    hidden: true,
   }
   ]
 },

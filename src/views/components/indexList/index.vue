@@ -24,14 +24,14 @@
                 @click.stop="showDetail(scope.row)"
                 >详情</el-button
               >
-              <el-button
+              <!-- <el-button
                 v-if="type == 2"
                 size="mini"
                 type="text"
                 icon="el-icon-s-flag"
                 @click.stop="appealBtn(scope.row)"
                 >申诉</el-button
-              >
+              > -->
             </template>
           </el-table-column>
         </el-table>
@@ -172,10 +172,10 @@ export default {
       let _type = this.type * 1;
       switch (_type) {
         case 1:
-          _title = "历史今天";
+          _title = "事故防范与安全提醒";
           break;
         case 2:
-          _title = "曝光问题";
+          _title = "场站保证申请";
           break;
         case 3:
           _title = "部门要事";
