@@ -3,14 +3,30 @@
     <el-main>
       <div class="main-content">
         <el-form ref="queryForm" :inline="true">
-          <el-form-item label="会议名称">
+          <el-form-item label="考试名称">
             <el-input
-              placeholder="请输入会议名称"
+              placeholder="请输入考试名称"
               v-model="search.title"
               clearable
               size="small"
+              style="width: 240px"
             />
           </el-form-item>
+          <el-form-item label="考试类型">
+            <el-select v-model="search.categoryId" placeholder="请选择考试类型">
+              <el-option
+                v-for="item in cateData"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <!-- <el-form-item label="状态" prop="status">
+        <el-select placeholder="请选择" clearable size="small" style="width: 240px">
+          <el-option />
+        </el-select>
+      </el-form-item>-->
           <el-form-item>
             <el-button
               type="primary"
@@ -24,34 +40,35 @@
             >
           </el-form-item>
         </el-form>
-        <el-table :data="meetingList" style="width: 100%" v-loading="loading">
+        <el-table :data="examList" style="width: 100%" v-loading="loading">
           <el-table-column
             align="center"
             type="index"
             label="序号"
             :index="(currentPage - 1) * pageSize + 1"
           ></el-table-column>
+          <el-table-column prop="title" label="考试名称"></el-table-column>
           <el-table-column
             align="center"
-            prop="title"
-            label="会议名称"
-          ></el-table-column>
-          <el-table-column
-            align="center"
-            prop="startTime"
+            prop="startDate"
             label="开始时间"
             width="180"
           ></el-table-column>
           <el-table-column
             align="center"
-            prop="endTime"
-            label="结束时间"
+            prop="endDate"
+            label="截止时间"
             width="180"
           ></el-table-column>
           <el-table-column
             align="center"
-            prop="content"
-            label="会议要求"
+            prop="categoryName"
+            label="模块"
+          ></el-table-column>
+          <el-table-column
+            align="center"
+            prop="duration"
+            label="时长(分钟)"
           ></el-table-column>
           <el-table-column align="center" label="操作">
             <template slot-scope="scope">
@@ -59,8 +76,13 @@
                 size="mini"
                 type="text"
                 icon="el-icon-thumb"
-                @click="detailHandle(scope.row)"
-                >查看</el-button
+                @click="
+                  $router.push({
+                    path: '/exams/detail',
+                    query: { examId: scope.row.id },
+                  })
+                "
+                >答题详情</el-button
               >
             </template>
           </el-table-column>
@@ -82,34 +104,51 @@
 </template>
 
 <script>
-import { getMeetingList } from "@/api/meeting.js";
-
+import { getMyExam, getExamCate, delExam } from "@/api/exam.js";
+// import { getCategory } from "@/api/tool/category.js";
 export default {
   data() {
     return {
-      meetingList: [],
+      examList: [],
       currentPage: 1,
       pageSize: 10,
       cateData: [],
       search: {
         title: "",
-        categoryId: 0,
-        level: 0
+        categoryId: "",
       },
       total: 0, //分页总页数
-      loading: true
+      loading: true,
     };
   },
   methods: {
+    handleUpdate() { },
     getData() {
-      getMeetingList({
+      let categoryId;
+      if (!this.search.categoryId) {
+        categoryId = 0;
+      } else {
+        categoryId = this.search.categoryId;
+      }
+      getMyExam({
         current: this.currentPage,
         size: this.pageSize,
-        title: this.search.title
-      }).then(res => {
-        this.meetingList = res.data.records;
+        title: this.search.title,
+        categoryId: categoryId,
+      }).then((res) => {
+        this.examList = res.data.records;
         this.total = res.data.total;
         this.loading = false;
+      });
+    },
+    // 获取分类列表
+    getCateList() {
+      getExamCate({
+        pageNum: 1,
+        pageSize: 1000,
+        // dictType: "sys_module_name",
+      }).then((res) => {
+        this.cateData = res.data.records;
       });
     },
     searchHandle() {
@@ -124,19 +163,39 @@ export default {
       this.currentPage = value;
       this.getData();
     },
-    detailHandle(_data) {
-      this.$router.push({
-        path: "/meetings/detail",
-        query: { id: _data.id, type: 2 }
-      });
-    }
+    delItem(item) {
+      this.$confirm("此操作将永久删除且无法恢复, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          console.log(item)
+          delExam(item.id).then((res) => {
+            this.$message({
+              message: "删除成功",
+              type: "success",
+            });
+            this.getData();
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+
+    },
   },
   created() {
     this.getData();
-  }
+    this.getCateList();
+  },
 };
 </script>
 <style lang="scss" scoped>
+/*表格内容区  */
 .main-content {
   background: #fff;
   min-height: calc(100vh - 210px);

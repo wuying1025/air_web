@@ -1,8 +1,14 @@
 <template>
-  <div class="container">
-    <div class="title">{{ dataInfo.title }}</div>
-    <div class="time">{{ dataInfo.createTime }}</div>
-    <div class="content" v-html="dataInfo.content"></div>
+  <div>
+    <el-main>
+      <div class="main-content">
+        <div class="container">
+          <div class="title">{{ dataInfo.title }}</div>
+          <div class="time">{{ dataInfo.createTime }}</div>
+          <div class="content" v-html="dataInfo.content"></div>
+        </div>
+      </div>
+    </el-main>
   </div>
 </template>
 <script>
@@ -29,27 +35,31 @@ export default {
 };
 </script>
 <style scoped>
-.container{
-    margin: 20px;
-    padding-top: 30px;
-    overflow: hidden;
-    background: white;
-    min-height: calc( 100vh - 150px );
-    border-radius: 10px;
+.main-content {
+  background: #fff;
+  min-height: calc(100vh - 210px);
+  padding: 20px;
+  box-sizing: border-box;
+  /* height:calc(100vh-200px); */
 }
-.container .title{
-    margin: 20px 0;
-    font-size: 40px;
-    font-weight: bold;
-    text-align: center;
+.container {
+  margin: 20px;
+  padding-top: 30px;
+  overflow: hidden;
 }
-.container .time{
-    text-align: center;
-    font-size: 14px;
-    color: #999;
+.container .title {
+  margin: 20px 0;
+  font-size: 40px;
+  font-weight: bold;
+  text-align: center;
 }
-.container .content{
-    width: 1000px;
-    margin: 50px auto 0;
+.container .time {
+  text-align: center;
+  font-size: 14px;
+  color: #999;
+}
+.container .content {
+  width: 1000px;
+  margin: 50px auto 0;
 }
 </style>

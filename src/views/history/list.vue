@@ -11,7 +11,7 @@
         <el-table-column type="index" width="150" label="序号">
         </el-table-column>
         <el-table-column prop="title" label="名称"></el-table-column>
-        <el-table-column prop="time" label="历史时间"></el-table-column>
+        <el-table-column prop="time" label="时间"></el-table-column>
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button
@@ -62,7 +62,7 @@ export default {
       exposureList({
         current: this.currentPage,
         size: this.pageSize,
-        time:dateFormat("YYYY-mm-dd HH:MM:SS", new Date()),
+        // time:dateFormat("YYYY-mm-dd HH:MM:SS", new Date()),
         type: 1,
       }).then((res) => {
         console.log(res);

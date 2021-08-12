@@ -169,7 +169,7 @@
         </div>
       </el-col>
     </el-row> -->
-    <div v-for="(item, index) in 6" :key="index">
+    <div v-for="(item, index) in 7" :key="index">
       <indexList :type="item" />
     </div>
   </div>
@@ -275,87 +275,112 @@ export default {
       this.$router.push(`/outsiders/getOutsiderDetail/${id}`)
     },
     drawSafe() {
-      var myChart = echarts.init(document.getElementById("safeBox"));
-      
+      const myChart = echarts.init(document.getElementById("safeBox"));
       selectSafety({
         size: 100,
         current: 1,
       }).then((res) => {
         if (res.data.records.length > 0) {
-          // this.id = res.data.records[0].id;
-          // var data = JSON.parse(res.data.records[0].url)[0];
-          var userData = JSON.parse(res.data.records[0].url);
-          var data = {
-            name:'安全责任图',
-            id:0,
-            children:userData
-          }
-          var option = {
-            // tooltip: {
-            //   trigger: "item",
-            //   triggerOn: "mousemove",
-            // },
-            series: [
-              {
-                type: "tree",
-                id: 0,
-                name: "tree1",
-                data: [data],
-
-                top: "10%",
-                left: "8%",
-                bottom: "22%",
-                right: "20%",
-
-                // symbolSize: 7,
-                // symbol: 'none',
-
-                orient: 'vertical',
-
-                // edgeShape: "polyline",
-                // edgeForkPosition: "63%",
-                // initialTreeDepth: 3,
-
-                // lineStyle: {
-                //   width: 2,
-                // },
-
-                label: {
-                  // backgroundColor: "#fff",
-                  // position: "left",
-                  // verticalAlign: "middle",
-                  // align: "right",
-                  position: 'top',
-                  verticalAlign: 'middle',
-                  align: 'center',
-                  fontSize: 16
-                },
-
-                leaves: {
-                  label: {
-                    // position: "right",
-                    // verticalAlign: "middle",
-                    // align: "left",
-                    position: 'bottom',
-                    verticalAlign: 'middle',
-                    align: 'center'
-                  },
-                },
-
-                emphasis: {
-                  focus: "descendant",
-                },
-
-                expandAndCollapse: true,
-                animationDuration: 550,
-                animationDurationUpdate: 750,
-              },
-            ],
+          const userData = JSON.parse(res.data.records[0].url);
+          const iteration = function (arr) {
+            let newArr = [];
+            if (arr != undefined && arr.length > 0) {
+              newArr = arr.map(item => {
+                item.symbolSize = [100, 30]
+                item.symbol = 'rectangle'
+                if (item.children != undefined && item.children.length > 0) {
+                  iteration(item.children);
+                }
+                return item;
+              });
+            }
+            return newArr;
           };
-          // console.log(111);
+          const newObj = iteration(userData)
+          const data = {
+            name: '安全责任图',
+            value: 0,
+            symbolSize: [100, 30],
+            symbol: 'rectangle',
+            itemStyle: {
+              normal: {
+                borderWidth: 2,
+                borderColor: '#395EFB'
+              }
+            },
+            children: newObj
+          }
+          const option = {
+            // title: {
+            //   text: '安全责任图'
+            // },
+            // tooltip: {
+            //   show: false,
+            //   trigger: 'item',
+            //   formatter: "{b}: {c}"
+            // },
+            toolbox: {
+              show: false,
+              feature: {
+                mark: {
+                  show: true
+                },
+                dataView: {
+                  show: false,
+                  readOnly: false
+                },
+                restore: {
+                  show: false
+                },
+                saveAsImage: {
+                  show: true
+                }
+              }
+            },
+            calculable: true,
+            series: [{
+              name: '安全责任图',
+              type: 'tree',
+              orient: 'vertical', // vertical horizontal
+              rootLocation: {
+                x: '50%',
+                y: '15%'
+              }, // 根节点位置  {x: 'center',y: 10}
+              // nodePadding: 30,
+              // layerPadding: 40,
+              // symbol: 'rectangle',
+              // borderColor: '#395EFB',
 
+              itemStyle: {
+                normal: {
+                  color: '#395EFB', //节点背景色
+                  borderWidth: 2,
+                  borderColor: '#395EFB',
+                  label: {
+                    show: true,
+                    position: 'inside',
+                    textStyle: {
+                      color: '#fff',
+                      fontSize: 16,
+                      fontWeight: 'bolder'
+                    }
+                  },
+                  lineStyle: {
+                    color: '#000',
+                    width: 2,
+                    type: 'solid' // 'curve'|'broken'|'solid'|'dotted'|'dashed'
+                  }
+                },
+                emphasis: {
+                  label: {
+                    show: false
+                  }
+                }
+              },
+              data: [data]
+            }]
+          };
           myChart.setOption(option);
-          // console.log(222);
         }
       });
     },
@@ -395,6 +420,6 @@ export default {
   }
 }
 #safeBox {
-  height: 300px;
+  min-height: 300px;
 }
 </style>

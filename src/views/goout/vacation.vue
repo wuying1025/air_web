@@ -35,8 +35,8 @@
             type="primary"
             style="background: rgb(74, 119, 252)"
             size="mini"
-            @click="$router.push('/out/stationApply')"
-            >驻地人员轮休申请</el-button
+            @click="$router.push('/out/vacationApply')"
+            >休假人员申请</el-button
           >
         </el-col>
       </el-row>
@@ -128,7 +128,7 @@ export default {
         size: this.pageSize,
         deptId: 0,
         status: 0,
-        typeId: 2 // 驻地外出2
+        typeId: 3 // 休假人员申请3
       })
       console.log(res);
       if (res && res.data && res.data.records) {
@@ -156,7 +156,7 @@ export default {
       this.loading = false;
     },
     update(person) {
-      this.$router.push(`/out/stationApply/${person.id}`)
+      this.$router.push(`/out/vacationApply/${person.id}`)
     },
     handleCurrentChange(value) {
       this.currentPage = value;

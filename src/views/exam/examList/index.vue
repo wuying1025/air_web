@@ -40,24 +40,27 @@
     </el-form>
     <el-table :data="examList" style="width: 100%" v-loading="loading">
       <el-table-column
+      align="center"
         type="index"
         label="序号"
         :index="(currentPage - 1) * pageSize + 1"
       ></el-table-column>
       <el-table-column prop="title" label="考试名称"></el-table-column>
       <el-table-column
+      align="center"
         prop="startDate"
         label="开始时间"
         width="180"
       ></el-table-column>
       <el-table-column
+      align="center"
         prop="endDate"
-        label="结束时间"
+        label="截止时间"
         width="180"
       ></el-table-column>
-      <el-table-column prop="categoryName" label="模块"></el-table-column>
-      <el-table-column prop="duration" label="时长"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column align="center" prop="categoryName" label="模块"></el-table-column>
+      <el-table-column align="center" prop="duration" label="时长(分钟)"></el-table-column>
+      <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -66,7 +69,7 @@
             @click="
               $router.push({
                 path: '/single',
-                query: { id: scope.row.id ,userId:$route.query.userId},
+                query: { id: scope.row.id ,userId:$route.query.userId, duration: scope.row.duration},
               })
             "
             v-if="scope.row.isFinished == null"
