@@ -62,7 +62,7 @@ export default {
       exposureList({
         current: this.currentPage,
         size: this.pageSize,
-        time:dateFormat("YYYY-mm-dd HH:MM:SS", new Date()),
+        // time:dateFormat("YYYY-mm-dd HH:MM:SS", new Date()),
         type: 1,
       }).then((res) => {
         console.log(res);
