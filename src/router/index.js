@@ -299,24 +299,6 @@ export const constantRoutes = [{
     // }
   ]
 }, {
-  path: '/evaluation',
-  component: Layout,
-  redirect: 'index',
-  hidden: true,
-  children: [
-    {
-      path: 'leaderactivity',
-      component: () => import('@/views/evaluation/activityDetail'),
-      name: '专项活动评比',
-      meta: { title: '专项活动评比' }
-    }, {
-      path: 'leaderinspect',
-      component: () => import('@/views/evaluation/inspectDetail'),
-      name: '检查活动评比',
-      meta: { title: '检查活动评比' }
-    }
-  ]
-}, {
   path: '/outsiders',
   component: Layout,
   hidden: true,
@@ -398,7 +380,7 @@ export const constantRoutes = [{
       title: '文章详情'
     }
   }]
-},{
+}, {
   path: '/dynamic_',
   component: Layout,
   hidden: true,
@@ -492,7 +474,61 @@ export const constantRoutes = [{
   //   noCache: true
   // },
   hidden: true
-},
+}, {
+  path: '/evaluations',
+  component: Layout,
+  hidden: true,
+  children: [{
+    path: 'addSeason',
+    component: () => import('@/views/evaluation/addSeason'),
+    name: 'addSeason',
+    meta: {
+      title: '创建季度信息'
+    }
+  }, {
+    path: 'addSeason/:id',
+    component: () => import('@/views/evaluation/addSeason'),
+    name: 'UpdateSeason',
+    meta: {
+      title: '修改季度信息'
+    }
+  }, {
+    path: 'seasonDetail/:quanId/:name',
+    component: () => import('@/views/evaluation/seasonDetail'),
+    name: 'seasonDetail',
+    meta: {
+      title: '评比信息详情'
+    }
+  }, {
+    path: 'addSub/:quanId',
+    component: () => import('@/views/evaluation/addSub'),
+    name: 'addSub',
+    meta: {
+      title: '加减分项'
+    }
+  }, {
+    path: 'itemDetail/:id',
+    component: () => import('@/views/evaluation/addSubDetail'),
+    name: 'AddSubDetail',
+    meta: {
+      title: '加减分详情'
+    }
+  }, {
+    path: 'selectTotal/:id/:name',
+    component: () => import('@/views/evaluation/selectTotal'),
+    name: 'SelectTotal',
+    meta: {
+      title: '量化评比统计'
+    }
+  }, {
+    path: 'selectTotalDetail/:quanId/:deptId',
+    component: () => import('@/views/evaluation/selectTotalDetail'),
+    name: 'SelectTotalDetail',
+    meta: {
+      title: '量化评比详情'
+    }
+  }]
+}
 
 ]
 
