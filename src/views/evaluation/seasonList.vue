@@ -2,82 +2,52 @@
   <div>
     <el-main>
       <div class="main-content">
-        <!-- <el-form ref="queryForm" :inline="true">
-      <el-form-item label="工作名称">
-        <el-input
-          placeholder="请输入工作名称"
-          v-model="search.title"
-          clearable
-          size="small"
-        />
-      </el-form-item>
-      <el-form-item label="工作分类">
-        <el-select v-model="search.cateId" placeholder="请选择工作分类">
-          <el-option
-            v-for="item in cateData"
-            :key="item.id"
-            :label="item.cateName"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          type="primary"
-          icon="el-icon-search"
-          size="mini"
-          @click="searchHandle()"
-          >搜索</el-button
-        >
-        <el-button icon="el-icon-refresh" size="mini" @click="reSetHandle()"
-          >重置</el-button
-        >
-      </el-form-item>
-    </el-form> -->
-        <el-row :gutter="10" class="mb8">
+        <!-- <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
             <el-button
               type="primary"
               icon="el-icon-plus"
               size="mini"
-              @click="$router.push('/plans/addWork')"
-              >创建工作</el-button
+              @click="$router.push('/evaluations/addSeason')"
+              >创建季度信息</el-button
             >
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-table :data="list" style="width: 100%" v-loading="loading">
           <el-table-column
+            align="center"
             type="index"
             label="序号"
             :index="(currentPage - 1) * pageSize + 1"
           ></el-table-column>
-          <el-table-column prop="title" label="工作名称"></el-table-column>
-          <el-table-column prop="content" label="工作内容"></el-table-column>
-          <el-table-column prop="startTime" label="开始时间"></el-table-column>
-          <el-table-column prop="endTime" label="结束时间"></el-table-column>
-          <el-table-column label="操作" width="220">
+          <el-table-column
+            align="center"
+            prop="name"
+            label="季度名称"
+          ></el-table-column>
+          <el-table-column align="center" label="操作">
             <template slot-scope="scope">
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-tickets"
                 @click="lookHandle(scope.row)"
-                >查看详情</el-button
+                >查看统计</el-button
               >
               <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-edit"
                 @click="editHandle(scope.row)"
-                >修改</el-button
+                >评比详情</el-button
               >
-              <el-button
+              <!-- <el-button
                 size="mini"
                 type="text"
                 icon="el-icon-delete"
                 @click="delHandle(scope.row)"
                 >删除</el-button
-              >
+              > -->
             </template>
           </el-table-column>
         </el-table>
@@ -115,7 +85,7 @@
 </template>
 
 <script>
-import { selectWorkplan, delWorkplanById } from "@/api/workplan"
+import { seasonList, seasonDel } from "@/api/evaluation"
 
 export default {
   data() {
@@ -123,11 +93,6 @@ export default {
       list: [],
       currentPage: 1,
       pageSize: 10,
-      cateData: [],
-      search: {
-        title: "",
-        cateId: 0,
-      },
       total: 0, //分页总页数
       loading: true,
       dialogVisible: false,
@@ -136,7 +101,7 @@ export default {
   },
   methods: {
     async getData() {
-      const res = await selectWorkplan({
+      const res = await seasonList({
         current: this.currentPage,
         size: this.pageSize,
       })
@@ -147,23 +112,15 @@ export default {
         this.loading = false;
       }
     },
-    searchHandle() {
-      this.getData();
-    },
-    reSetHandle() {
-      this.search.title = "";
-      this.search.cateId = 0;
-      this.getData();
-    },
     handleCurrentChange(value) {
       this.currentPage = value;
       this.getData();
     },
-    lookHandle({ id }) {
-      this.$router.push(`/plans/getDetail/${id}`)
+    lookHandle({ id, name }) {
+      this.$router.push(`/evaluations/selectTotal/${id}/${name}`)
     },
-    editHandle({ id }) {
-      this.$router.push(`/plans/addWork/${id}`)
+    editHandle({ id, name }) {
+      this.$router.push(`/evaluations/seasonDetail/${id}/${name}`)
     },
     delHandle({ id }) {
       this.dialogVisible = true
@@ -171,7 +128,7 @@ export default {
     },
     async doDelHandle() {
       this.dialogVisible = false
-      const res = await delWorkplanById(this.id)
+      const res = await seasonDel(this.id)
       if (res && res.code === '200') {
         this.$message({
           message: '删除成功',
@@ -181,7 +138,7 @@ export default {
       }
     },
   },
-  created() {
+  mounted() {
     this.getData();
   },
 
@@ -192,14 +149,13 @@ export default {
   text-align: right;
   margin-top: 20px;
 }
+.el-tag {
+  cursor: pointer;
+}
 .main-content {
   background: #fff;
   min-height: calc(100vh - 210px);
   padding: 20px;
   box-sizing: border-box;
-  /* height:calc(100vh-200px); */
-}
-.el-tag {
-  cursor: pointer;
 }
 </style>

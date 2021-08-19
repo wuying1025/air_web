@@ -127,7 +127,6 @@ export default {
   min-height: calc(100vh - 210px);
   padding: 20px;
   box-sizing: border-box;
-  /* height:calc(100vh-200px); */
 }
 .main-content .isdone {
   border-radius: 40px;
