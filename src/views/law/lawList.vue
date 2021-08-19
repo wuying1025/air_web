@@ -28,7 +28,7 @@
         <el-table-column type="index" width="50" label="序号">
         </el-table-column>
         <el-table-column prop="name" label="名称" width="130"></el-table-column>
-        <el-table-column prop="createTime" label="添加时间"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column prop="remark" label="法规简介"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
