@@ -248,9 +248,9 @@ export default {
   position: absolute;
   top: 20px;
   right: 30px;
-  color: #bfbfbf;
   font-size: 18px;
   font-weight: bolder;
+  color: #fff;
 }
 
 .question:hover {
@@ -260,9 +260,9 @@ export default {
   position: absolute;
   top: 20px;
   right: 160px;
-  color: #bfbfbf;
   font-size: 18px;
   font-weight: bolder;
+  color: #fff;
 }
 .exam:hover {
   color: #1890ff;

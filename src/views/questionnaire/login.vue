@@ -110,7 +110,7 @@ export default {
       }
     },
     changeUserId(val) {
-      console.log(95, val);
+      // console.log(95, val);
       this.questionList = []
       this.loginForm.questionId = ''
       this.getQuestionList(val)

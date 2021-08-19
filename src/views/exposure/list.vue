@@ -1,23 +1,51 @@
 <template>
   <div class="app-container">
-    
-
     <div class="content">
-      <el-table
-        :data="dataList"
-        style="width: 100%"
-        v-loading="loading"
-      >
-        <el-table-column type="index" width="150" label="序号">
+      <el-table :data="dataList" style="width: 100%" v-loading="loading">
+        <el-table-column align="center" type="index" width="150" label="序号">
         </el-table-column>
-        <el-table-column prop="title" label="标题"></el-table-column>
+        <el-table-column
+          align="center"
+          prop="title"
+          label="名称"
+        ></el-table-column>
         <el-table-column
           align="center"
           prop="cateName"
           label="类型"
         ></el-table-column>
-        <el-table-column prop="createTime" label="创建时间"></el-table-column>
-        <el-table-column label="操作" width="200">
+        <el-table-column
+          align="center"
+          prop="createTime"
+          label="创建时间"
+        ></el-table-column>
+        <el-table-column align="center" label="是否反馈">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.count == 0">未反馈</el-tag>
+            <el-tag v-else type="success">已反馈</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="反馈">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="primary"
+              icon="el-icon-s-flag"
+              @click.stop="appealBtn(scope.row)"
+              v-if="scope.row.count == 0"
+              >填写反馈</el-button
+            >
+            <el-button
+              type="success"
+              size="mini"
+              icon="el-icon-search"
+              @click.stop="lookBtn(scope.row)"
+              v-else
+              >查看反馈</el-button
+            >
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="操作" width="200">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -45,18 +73,48 @@
       </el-table>
       <div class="page-box">
         <el-pagination
-          layout="total, prev, pager, next, jumper"
+          style="width: 100%"
+          background
+          layout="total, prev, pager, next"
           :total="total"
           :current-page.sync="currentPage"
           :page-size="pageSize"
           @current-change="handleCurrentChange"
         ></el-pagination>
       </div>
+      <!-- 弹框 -->
+      <el-dialog
+        v-loading="diaLoading"
+        @closed="closeDialog"
+        title="问题反馈"
+        :visible.sync="dialogFormVisible"
+      >
+        <el-form ref="form" :model="appealForm" :rules="rules">
+          <el-form-item label="反馈人" label-width="120px" prop="title">
+            <el-input v-model="appealForm.title" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="反馈内容" label-width="120px" prop="content">
+            <el-input
+              type="textarea"
+              v-model="appealForm.content"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" v-if="btnShow" @click="appealHandle"
+            >确 定</el-button
+          >
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
 <script>
 import { exposureList, exposureDel } from "@/api/exposure";
+import { addAppeal, appealList } from "@/api/appeal";
+
 export default {
   data() {
     return {
@@ -66,6 +124,14 @@ export default {
       currentPage: 1, //分页当前页
       pageSize: 10,
       total: 0, //总页数
+      diaLoading: false,
+      appealForm: {},
+      dialogFormVisible: false,
+      rules: {
+        title: [{ required: true, message: "请输入反馈人", trigger: "blur" }],
+        content: [{ required: true, message: "请输入反馈内容", trigger: "blur" }],
+      },
+      btnShow: true
     };
   },
   methods: {
@@ -77,7 +143,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          console.log(item)
+          // console.log(item)
           exposureDel(item.id).then((res) => {
             this.$message({
               message: "删除成功",
@@ -92,15 +158,15 @@ export default {
             message: "已取消删除",
           });
         });
-      
+
     },
 
     // 修改记录
     editItem(item) {
       this.$router.push({
         path: "/exposure/add",
-        query:{
-          id:item.id
+        query: {
+          id: item.id
         }
       });
     },
@@ -143,9 +209,10 @@ export default {
         size: this.pageSize,
         type: 2,
       }).then((res) => {
-        console.log(res);
+        // console.log(res);
         this.dataList = res.data.records;
         this.loading = false;
+        this.total = res.data.total
       });
     },
     // 初始化数据
@@ -163,6 +230,57 @@ export default {
     handleCurrentChange(value) {
       this.currentPage = value;
       this.getData();
+    },
+    // 反馈按钮
+    appealBtn(row) {
+      this.appealForm = {}
+      this.appealId = row.id;
+      this.btnShow = true
+      this.dialogFormVisible = true;
+    },
+    async lookBtn(row) {
+      const res = await appealList({
+        current: this.currentPage,
+        size: this.pageSize,
+        hId: row.id
+      })
+      if (res && res.code == 200 && res.data.records && res.data.records[0]) {
+        this.btnShow = false
+        this.dialogFormVisible = true
+        this.appealForm = {
+          title: res.data.records[0].username,
+          content: res.data.records[0].complaint,
+        }
+      }
+    },
+    // 反馈
+    appealHandle() {
+      this.diaLoading = true;
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          addAppeal({
+            username: this.appealForm.title,
+            hid: this.appealId,
+            complaint: this.appealForm.content,
+          }).then((res) => {
+            this.$message({
+              message: "反馈已发出",
+              type: "success",
+            });
+            this.$refs.form.resetFields();
+            this.dialogFormVisible = false;
+            this.diaLoading = false;
+            this.getList();
+          });
+        } else {
+          console.log(valid, "error submit!!");
+          return false;
+        }
+      });
+    },
+    // 关闭弹框
+    closeDialog() {
+      this.$refs.form.resetFields();
     },
   },
   created() {
@@ -210,5 +328,9 @@ li {
 }
 .search-box .el-input__suffix {
   right: 10px;
+}
+.page-box {
+  text-align: right;
+  margin-top: 20px;
 }
 </style>

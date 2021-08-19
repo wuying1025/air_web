@@ -3,6 +3,13 @@
     <el-main>
       <div class="main-content">
         <div class="container">
+          <el-button
+            type="primary"
+            icon="el-icon-back"
+            size="mini"
+            @click="$router.go(-1)"
+            >返回</el-button
+          >
           <div class="title">{{ dataInfo.title }}</div>
           <div class="time">{{ dataInfo.createTime }}</div>
           <div class="content" v-html="dataInfo.content"></div>
@@ -35,13 +42,6 @@ export default {
 };
 </script>
 <style scoped>
-.main-content {
-  background: #fff;
-  min-height: calc(100vh - 210px);
-  padding: 20px;
-  box-sizing: border-box;
-  /* height:calc(100vh-200px); */
-}
 .container {
   margin: 20px;
   padding-top: 30px;
@@ -61,5 +61,11 @@ export default {
 .container .content {
   width: 1000px;
   margin: 50px auto 0;
+}
+.main-content {
+  background: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 10px;
 }
 </style>

@@ -60,13 +60,13 @@
         <el-table-column
           align="center"
           prop="startTime"
-          label="开始时间"
+          label="值班时间"
         ></el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           align="center"
           prop="endTime"
           label="结束时间"
-        ></el-table-column>
+        ></el-table-column> -->
         <el-table-column
           align="center"
           prop="pos"
