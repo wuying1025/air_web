@@ -1,126 +1,141 @@
 <template>
-  <div id="banner-list">
-    <el-tabs v-model="activeName" @tab-click="tabHandle(activeName)">
-      <el-tab-pane label="单选题" name="1">
-        <el-button
-          type="primary"
-          size="mini"
-          id="banner-list-add"
-          @click="showDialog('add', 1)"
-        >
-          <i class="el-icon-plus"></i>
-          添加单选题
-        </el-button>
+  <div>
+    <el-main>
+      <div class="main-content">
+        <div id="banner-list">
+          <el-tabs v-model="activeName" @tab-click="tabHandle(activeName)">
+            <el-tab-pane label="单选题" name="1">
+              <!-- <el-button
+                type="primary"
+                size="mini"
+                id="banner-list-add"
+                @click="showDialog('add', 1)"
+              >
+                <i class="el-icon-plus"></i>
+                添加单选题
+              </el-button> -->
 
-        <el-table :data="single" style="width: 100%">
-          <el-table-column type="expand">
-            <template slot-scope="{ row }">
-              <h3>题目详情</h3>
-              <div v-html="row.title"></div>
-            </template>
-          </el-table-column>
-          <!-- <el-table-column label="ID" prop="id"></el-table-column> -->
-          <el-table-column label="序号" width="70px">
-            <template slot-scope="scope">
-              {{ scope.$index + 1 }}
-            </template>
-          </el-table-column>
-          <el-table-column label="题目" prop="title">
-            <template slot-scope="{ row }">
-              <div v-html="row.title" style="height: 27px"></div>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" prop="desc">
-            <template slot-scope="scope">
-              <el-button
-                @click="change(scope.row, 'change', 1)"
-                type="text"
-                size="small"
-                >编辑</el-button
+              <el-table :data="single" style="width: 100%">
+                <el-table-column type="expand">
+                  <template slot-scope="{ row }">
+                    <h3>题目详情</h3>
+                    <div v-html="row.title"></div>
+                  </template>
+                </el-table-column>
+                <!-- <el-table-column label="ID" prop="id"></el-table-column> -->
+                <el-table-column label="序号" width="70px">
+                  <template slot-scope="scope">
+                    {{ scope.$index + 1 }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="题目" prop="title">
+                  <template slot-scope="{ row }">
+                    <div v-html="row.title" style="height: 27px"></div>
+                  </template>
+                </el-table-column>
+                <!-- <el-table-column label="操作" prop="desc">
+                  <template slot-scope="scope">
+                    <el-button
+                      @click="change(scope.row, 'change', 1)"
+                      type="text"
+                      size="small"
+                      >编辑</el-button
+                    >
+                    <el-button
+                      @click="delHandle(scope.row)"
+                      type="text"
+                      size="small"
+                      >删除</el-button
+                    >
+                  </template>
+                </el-table-column> -->
+              </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="简答题" name="2">
+              <!-- <el-button
+                type="primary"
+                size="mini"
+                id="banner-list-add"
+                @click="showDialog('add', 2)"
               >
-              <el-button @click="delHandle(scope.row)" type="text" size="small"
-                >删除</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-      <el-tab-pane label="简答题" name="2">
-        <el-button
-          type="primary"
-          size="mini"
-          id="banner-list-add"
-          @click="showDialog('add', 2)"
-        >
-          <i class="el-icon-plus"></i>
-          添加简答题
-        </el-button>
-        <el-table :data="essay" style="width: 100%">
-          <el-table-column type="expand">
-            <template slot-scope="{ row }">
-              <h3>题目详情</h3>
-              <div v-html="row.title"></div>
-            </template>
-          </el-table-column>
-          <!-- <el-table-column label="ID" prop="id"></el-table-column> -->
-          <el-table-column label="序号" width="70px">
-            <template slot-scope="scope">
-              {{ scope.$index + 1 }}
-            </template>
-          </el-table-column>
-          <el-table-column label="题目" prop="title">
-            <template slot-scope="{ row }">
-              <div v-html="row.title" style="height: 27px"></div>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" prop="desc">
-            <template slot-scope="scope">
-              <el-button
-                @click="change(scope.row, 'change', 2)"
-                type="text"
-                size="small"
-                >编辑</el-button
-              >
-              <el-button @click="delHandle(scope.row)" type="text" size="small"
-                >删除</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-    </el-tabs>
+                <i class="el-icon-plus"></i>
+                添加简答题
+              </el-button> -->
+              <el-table :data="essay" style="width: 100%">
+                <el-table-column type="expand">
+                  <template slot-scope="{ row }">
+                    <h3>题目详情</h3>
+                    <div v-html="row.title"></div>
+                  </template>
+                </el-table-column>
+                <!-- <el-table-column label="ID" prop="id"></el-table-column> -->
+                <el-table-column label="序号" width="70px">
+                  <template slot-scope="scope">
+                    {{ scope.$index + 1 }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="题目" prop="title">
+                  <template slot-scope="{ row }">
+                    <div v-html="row.title" style="height: 27px"></div>
+                  </template>
+                </el-table-column>
+                <!-- <el-table-column label="操作" prop="desc">
+                  <template slot-scope="scope">
+                    <el-button
+                      @click="change(scope.row, 'change', 2)"
+                      type="text"
+                      size="small"
+                      >编辑</el-button
+                    >
+                    <el-button
+                      @click="delHandle(scope.row)"
+                      type="text"
+                      size="small"
+                      >删除</el-button
+                    >
+                  </template>
+                </el-table-column> -->
+              </el-table>
+            </el-tab-pane>
+          </el-tabs>
 
-    <el-dialog title="编辑问卷" :visible.sync="dialogVisible" width="70%">
-      <el-form label-width="100px">
-        <el-form-item label="题目">
-          <el-input type="textarea" v-model="exer.title"></el-input>
-        </el-form-item>
-        <div v-if="status * 1 == 1">
-          <el-form-item label="A">
-            <el-input type="textarea" v-model="exer.choiceA"></el-input>
-          </el-form-item>
-          <el-form-item label="B">
-            <el-input type="textarea" v-model="exer.choiceB"></el-input>
-          </el-form-item>
-          <el-form-item label="C">
-            <el-input type="textarea" v-model="exer.choiceC"></el-input>
-          </el-form-item>
-          <el-form-item label="D">
-            <el-input type="textarea" v-model="exer.choiceD"></el-input>
-          </el-form-item>
+          <el-dialog title="编辑问卷" :visible.sync="dialogVisible" width="70%">
+            <el-form label-width="100px">
+              <el-form-item label="题目">
+                <el-input type="textarea" v-model="exer.title"></el-input>
+              </el-form-item>
+              <div v-if="status * 1 == 1">
+                <el-form-item label="A">
+                  <el-input type="textarea" v-model="exer.choiceA"></el-input>
+                </el-form-item>
+                <el-form-item label="B">
+                  <el-input type="textarea" v-model="exer.choiceB"></el-input>
+                </el-form-item>
+                <el-form-item label="C">
+                  <el-input type="textarea" v-model="exer.choiceC"></el-input>
+                </el-form-item>
+                <el-form-item label="D">
+                  <el-input type="textarea" v-model="exer.choiceD"></el-input>
+                </el-form-item>
+              </div>
+            </el-form>
+
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button v-if="tag == 'add'" type="primary" @click="addHandle()"
+                >添 加</el-button
+              >
+              <el-button
+                v-if="tag == 'change'"
+                type="primary"
+                @click="editHandle()"
+                >修 改</el-button
+              >
+            </span>
+          </el-dialog>
         </div>
-      </el-form>
-
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button v-if="tag == 'add'" type="primary" @click="addHandle()"
-          >添 加</el-button
-        >
-        <el-button v-if="tag == 'change'" type="primary" @click="editHandle()"
-          >修 改</el-button
-        >
-      </span>
-    </el-dialog>
+      </div>
+    </el-main>
   </div>
 </template>
 
@@ -264,5 +279,11 @@ export default {
 .page-box {
   text-align: right;
   margin-top: 20px;
+}
+.main-content {
+  background: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 10px;
 }
 </style>
