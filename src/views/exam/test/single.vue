@@ -238,7 +238,7 @@ export default {
           this.duration = msg
           if (maxtime == 5 * 60) {
             this.$message({
-              message: "还剩5分钟",
+              message: "还剩5分钟，请注意答题时间",
               type: "warning"
             });
           }

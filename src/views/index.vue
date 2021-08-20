@@ -246,7 +246,8 @@ export default {
         current: 0,
         size: 999,
         deptId: 0,
-        startTime: dateFormat("YYYY-mm-dd HH:MM:SS", new Date()),
+        startTime: dateFormat("YYYY-mm-dd 00:00:00", new Date()),
+        endTime: dateFormat("YYYY-mm-dd 23:59:59", new Date()),
       })
       // console.log(res);
       if (res.code === '200' && res.data) {
