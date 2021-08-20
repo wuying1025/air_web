@@ -40,40 +40,41 @@
     </el-form>
     <el-table :data="examList" style="width: 100%" v-loading="loading">
       <el-table-column
-      align="center"
+        align="center"
         type="index"
         label="序号"
         :index="(currentPage - 1) * pageSize + 1"
       ></el-table-column>
       <el-table-column prop="title" label="考试名称"></el-table-column>
       <el-table-column
-      align="center"
+        align="center"
         prop="startDate"
         label="开始时间"
-        width="180"
       ></el-table-column>
       <el-table-column
-      align="center"
+        align="center"
         prop="endDate"
         label="截止时间"
-        width="180"
       ></el-table-column>
-      <el-table-column align="center" prop="categoryName" label="模块"></el-table-column>
-      <el-table-column align="center" prop="duration" label="时长(分钟)"></el-table-column>
+      <el-table-column
+        align="center"
+        prop="categoryName"
+        label="模块"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="duration"
+        label="时长(分钟)"
+      ></el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="
-              $router.push({
-                path: '/single',
-                query: { id: scope.row.id ,userId:$route.query.userId, duration: scope.row.duration},
-              })
-            "
+            @click.stop="goSingle(scope.row)"
             v-if="scope.row.isFinished == null"
-            >考试</el-button
+            >开始考试</el-button
           >
           <el-button
             size="mini"
@@ -83,10 +84,10 @@
             @click="
               $router.push({
                 path: '/analytic',
-                query: { examId: scope.row.id ,userId:$route.query.userId},
+                query: { examId: scope.row.id, userId: $route.query.userId },
               })
             "
-            >查看</el-button
+            >查看结果</el-button
           >
         </template>
       </el-table-column>
@@ -124,7 +125,7 @@ export default {
     };
   },
   methods: {
-    handleUpdate() {},
+    handleUpdate() { },
     getData() {
       let categoryId;
       if (!this.search.categoryId) {
@@ -137,7 +138,7 @@ export default {
         size: this.pageSize,
         title: this.search.title,
         categoryId: categoryId,
-        userId:this.$route.query.userId
+        userId: this.$route.query.userId
       }).then((res) => {
         this.examList = res.data.records;
         this.total = res.data.total;
@@ -149,7 +150,7 @@ export default {
       getExamCate({
         ...this.search,
         size: 1000,
-        current:1
+        current: 1
       }).then(res => {
         // console.log(res);
         this.cateData = res.data.records;
@@ -174,6 +175,23 @@ export default {
       this.currentPage = value;
       this.getData();
     },
+    goSingle(row) {
+      const now = new Date().getTime()
+      const start = new Date(row.startDate).getTime()
+      const end = new Date(row.endDate).getTime()
+
+      if (now >= start && now <= end) {
+        this.$router.push({
+          path: '/single',
+          query: { id: row.id, userId: this.$route.query.userId, duration: row.duration },
+        })
+      } else {
+        this.$message({
+          message: "不在考试时间内",
+          type: "error"
+        });
+      }
+    }
   },
   created() {
     this.getData();
@@ -182,8 +200,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.app-container{
-  padding:60px 30px;
+.app-container {
+  padding: 60px 30px;
 }
 .page-box {
   text-align: right;
