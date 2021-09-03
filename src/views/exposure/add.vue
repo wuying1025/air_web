@@ -1,38 +1,47 @@
 <!-- 发布法规 -->
 <template>
-  <div v-loading="loading" class="app-container">
-    <el-form ref="form" :model="form" :rules="rules" label-width="130px">
-      <el-form-item label="曝光标题" prop="title">
-        <el-input v-model="form.title" style="width: 300px"></el-input>
-      </el-form-item>
-      <el-form-item label="选择分类" prop="cateId">
-        <el-select
-          v-model="form.cateId"
-          placeholder="请选择分类"
-          style="width: 300px"
-        >
-          <el-option
-            v-for="item in cateData"
-            :key="item.id"
-            :label="item.cateName"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="曝光内容" prop="content">
-        <tinymce v-model="form.content" :height="300" />
-        <!-- <VueUeditorWrap :config="myConfig" v-model="form.content" /> -->
-      </el-form-item>
-      <el-form-item>
-        <el-button v-if="isChange" type="primary" @click="editForm('form')"
-          >立即修改</el-button
-        >
-        <el-button v-else type="primary" @click="submitForm('form')"
-          >立即创建</el-button
-        >
-        <el-button @click="resetForm('form')">取消</el-button>
-      </el-form-item>
-    </el-form>
+  <div>
+    <el-main>
+      <div class="main-content">
+        <div v-loading="loading" class="app-container">
+          <el-form ref="form" :model="form" :rules="rules" label-width="130px">
+            <el-form-item label="曝光标题" prop="title">
+              <el-input v-model="form.title" style="width: 300px"></el-input>
+            </el-form-item>
+            <el-form-item label="选择分类" prop="cateId">
+              <el-select
+                v-model="form.cateId"
+                placeholder="请选择分类"
+                style="width: 300px"
+              >
+                <el-option
+                  v-for="item in cateData"
+                  :key="item.id"
+                  :label="item.cateName"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="曝光内容" prop="content">
+              <tinymce v-model="form.content" :height="300" />
+              <!-- <VueUeditorWrap :config="myConfig" v-model="form.content" /> -->
+            </el-form-item>
+            <el-form-item>
+              <el-button
+                v-if="isChange"
+                type="primary"
+                @click="editForm('form')"
+                >立即修改</el-button
+              >
+              <el-button v-else type="primary" @click="submitForm('form')"
+                >立即创建</el-button
+              >
+              <el-button @click="resetForm('form')">取消</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
+    </el-main>
   </div>
 </template>
 
@@ -152,4 +161,10 @@ export default {
 };
 </script>
 <style scoped>
+.main-content {
+  background: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
 </style>
