@@ -206,6 +206,8 @@ export default {
       }
     },
     async getData() {
+      this.spanArr = []
+      this.pos = 0
       const res = await selectWeekplan({
         current: this.currentPage,
         size: this.pageSize,
