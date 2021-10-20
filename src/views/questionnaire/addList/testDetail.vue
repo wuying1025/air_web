@@ -69,7 +69,7 @@ export default {
       const res = await getQueList({
         naireId: this.$route.query.naireId
       })
-      console.log(res);
+      // console.log(res);
       if (res && res.code === '200' && res.data) {
         this.title = res.data.title
 
@@ -121,8 +121,8 @@ export default {
       naireId,
       userId
     })
-    console.log(data);
-    console.log(this.form);
+    // console.log(data);
+    // console.log(this.form);
     this.form.choice.forEach((c, cIndex) => {
       data.forEach(d => {
         if(c.id === d.id){

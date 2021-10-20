@@ -185,7 +185,9 @@
       </el-col>
     </el-row> -->
     <div v-for="(item, index) in 7" :key="index">
+      <div v-if="item != 4">
       <indexList :type="item" />
+      </div>
     </div>
   </div>
 </template>
