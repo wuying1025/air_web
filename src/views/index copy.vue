@@ -1,26 +1,191 @@
 <template>
-  <div>
-    <div class="home-container">
-      <div class="header">
-        <div class="header-left">空军OA管理系统</div>
+  <div class="dashboard-editor-container">
+    <!-- <panel-group @handleSetLineChartData="handleSetLineChartData" /> -->
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>本周工作学习计划</span>
       </div>
-      <div class="banner"></div>
-      <div class="swiper">
-        <div class="swiper-left">
-          <div>11</div>
-          <div>22</div>
-          <div>33</div>
-          <div>44</div>
-          <div>55</div>
-        </div>
-        <div class="swiper-right">
-          <div class="item selected">a</div>
-          <div class="item">b</div>
-          <div class="item">c</div>
-          <div class="item">d</div>
-          <div class="item">e</div>
-        </div>
+      <el-table :data="workplanList" style="width: 100%" v-loading="loading">
+        <el-table-column align="center" label="序号" type="index">
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="title"
+          label="工作名称"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="startTime"
+          label="开始时间"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="endTime"
+          label="结束时间"
+        ></el-table-column>
+        <el-table-column align="center" label="操作" width="220">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-view"
+              @click="workplanDetail(scope.row)"
+              >详情</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>本周值班</span>
       </div>
+      <el-table :data="dutyList" style="width: 100%" v-loading="loading">
+        <el-table-column align="center" label="序号" type="index" />
+
+        <el-table-column
+          align="center"
+          prop="showTime"
+          label="周值班表"
+        ></el-table-column>
+        <!-- <el-table-column prop="endTime" label="结束时间"></el-table-column> -->
+        <el-table-column
+          align="center"
+          prop="remark"
+          label="备注"
+        ></el-table-column>
+        <el-table-column prop="url" label="值班表格">
+          <template slot-scope="scope">
+            <el-button
+              icon="el-icon-view"
+              size="small"
+              type="primary"
+              @click="openfile(scope.row.url)"
+              >查看</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>本周工作安排</span>
+      </div>
+      <el-table :data="weekplanList" style="width: 100%" v-loading="loading">
+        <el-table-column align="center" label="序号" type="index" />
+
+        <el-table-column
+          align="center"
+          prop="showTime"
+          label="周工作安排表"
+        ></el-table-column>
+        <!-- <el-table-column prop="endTime" label="结束时间"></el-table-column> -->
+        <el-table-column
+          align="center"
+          prop="remark"
+          label="备注"
+        ></el-table-column>
+        <el-table-column prop="url" label="工作安排表格">
+          <template slot-scope="scope">
+            <el-button
+              icon="el-icon-view"
+              size="small"
+              type="primary"
+              @click="openfile(scope.row.url)"
+              >查看</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>今日来访</span>
+      </div>
+      <el-table :data="outsiderList" style="width: 100%" v-loading="loading">
+        <el-table-column
+          align="center"
+          label="序号"
+          type="index"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="title"
+          label="来访事由"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="name"
+          label="来访人"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="company"
+          label="联系人单位"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="contacts"
+          label="联系人"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="time"
+          width="180"
+          label="来访时段"
+        ></el-table-column>
+        <!-- <el-table-column
+        prop="createTime"
+        width="180"
+        label="创建时间"
+      ></el-table-column> -->
+        <el-table-column align="center" label="操作" width="220">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-view"
+              @click="outSiderDetail(scope.row)"
+              >详情</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>安全管理责任图</span>
+      </div>
+      <div id="safeBox"></div>
+    </el-card>
+
+    <!-- <el-row style="background: #fff; padding: 16px 16px 0; margin-bottom: 32px">
+      <line-chart :chart-data="lineChartData" />
+    </el-row>
+
+    <el-row :gutter="32">
+      <el-col :xs="24" :sm="24" :lg="8">
+        <div class="chart-wrapper">
+          <raddar-chart />
+        </div>
+      </el-col>
+      <el-col :xs="24" :sm="24" :lg="8">
+        <div class="chart-wrapper">
+          <pie-chart />
+        </div>
+      </el-col>
+      <el-col :xs="24" :sm="24" :lg="8">
+        <div class="chart-wrapper">
+          <bar-chart />
+        </div>
+      </el-col>
+    </el-row> -->
+    <div v-for="(item, index) in 7" :key="index">
+      <indexList :type="item" />
     </div>
   </div>
 </template>
@@ -39,7 +204,6 @@ import { selectOutsider } from "@/api/outsider.js";
 import { dateFormat } from "@/utils/format"
 import echarts from "echarts";
 import { selectSafety } from "@/api/safety.js";
-import store from '@/store'
 
 const lineChartData = {
   newVisitis: {
@@ -78,11 +242,6 @@ export default {
       dutyList: [],
       weekplanList: [],
       outsiderList: []
-    }
-  },
-  watch: {
-    $route(route) {
-      store.dispatch('app/closeSideBar', { withoutAnimation: false })
     }
   },
   methods: {
@@ -275,13 +434,6 @@ export default {
     },
   },
   async mounted() {
-    this.$nextTick(() => {
-      const navbar = document.getElementById('navbar')
-      console.log(999);
-      console.log(navbar);
-    });
-
-
     this.loading = true
     this.getWorkplan()
     this.getDutyList()
@@ -318,55 +470,5 @@ export default {
 }
 #safeBox {
   min-height: 500px;
-}
-
-.home-container {
-  width: 100%;
-  height: 500px;
-  background: #fff;
-  // .wrapper {
-  //   width: 100%;
-  //   padding: 0 60px;
-  //   margin: 0 auto;
-  .header {
-    height: 80px;
-    background: #f8f8f9;
-    padding: 0 60px;
-    line-height: 80px;
-    .header-left {
-      color: #ed1c1c;
-      font-size: 28px;
-    }
-  }
-  // }
-  .banner {
-    // height: 600px;
-    background: url(banner.jpg);
-    background-size: contain;
-    padding-top: 31.25%;
-  }
-
-  .swiper {
-    width: 100%;
-    height: 780px;
-    padding: 0 60px;
-    display: flex;
-    .swiper-left {
-      flex: 2;
-    }
-    .swiper-right {
-      flex: 1;
-      .item {
-        width: 590px;
-        height: 126px;
-        background-color: #fff;
-        color: #a11e2b;
-      }
-      .selected {
-        background-color: #a11e2b;
-        color: #fff;
-      }
-    }
-  }
 }
 </style>

@@ -1,10 +1,14 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
+    <div
+      v-if="device === 'mobile' && sidebar.opened"
+      class="drawer-bg"
+      @click="handleClickOutside"
+    />
     <sidebar class="sidebar-container" />
-    <div :class="{hasTagsView:needTagsView}" class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
-        <navbar />
+    <div :class="{ hasTagsView: needTagsView }" class="main-container">
+      <div :class="{ 'fixed-header': fixedHeader }">
+        <navbar v-show="showNavBar" />
         <tags-view v-if="needTagsView" />
       </div>
       <app-main />
@@ -24,8 +28,13 @@ import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
 
 export default {
+  data() {
+    return {
+      showNavBar: false
+    }
+  },
   name: 'Layout',
-  created(){
+  created() {
     this.$store.dispatch("checkMessage");
   },
   components: {
@@ -55,6 +64,17 @@ export default {
       }
     }
   },
+  watch: {
+    $route(route) {
+      console.log('route');
+      console.log(route);
+      if (route.path == '/index') {
+        this.showNavBar = false
+      } else {
+        this.showNavBar = true
+      }
+    }
+  },
   methods: {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
@@ -64,49 +84,49 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/assets/styles/mixin.scss";
-  @import "~@/assets/styles/variables.scss";
+@import "~@/assets/styles/mixin.scss";
+@import "~@/assets/styles/variables.scss";
 
-  .app-wrapper {
-    @include clearfix;
-    position: relative;
-    height: 100%;
-    width: 100%;
+.app-wrapper {
+  @include clearfix;
+  position: relative;
+  height: 100%;
+  width: 100%;
 
-    &.mobile.openSidebar {
-      position: fixed;
-      top: 0;
-    }
-  }
-
-  .drawer-bg {
-    background: #000;
-    opacity: 0.3;
-    width: 100%;
-    top: 0;
-    height: 100%;
-    position: absolute;
-    z-index: 999;
-  }
-
-  .fixed-header {
+  &.mobile.openSidebar {
     position: fixed;
     top: 0;
-    right: 0;
-    z-index: 9;
-    width: calc(100% - #{$sideBarWidth});
-    transition: width 0.28s;
   }
+}
 
-  .hideSidebar .fixed-header {
-    width: calc(100% - 54px)
-  }
+.drawer-bg {
+  background: #000;
+  opacity: 0.3;
+  width: 100%;
+  top: 0;
+  height: 100%;
+  position: absolute;
+  z-index: 999;
+}
 
-  .mobile .fixed-header {
-    width: 100%;
-  }
-  .main-container{
-    background: #eaeff3 url(./../assets/image/bg.jpg) 0 0 no-repeat;
-    background-size: contain;
-  }
+.fixed-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 9;
+  width: calc(100% - #{$sideBarWidth});
+  transition: width 0.28s;
+}
+
+.hideSidebar .fixed-header {
+  width: calc(100% - 54px);
+}
+
+.mobile .fixed-header {
+  width: 100%;
+}
+.main-container {
+  background: #eaeff3 url(./../assets/image/bg.jpg) 0 0 no-repeat;
+  background-size: contain;
+}
 </style>
