@@ -26,6 +26,7 @@ import RightPanel from '@/components/RightPanel'
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
+import store from '@/store'
 
 export default {
   data() {
@@ -35,7 +36,7 @@ export default {
   },
   name: 'Layout',
   created() {
-    this.$store.dispatch("checkMessage");
+    // this.$store.dispatch("checkMessage");
   },
   components: {
     AppMain,
@@ -66,8 +67,8 @@ export default {
   },
   watch: {
     $route(route) {
-      console.log('route');
-      console.log(route);
+      // console.log('route');
+      // console.log(route);
       if (route.path == '/index') {
         this.showNavBar = false
       } else {
