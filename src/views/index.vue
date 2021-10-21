@@ -40,6 +40,47 @@
           <div class="left-item" v-show="index == 4">
             <div id="safeBox"></div>
           </div>
+          <div class="left-item dragon-tiger" v-show="index == 5">
+            <!-- 龙虎榜 -->
+            <h2 class="dragon-tiger-title">龙虎榜</h2>
+            <el-table
+              :data="dragonTigerList"
+              style="width: 100%"
+              v-loading="loading"
+            >
+              <!-- :row-class-name="tableRowClassName" -->
+              <el-table-column
+                align="center"
+                type="index"
+                label="排名"
+              ></el-table-column>
+              <el-table-column property="avatar" label="照片" align="center">
+                <template slot-scope="scope">
+                  <el-image
+                    v-if="scope.row.avatar"
+                    style="width: 60px; height: 60px"
+                    :src="scope.row.avatar"
+                  >
+                  </el-image>
+                </template>
+              </el-table-column>
+              <el-table-column
+                align="center"
+                prop="deptName"
+                label="所属连队"
+              ></el-table-column>
+              <el-table-column
+                align="center"
+                prop="name"
+                label="姓名"
+              ></el-table-column>
+              <el-table-column
+                align="center"
+                prop="score"
+                label="分数"
+              ></el-table-column>
+            </el-table>
+          </div>
         </div>
         <div class="swiper-right">
           <div
@@ -76,6 +117,13 @@
             @mouseover="change(4)"
           >
             安全管理责任图
+          </div>
+          <div
+            class="item"
+            :class="{ selected: index === 5 }"
+            @mouseover="change(5)"
+          >
+            龙虎榜
           </div>
         </div>
       </div>
@@ -164,6 +212,8 @@ import { selectSafety } from "@/api/safety.js";
 import { seasonList, selectTotal } from "@/api/evaluation"
 import { selectInfo } from "@/api/goout.js";
 import { exposureList } from "@/api/exposure";
+import { selectPerson } from "@/api/insider.js";
+
 
 import store from '@/store'
 
@@ -192,6 +242,8 @@ export default {
       nowTime: null,
       imgBg1: require('@/assets/image/bg1.jpg'),
       imgBanner: require('@/assets/image/home-banner.jpg'),
+      imgAvatar: require('@/assets/image/avatar.jpeg'),
+      dragonTigerList: []
     }
   },
   watch: {
@@ -661,6 +713,64 @@ export default {
         this.total = res.data.total
       });
     },
+    //生成从minNum到maxNum的随机数
+    randomNum(minNum, maxNum) {
+      switch (arguments.length) {
+        case 1:
+          return parseInt(Math.random() * minNum + 1, 10);
+          break;
+        case 2:
+          return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
+          break;
+        default:
+          return 0;
+          break;
+      }
+    },
+    tableRowClassName({ row, rowIndex }) {
+      if (rowIndex <= 10) {
+        return 'success-row';
+      }
+      return '';
+    },
+    async getDragonTigerList() {
+      const res = await selectPerson({
+        current: 0,
+        size: 9999,
+        deptId: 0
+      })
+      if (res.code === '200' && res.data) {
+        res.data.records.map(item => {
+          switch (item.jobType) {
+            case '1':
+              item.jobTypeName = '主官'
+              break
+            case '2':
+              item.jobTypeName = '干部'
+              break
+            case '3':
+              item.jobTypeName = '义务兵'
+              break
+            default:
+              item.jobTypeName = '义务兵'
+          }
+          item.score = this.randomNum(90, 98)
+        })
+        res.data.records.sort((a, b) => {
+          return b.score - a.score
+        })
+
+        res.data.records.map((item, index) => {
+          if (index < 10) {
+            item.avatar = this.imgAvatar
+          } else {
+            item.avatar = ''
+          }
+        })
+
+        this.dragonTigerList = res.data.records
+      }
+    },
     change(index) {
       this.index = index;
     }
@@ -672,6 +782,7 @@ export default {
     this.getDutyList()
     this.getWeekplan()
     this.getOutsider()
+    this.getDragonTigerList()
 
     await this.getSeasonList()
 
@@ -769,17 +880,25 @@ export default {
         height: 633px;
         border: 1px solid #dabbbe;
       }
+      .dragon-tiger {
+        padding: 20px;
+        overflow: scroll;
+        &-title {
+          text-align: center;
+          margin-bottom: 20px;
+        }
+      }
     }
     .swiper-right {
       flex: 1;
       .item {
         width: 100%;
-        height: 126px;
+        height: 106px;
         background-color: #fff;
         color: #a11e2b;
         //@dong
         padding: 0 50px;
-        line-height: 126px;
+        line-height: 106px;
         font-size: 20px;
         box-sizing: border-box;
         border-bottom: 1px solid #dabbbe;
@@ -792,6 +911,7 @@ export default {
     }
   }
 }
+
 .list-container {
   display: flex;
   flex-wrap: wrap;
