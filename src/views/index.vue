@@ -2,15 +2,89 @@
   <div>
     <div class="home-container">
       <div class="header">
-        <div class="header-left">空军OA管理系统</div>
+        <!-- <img :src="imgLogo" alt=""> -->
+        <div
+          class="header-left"
+          :style="{
+            backgroundImage: `url(${imgLogo})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center left',
+          }"
+        >
+          空军牡丹江场站管理系统
+        </div>
+        <a
+          href="javascript:;"
+          class="header-icons out"
+          @click="logout"
+          title="退出"
+        ></a>
       </div>
       <div
         class="banner"
         :style="{
           backgroundImage: `url(${imgBanner})`,
           backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat',
         }"
       ></div>
+      <ul class="nav">
+        <li
+          :class="{ 'nav-selected': navIndex === 0 }"
+          @mouseover="navMouseover(0)"
+          @mouseout="navMouseout(0)"
+        >
+          首页
+        </li>
+        <li
+          :class="{ 'nav-selected': navIndex === 1 }"
+          @mouseover="navMouseover(1)"
+          @mouseout="navMouseout(1)"
+          @click="$router.push('duty/dutyUpload')"
+        >
+          周值班表
+        </li>
+        <li
+          :class="{ 'nav-selected': navIndex === 2 }"
+          @mouseover="navMouseover(2)"
+          @mouseout="navMouseout(2)"
+          @click="$router.push('safeUpload/show')"
+        >
+          安全责任图
+        </li>
+        <li
+          :class="{ 'nav-selected': navIndex === 3 }"
+          @mouseover="navMouseover(3)"
+          @mouseout="navMouseout(3)"
+          @click="$router.push('dragontiger/dragontigerTotal')"
+        >
+          龙虎榜
+        </li>
+        <li
+          :class="{ 'nav-selected': navIndex === 4 }"
+          @mouseover="navMouseover(4)"
+          @mouseout="navMouseout(4)"
+          @click="$router.push('weekplan/weekplanUpload')"
+        >
+          周工作安排
+        </li>
+        <!--  <li
+          :class="{ 'nav-selected': navIndex === 5 }"
+          @mouseover="navMouseover(5)"
+          @mouseout="navMouseout(5)"
+          @click="$router.push('duty/dutyUpload')"
+        >
+          周值班
+        </li> -->
+        <li
+          :class="{ 'nav-selected': navIndex === 6 }"
+          @mouseover="navMouseover(6)"
+          @mouseout="navMouseout(6)"
+          @click="$router.push('evaluation/seasonList')"
+        >
+          量化评比
+        </li>
+      </ul>
       <div class="swiper">
         <div class="swiper-left">
           <div class="left-item active" v-show="index == 0">
@@ -42,7 +116,9 @@
           </div>
           <div class="left-item dragon-tiger" v-show="index == 5">
             <!-- 龙虎榜 -->
-            <h2 class="dragon-tiger-title" v-if="activity">{{activity.title}}龙虎榜</h2>
+            <h2 class="dragon-tiger-title" v-if="activity">
+              {{ activity.title }}龙虎榜
+            </h2>
             <el-table
               :data="dragonTigerList"
               style="width: 100%"
@@ -87,44 +163,56 @@
             class="item"
             :class="{ selected: index === 0 }"
             @mouseover="change(0)"
+            @click="$router.push('duty/dutyUpload')"
           >
             {{ dutyList.showTime }} 周值班表
+            <i class="iconfont icon-anniu-jiantouxiangyou"></i>
           </div>
           <div
             class="item"
             :class="{ selected: index === 1 }"
             @mouseover="change(1)"
+            @click="$router.push('weekplan/weekplanUpload')"
           >
             {{ weekplanList.showTime }} 周工作安排
+            <i class="iconfont icon-anniu-jiantouxiangyou"></i>
           </div>
           <div
             class="item"
             :class="{ selected: index === 2 }"
             @mouseover="change(2)"
+            @click="$router.push('evaluation/seasonList')"
           >
             {{ seasonName }} 量化评比综合情况
+            <i class="iconfont icon-anniu-jiantouxiangyou"></i>
           </div>
           <div
             class="item"
             :class="{ selected: index === 3 }"
             @mouseover="change(3)"
+            @click="$router.push('goout/innerOut')"
           >
             {{ nowTime }} 在岗情况
+            <i class="iconfont icon-anniu-jiantouxiangyou"></i>
           </div>
           <div
             class="item"
             :class="{ selected: index === 4 }"
             @mouseover="change(4)"
+            @click="$router.push('safeUpload/show')"
           >
             安全管理责任图
+            <i class="iconfont icon-anniu-jiantouxiangyou"></i>
           </div>
           <div
             class="item"
             :class="{ selected: index === 5 }"
             @mouseover="change(5)"
+            @click="$router.push('dragontiger/dragontigerTotal')"
             v-if="activity"
           >
-            {{activity.title}} 龙虎榜
+            {{ activity.title }} 龙虎榜
+            <i class="iconfont icon-anniu-jiantouxiangyou"></i>
           </div>
         </div>
       </div>
@@ -204,7 +292,6 @@ import PieChart from './dashboard/PieChart'
 import BarChart from './dashboard/BarChart'
 import indexList from '@/views/components/indexList/index2'
 import { selectWorkplan } from "@/api/workplan"
-// import { getDutyList } from "@/api/duty"
 import { selectWorkupload } from "@/api/workupload"
 import { selectOutsider } from "@/api/outsider.js";
 import { dateFormat } from "@/utils/format"
@@ -213,9 +300,8 @@ import { selectSafety } from "@/api/safety.js";
 import { seasonList, selectTotal } from "@/api/evaluation"
 import { selectInfo } from "@/api/goout.js";
 import { exposureList } from "@/api/exposure";
-import { selectPerson } from "@/api/insider.js";
 import { selectActivity, selectScore, getActivityById } from "@/api/activity.js";
-
+import { removeToken } from "@/utils/auth";
 
 import store from '@/store'
 
@@ -245,8 +331,11 @@ export default {
       imgBg1: require('@/assets/image/bg1.jpg'),
       imgBanner: require('@/assets/image/home-banner.jpg'),
       imgAvatar: require('@/assets/image/avatar.jpeg'),
+      imgLogo: require('@/assets/image/home-logo.png'),
+      imgRight: require('@/assets/image/home-right.png'),
       dragonTigerList: [],
-      activity: null
+      activity: null,
+      navIndex: 0
     }
   },
   watch: {
@@ -278,17 +367,16 @@ export default {
         startTime: dateFormat("YYYY-mm-dd", this.getFirstDayOfWeek(new Date())),
         type: 2,
       })
-      //   console.log(res);
       if (res.code === '200' && res.data) {
-        res.data.records.map(rec => {
-          let startDate = new Date(rec.startTime)
-          let endDate = new Date(rec.endTime)
-          // rec.showTime = startDate.getFullYear() + '年' + (startDate.getMonth() + 1) + '月' + startDate.getDate() + '日' + ' - ' +
-          //   endDate.getFullYear() + '年' + (endDate.getMonth() + 1) + '月' + endDate.getDate() + '日'
-          rec.showTime = (startDate.getMonth() + 1) + '月' + startDate.getDate() + '日' + ' - ' +
-            (endDate.getMonth() + 1) + '月' + endDate.getDate() + '日'
-        })
         if (res.data.records && res.data.records[0]) {
+          res.data.records.map(rec => {
+            let startDate = new Date(rec.startTime)
+            let endDate = new Date(rec.endTime)
+            // rec.showTime = startDate.getFullYear() + '年' + (startDate.getMonth() + 1) + '月' + startDate.getDate() + '日' + ' - ' +
+            //   endDate.getFullYear() + '年' + (endDate.getMonth() + 1) + '月' + endDate.getDate() + '日'
+            rec.showTime = (startDate.getMonth() + 1) + '月' + startDate.getDate() + '日' + ' - ' +
+              (endDate.getMonth() + 1) + '月' + endDate.getDate() + '日'
+          })
           this.dutyList = res.data.records[0];
         }
       }
@@ -300,7 +388,6 @@ export default {
         startTime: dateFormat("YYYY-mm-dd", this.getFirstDayOfWeek(new Date())),
         type: 1,
       })
-      //   console.log(res);
       if (res.code === '200' && res.data) {
         res.data.records.map(rec => {
           let startDate = new Date(rec.startTime)
@@ -322,7 +409,6 @@ export default {
         // name: this.search.name
         startTime: dateFormat("YYYY-mm-dd HH:MM:SS", new Date()),
       })
-      // console.log(res);
       if (res.code === '200' && res.data) {
         this.outsiderList = res.data.records;
         res.data.records && res.data.records.map((item, index) => {
@@ -394,6 +480,12 @@ export default {
             data: this.seasonXData,
             axisTick: {
               alignWithLabel: true
+            },
+            axisLabel: {
+              inside: false,
+              textStyle: {
+                fontSize: 16,
+              }
             }
           }
         ],
@@ -420,11 +512,20 @@ export default {
             barCategoryGap: "5%", // 柱形的间距
             itemStyle: {
               normal: {
-                color: "#f00"
+                color: "#f00",
+                label: {
+                  show: true,		//开启显示
+                  position: 'top',	//在上方显示
+                  textStyle: {	    //数值样式
+                    color: 'black',
+                    fontSize: 16
+                  }
+                }
               },
               emphasis: {
                 color: "#eee114"
-              }
+              },
+
             }
           }
         ]
@@ -498,7 +599,7 @@ export default {
             series: [{
               name: '安全管理责任图',
               type: 'tree',
-              orient: 'horizontal', // vertical horizontal
+              orient: 'vertical', // vertical horizontal
               rootLocation: {
                 x: '50%',
                 y: '15%'
@@ -639,15 +740,13 @@ export default {
     },
     async selectInfo(jobType = 0) {
       // pos是表格  
-      // ps是三个饼  1主官 2干部 3义务兵
+      // ps是三个饼  1主官 2干部 3战士
       this.nowTime = dateFormat("YYYY-mm-dd HH:MM:SS", new Date())
       const res = await selectInfo({
         deptId: 0,
         startTime: this.nowTime,
         jobType
       })
-      // todo
-      // console.log(res);
       if (res && res.code === '200') {
         res.data.pos.records.map(item => {
           switch (item.jobType) {
@@ -658,10 +757,10 @@ export default {
               item.jobTypeName = '干部'
               break
             case 3:
-              item.jobTypeName = '义务兵'
+              item.jobTypeName = '战士'
               break
             default:
-              item.jobTypeName = '义务兵'
+              item.jobTypeName = '战士'
           }
         })
         this.personData = res.data.pos.records
@@ -688,7 +787,7 @@ export default {
           } else if (elem.id === 3) {
             this.chartSetOption({
               chartId: 'chart3',
-              text: '义务兵在岗情况',
+              text: '战士在岗情况',
               percent: elem.totalCount == 0 ? 0 : ((elem.totalCount - elem.outCount) / elem.totalCount * 100).toFixed(0),
               color: elem.pass ? '#2975EC' : '#EF263D',
               outCount: elem.outCount,
@@ -710,25 +809,10 @@ export default {
         _data.time = dateFormat("YYYY-mm-dd HH:MM:SS", new Date())
       }
       exposureList(_data).then((res) => {
-        // console.log(res);
         this.dataList = res.data.records;
         this.loading = false;
         this.total = res.data.total
       });
-    },
-    //生成从minNum到maxNum的随机数
-    randomNum(minNum, maxNum) {
-      switch (arguments.length) {
-        case 1:
-          return parseInt(Math.random() * minNum + 1, 10);
-          break;
-        case 2:
-          return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
-          break;
-        default:
-          return 0;
-          break;
-      }
     },
     tableRowClassName({ row, rowIndex }) {
       if (rowIndex <= 10) {
@@ -743,7 +827,6 @@ export default {
         title: '',
         cateId: 0,
       })
-      console.log(res);
       if (res.code === '200' && res.data && res.data.records && res.data.records.length > 0) {
         const firstData = res.data.records[0]
         const score = await selectScore({
@@ -776,55 +859,33 @@ export default {
           }
         }
       }
-      // if (res.code === '200' && res.data) {
-      //   res.data.records.map(elem => {
-      //     elem.time = elem.startTime.substr(5, 11) + ' 至 ' + elem.endTime.substr(5, 11)
-      //   })
-      //   this.list = res.data.records;
-      //   this.total = res.data.total;
-      //   this.loading = false;
-      // }
-
-      /*  const res = await selectPerson({
-         current: 0,
-         size: 9999,
-         deptId: 0
-       })
-       if (res.code === '200' && res.data) {
-         res.data.records.map(item => {
-           switch (item.jobType) {
-             case '1':
-               item.jobTypeName = '主官'
-               break
-             case '2':
-               item.jobTypeName = '干部'
-               break
-             case '3':
-               item.jobTypeName = '义务兵'
-               break
-             default:
-               item.jobTypeName = '义务兵'
-           }
-           item.score = this.randomNum(90, 98)
-         })
-         res.data.records.sort((a, b) => {
-           return b.score - a.score
-         })
- 
-         res.data.records.map((item, index) => {
-           if (index < 10) {
-             item.avatar = this.imgAvatar
-           } else {
-             item.avatar = ''
-           }
-         })
- 
-         this.dragonTigerList = res.data.records
-       } */
     },
     change(index) {
-      this.index = index;
-    }
+      this.index = index
+    },
+    navMouseover(index) {
+      this.navIndex = index
+    },
+    navMouseout(index) {
+      this.navIndex = 0
+    },
+    logout() {
+      this.$confirm("确定注销并退出系统吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        // 清楚token 角色 权限  调到登录页
+        this.$store.commit("SET_TOKEN", "");
+        this.$store.commit("SET_ROLES", []);
+        this.$store.commit("SET_PERMISSIONS", []);
+        removeToken();
+        this.$router.push("/login");
+        // this.$store.dispatch('LogOut').then(() => {
+        //   location.reload()
+        // })
+      });
+    },
   },
   async mounted() {
     this.loading = true
@@ -900,13 +961,39 @@ export default {
   //   padding: 0 60px;
   //   margin: 0 auto;
   .header {
-    height: 80px;
+    height: 100px;
     background: #f8f8f9;
     padding: 0 60px;
-    line-height: 80px;
+    line-height: 100px;
+    position: relative;
     .header-left {
       color: #ed1c1c;
-      font-size: 28px;
+      font-size: 32px;
+      font-family: "STKaiti";
+      font-weight: 700;
+      padding-left: 90px;
+    }
+  }
+  .nav {
+    height: 70px;
+    background-color: #b42617;
+    color: #fff;
+    display: flex;
+    padding: 0 10%;
+    align-items: center;
+    margin-top: 2px;
+    .nav-selected {
+      background-color: #971305;
+    }
+    li {
+      flex: 1;
+      text-align: center;
+      height: 70px;
+      line-height: 70px;
+      cursor: pointer;
+    }
+    li:hover {
+      background-color: #971305;
     }
   }
   // }
@@ -914,7 +1001,7 @@ export default {
     // height: 600px;
     // background: url(banner.jpg);
     // background-size: contain;
-    padding-top: 31.25%;
+    padding-top: 15.89%;
   }
 
   .swiper {
@@ -958,6 +1045,9 @@ export default {
       .selected {
         background-color: #a11e2b;
         color: #fff;
+      }
+      .icon-anniu-jiantouxiangyou {
+        font-size: 20px;
       }
     }
   }
@@ -1060,5 +1150,15 @@ export default {
       font-size: 18px;
     }
   }
+}
+.header-icons {
+  width: 48px;
+  height: 36px;
+  background: url(../assets/image/out.png) no-repeat 0 0 / 28px 28px;
+  cursor: pointer;
+  position: absolute;
+  right: 60px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 </style>

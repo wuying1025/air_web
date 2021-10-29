@@ -7,12 +7,18 @@
         <span class="line"></span>
         <span class="cn-title">{{ title }}</span>
         <!-- <span class="en-title">/Incident notification</span> -->
-        <!-- <div class="right">
-          <a href="#" id="">查看详情</a>
-        </div> -->
+        <div class="right" @click="goDetail">
+          <span>查看详情</span>
+          <i class="iconfont icon-anniu-jiantouxiangyou"></i>
+        </div>
       </h2>
       <ul class="sub-list-container">
-        <li @click.stop="showDetail(item)" class="sub-list" v-for="(item, index) in dataList" :key="index">
+        <li
+          @click.stop="showDetail(item)"
+          class="sub-list"
+          v-for="(item, index) in dataList"
+          :key="index"
+        >
           <span> {{ item.title }}</span>
           <span class="createtime">{{ item.createTime }}</span>
         </li>
@@ -107,7 +113,7 @@ export default {
 
     // 查看详情
     showDetail(_data) {
-      console.log(_data);
+      // console.log(_data);
       this.$router.push({
         path: "/exposure_/detail/" + _data.id,
       });
@@ -134,6 +140,40 @@ export default {
     closeDialog() {
       this.$refs.form.resetFields();
     },
+    goDetail() {
+      console.log(this.type);
+      switch (this.type) {
+        case 1:
+          console.log(this);
+          // _title = "事故防范与安全提醒";
+          this.$router.push('history/list')
+          break;
+        case 2:
+          // _title = "场站保证申请与反馈";
+          this.$router.push('exposure/list')
+          break;
+        case 3:
+          // _title = "部门要事";
+          this.$router.push('important/list')
+          break;
+        case 4:
+          // _title = "事故通报";
+          this.$router.push('accident/list')
+          break;
+        case 5:
+          // _title = "司机专栏";
+          this.$router.push('driver/list')
+          break;
+        case 6:
+          // _title = "学习园地";
+          this.$router.push('learn/learnList')
+          break;
+        case 7:
+          // _title = "部队管理动态";
+          this.$router.push('dynamic/dynamicList')
+          break;
+      }
+    }
   },
   mounted() {
     this.getList();
@@ -198,7 +238,7 @@ li {
   .list {
     margin-bottom: 20px;
     .sub-list-container {
-      padding: 0 20px 0 10px;
+      padding: 8px 20px 0 10px;
       .sub-list {
         height: 37px;
         line-height: 37px;
@@ -206,7 +246,7 @@ li {
           float: right;
         }
       }
-      .sub-list:hover span{
+      .sub-list:hover span {
         cursor: pointer;
         color: #a11e2b;
       }
@@ -218,6 +258,8 @@ li {
   // line-height: 67px;
   font-weight: 400;
   padding-right: 20px;
+  display: flex;
+  align-items: center;
   .line {
     content: "";
     display: inline-block;
@@ -225,22 +267,22 @@ li {
     height: 24px;
     background: #a6212e;
     vertical-align: middle;
-    margin-top: -3px;
+    margin-right: 8px;
   }
   .cn-title {
     font-size: 23px;
     color: #333333;
+    flex: 1;
   }
   .en-title {
     color: #999999;
     font-size: 17px;
   }
   .right {
-    float: right;
-    a {
-      color: #ed1c1c;
-      font-size: 13px;
-    }
+    width: 80px;
+    color: #ed1c1c;
+    font-size: 14px;
+    cursor: pointer;
   }
 }
 </style>

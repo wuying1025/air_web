@@ -25,12 +25,24 @@
         style="width: 100%"
         v-loading="loading"
       >
-        <el-table-column type="index" width="50" label="序号">
+        <el-table-column align="center" type="index" label="序号">
         </el-table-column>
-        <el-table-column prop="name" label="名称" width="130"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间"></el-table-column>
-        <el-table-column prop="remark" label="法规简介"></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column
+          align="center"
+          prop="name"
+          label="名称"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="createTime"
+          label="创建时间"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="remark"
+          label="法规简介"
+        ></el-table-column>
+        <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -89,8 +101,8 @@ export default {
       this.$router.push({
         path: "/release/lawdetail/0",
         query: {
-            search: this.searchText
-          }
+          search: this.searchText
+        }
       });
 
     },

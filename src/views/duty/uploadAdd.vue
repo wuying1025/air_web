@@ -1,62 +1,71 @@
 <template>
-  <div class="app-container">
-    <el-form ref="weekplan" :model="weekplan" :rules="rules" label-width="80px">
-      <el-form-item label="选择周" prop="time">
-        <el-date-picker
-          v-model="weekplan.time"
-          type="week"
-          placeholder="选择周"
-          style="width: 400px"
-          id="week"
-          :picker-options="{
-            firstDayOfWeek: 1,
-          }"
-          :format="startTime + ' 至 ' + endTime"
-          @change="changeWeek"
+  <el-main>
+    <div class="main-content">
+      <div class="app-container">
+        <el-form
+          ref="weekplan"
+          :model="weekplan"
+          :rules="rules"
+          label-width="80px"
         >
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="上传表格" prop="file">
-        <Uploader
-          style="width: 400px"
-          v-on:getFile="getFileUrl(arguments)"
-          :change="isChange"
-          :name="file.name"
-        ></Uploader>
-        <!-- <el-button @click="openTabWin(file.readUrl,'view')" v-if="file.readUrl"  icon="el-icon-view" size="small" type="primary">预览文件</el-button> -->
-        <el-button
-          v-if="id"
-          @click="openTabWin(file.url, 'download')"
-          icon="el-icon-download"
-          size="small"
-          type="success"
-          >下载文件</el-button
-        >
-      </el-form-item>
-      <el-form-item label="备注" prop="remark">
-        <el-input
-          style="width: 400px"
-          type="textarea"
-          :autosize="{ minRows: 2, maxRows: 4 }"
-          placeholder="请输入备注"
-          v-model="weekplan.remark"
-        ></el-input>
-      </el-form-item>
+          <el-form-item label="选择周" prop="time">
+            <el-date-picker
+              v-model="weekplan.time"
+              type="week"
+              placeholder="选择周"
+              style="width: 400px"
+              id="week"
+              :picker-options="{
+                firstDayOfWeek: 1,
+              }"
+              :format="startTime + ' 至 ' + endTime"
+              @change="changeWeek"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="上传表格" prop="file">
+            <Uploader
+              style="width: 400px"
+              v-on:getFile="getFileUrl(arguments)"
+              :change="isChange"
+              :name="file.name"
+            ></Uploader>
+            <!-- <el-button @click="openTabWin(file.readUrl,'view')" v-if="file.readUrl"  icon="el-icon-view" size="small" type="primary">预览文件</el-button> -->
+            <el-button
+              v-if="id"
+              @click="openTabWin(file.url, 'download')"
+              icon="el-icon-download"
+              size="small"
+              type="success"
+              >下载文件</el-button
+            >
+          </el-form-item>
+          <el-form-item label="备注" prop="remark">
+            <el-input
+              style="width: 400px"
+              type="textarea"
+              :autosize="{ minRows: 2, maxRows: 4 }"
+              placeholder="请输入备注"
+              v-model="weekplan.remark"
+            ></el-input>
+          </el-form-item>
 
-      <el-form-item>
-        <el-button
-          v-if="$route.params.id"
-          type="primary"
-          @click="updateHandle('weekplan')"
-          >确定修改</el-button
-        >
-        <el-button v-else type="primary" @click="submitForm('weekplan')"
-          >立即创建</el-button
-        >
-        <el-button @click="resetForm('weekplan')">取消</el-button>
-      </el-form-item>
-    </el-form>
-  </div>
+          <el-form-item>
+            <el-button
+              v-if="$route.params.id"
+              type="primary"
+              @click="updateHandle('weekplan')"
+              >确定修改</el-button
+            >
+            <el-button v-else type="primary" @click="submitForm('weekplan')"
+              >立即创建</el-button
+            >
+            <el-button @click="resetForm('weekplan')">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+  </el-main>
 </template>
 
 <script>

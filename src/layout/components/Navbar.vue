@@ -106,7 +106,7 @@ export default {
     getData() {
       getCount().then(res => {
         this.msgCount = res.data;
-        console.log(this.msgCount)
+        // console.log(this.msgCount)
       });
     }
   },

@@ -537,10 +537,10 @@ export default {
               item.jobTypeName = '干部'
               break
             case 3:
-              item.jobTypeName = '义务兵'
+              item.jobTypeName = '战士'
               break
             default:
-              item.jobTypeName = '义务兵'
+              item.jobTypeName = '战士'
           }
         })
         this.personData = res.data.pos.records
@@ -555,7 +555,7 @@ export default {
     },
     async selectInfo(jobType = 0) {
       // pos是表格  
-      // ps是三个饼  1主官 2干部 3义务兵
+      // ps是三个饼  1主官 2干部 3战士
 
       // const res = await selectInfo({
       //   deptId: 0,
@@ -580,10 +580,10 @@ export default {
               item.jobTypeName = '干部'
               break
             case 3:
-              item.jobTypeName = '义务兵'
+              item.jobTypeName = '战士'
               break
             default:
-              item.jobTypeName = '义务兵'
+              item.jobTypeName = '战士'
           }
         })
         this.personData = res.data.pos.records
@@ -610,7 +610,7 @@ export default {
           } else if (elem.id === 3) {
             this.chartSetOption({
               chartId: 'chart3',
-              text: '义务兵在岗情况',
+              text: '战士在岗情况',
               percent: elem.totalCount == 0 ? 0 : ((elem.totalCount - elem.outCount) / elem.totalCount * 100).toFixed(0),
               color: elem.pass ? '#2975EC' : '#EF263D',
               outCount: elem.outCount,

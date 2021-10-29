@@ -221,10 +221,10 @@ export default {
               item.jobTypeName = '干部'
               break
             case '3':
-              item.jobTypeName = '义务兵'
+              item.jobTypeName = '战士'
               break
             default:
-              item.jobTypeName = '义务兵'
+              item.jobTypeName = '战士'
           }
         })
         this.personData = res.data
@@ -304,7 +304,7 @@ export default {
           this.station.jobTypeName = '干部'
           break
         case '3':
-          this.station.jobTypeName = '义务兵'
+          this.station.jobTypeName = '战士'
           break
         default:
           this.station.jobTypeName = ''
@@ -322,7 +322,7 @@ export default {
       //       res.data.jobTypeName = '干部'
       //       break
       //     case '3':
-      //       res.data.jobTypeName = '义务兵'
+      //       res.data.jobTypeName = '战士'
       //       break
       //     default:
       //       res.data.jobTypeName = ''

@@ -1,0 +1,16 @@
+{
+  "id": "2902139",
+  "name": "oa",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "5387570",
+      "name": "按钮-箭头向右",
+      "font_class": "anniu-jiantouxiangyou",
+      "unicode": "eb03",
+      "unicode_decimal": 60163
+    }
+  ]
+}
