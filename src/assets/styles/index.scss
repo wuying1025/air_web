@@ -201,3 +201,9 @@ ul,ol{list-style:none;}
 .success-row {
   background-color: oldlace!important;
 }
+.main-content {
+  background: #fff;
+  min-height: calc(100vh - 210px);
+  padding: 20px;
+  box-sizing: border-box;
+}
