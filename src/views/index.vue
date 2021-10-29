@@ -42,7 +42,7 @@
           </div>
           <div class="left-item dragon-tiger" v-show="index == 5">
             <!-- 龙虎榜 -->
-            <h2 class="dragon-tiger-title">龙虎榜</h2>
+            <h2 class="dragon-tiger-title" v-if="activity">{{activity.title}}龙虎榜</h2>
             <el-table
               :data="dragonTigerList"
               style="width: 100%"
@@ -66,18 +66,18 @@
               </el-table-column>
               <el-table-column
                 align="center"
-                prop="deptName"
-                label="所属连队"
-              ></el-table-column>
-              <el-table-column
-                align="center"
                 prop="name"
                 label="姓名"
               ></el-table-column>
               <el-table-column
                 align="center"
-                prop="score"
-                label="分数"
+                prop="deptName"
+                label="所属连队"
+              ></el-table-column>
+              <el-table-column
+                align="center"
+                prop="result"
+                label="成绩"
               ></el-table-column>
             </el-table>
           </div>
@@ -122,8 +122,9 @@
             class="item"
             :class="{ selected: index === 5 }"
             @mouseover="change(5)"
+            v-if="activity"
           >
-            龙虎榜
+            {{activity.title}} 龙虎榜
           </div>
         </div>
       </div>
@@ -213,6 +214,7 @@ import { seasonList, selectTotal } from "@/api/evaluation"
 import { selectInfo } from "@/api/goout.js";
 import { exposureList } from "@/api/exposure";
 import { selectPerson } from "@/api/insider.js";
+import { selectActivity, selectScore, getActivityById } from "@/api/activity.js";
 
 
 import store from '@/store'
@@ -243,7 +245,8 @@ export default {
       imgBg1: require('@/assets/image/bg1.jpg'),
       imgBanner: require('@/assets/image/home-banner.jpg'),
       imgAvatar: require('@/assets/image/avatar.jpeg'),
-      dragonTigerList: []
+      dragonTigerList: [],
+      activity: null
     }
   },
   watch: {
@@ -734,42 +737,90 @@ export default {
       return '';
     },
     async getDragonTigerList() {
-      const res = await selectPerson({
+      const res = await selectActivity({
         current: 0,
-        size: 9999,
-        deptId: 0
+        size: 1,
+        title: '',
+        cateId: 0,
       })
-      if (res.code === '200' && res.data) {
-        res.data.records.map(item => {
-          switch (item.jobType) {
-            case '1':
-              item.jobTypeName = '主官'
-              break
-            case '2':
-              item.jobTypeName = '干部'
-              break
-            case '3':
-              item.jobTypeName = '义务兵'
-              break
-            default:
-              item.jobTypeName = '义务兵'
-          }
-          item.score = this.randomNum(90, 98)
+      console.log(res);
+      if (res.code === '200' && res.data && res.data.records && res.data.records.length > 0) {
+        const firstData = res.data.records[0]
+        const score = await selectScore({
+          activityId: firstData.id,
+          typeId: firstData.typeId
         })
-        res.data.records.sort((a, b) => {
-          return b.score - a.score
-        })
+        if (score.code === '200' && score.data) {
+          score.data.records.map((elem, index) => {
+            if (elem.count) {
+              elem.result = elem.count + '个'
+            } else {
+              elem.result = elem.minute + '分' + elem.second + '秒'
+            }
 
-        res.data.records.map((item, index) => {
-          if (index < 10) {
-            item.avatar = this.imgAvatar
-          } else {
-            item.avatar = ''
-          }
-        })
+            if (index < 10) {
+              if (elem.url) {
+                elem.avatar = elem.url
+              } else {
+                elem.avatar = this.imgAvatar
+              }
+            } else {
+              elem.avatar = ''
+            }
+          })
+          this.dragonTigerList = score.data.records;
 
-        this.dragonTigerList = res.data.records
+          const activity = await getActivityById(firstData.id)
+          if (activity && activity.code === '200') {
+            this.activity = activity.data
+          }
+        }
       }
+      // if (res.code === '200' && res.data) {
+      //   res.data.records.map(elem => {
+      //     elem.time = elem.startTime.substr(5, 11) + ' 至 ' + elem.endTime.substr(5, 11)
+      //   })
+      //   this.list = res.data.records;
+      //   this.total = res.data.total;
+      //   this.loading = false;
+      // }
+
+      /*  const res = await selectPerson({
+         current: 0,
+         size: 9999,
+         deptId: 0
+       })
+       if (res.code === '200' && res.data) {
+         res.data.records.map(item => {
+           switch (item.jobType) {
+             case '1':
+               item.jobTypeName = '主官'
+               break
+             case '2':
+               item.jobTypeName = '干部'
+               break
+             case '3':
+               item.jobTypeName = '义务兵'
+               break
+             default:
+               item.jobTypeName = '义务兵'
+           }
+           item.score = this.randomNum(90, 98)
+         })
+         res.data.records.sort((a, b) => {
+           return b.score - a.score
+         })
+ 
+         res.data.records.map((item, index) => {
+           if (index < 10) {
+             item.avatar = this.imgAvatar
+           } else {
+             item.avatar = ''
+           }
+         })
+ 
+         this.dragonTigerList = res.data.records
+       } */
     },
     change(index) {
       this.index = index;
