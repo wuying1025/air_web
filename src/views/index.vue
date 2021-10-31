@@ -101,7 +101,11 @@
               style="width: 100%; height: 100%"
             ></iframe>
           </div>
-          <div class="left-item" v-show="index == 2">
+          <div
+            class="left-item"
+            style="width: 100%; height: 100%"
+            v-show="index == 2"
+          >
             <div id="season"></div>
           </div>
           <div class="left-item" v-show="index == 3">
@@ -159,56 +163,62 @@
           </div>
         </div>
         <div class="swiper-right">
+          <!-- @click="$router.push('duty/dutyUpload')" -->
           <div
             class="item"
             :class="{ selected: index === 0 }"
             @mouseover="change(0)"
-            @click="$router.push('duty/dutyUpload')"
+            @click="swiperDetail(0)"
           >
             {{ dutyList.showTime }} 周值班表
             <i class="iconfont icon-anniu-jiantouxiangyou"></i>
           </div>
+          <!-- @click="$router.push('weekplan/weekplanUpload')" -->
           <div
             class="item"
             :class="{ selected: index === 1 }"
             @mouseover="change(1)"
-            @click="$router.push('weekplan/weekplanUpload')"
+            @click="swiperDetail(1)"
           >
             {{ weekplanList.showTime }} 周工作安排
             <i class="iconfont icon-anniu-jiantouxiangyou"></i>
           </div>
+          <!-- @click="$router.push('evaluation/seasonList')" -->
           <div
             class="item"
             :class="{ selected: index === 2 }"
             @mouseover="change(2)"
-            @click="$router.push('evaluation/seasonList')"
+            @click="swiperDetail(2)"
           >
             {{ seasonName }} 量化评比综合情况
             <i class="iconfont icon-anniu-jiantouxiangyou"></i>
           </div>
+          <!-- @click="$router.push('goout/innerOut')" -->
           <div
             class="item"
             :class="{ selected: index === 3 }"
             @mouseover="change(3)"
-            @click="$router.push('goout/innerOut')"
+            @click="swiperDetail(3)"
           >
             {{ nowTime }} 在岗情况
             <i class="iconfont icon-anniu-jiantouxiangyou"></i>
           </div>
+          <!-- @click="$router.push('safeUpload/show')" -->
           <div
             class="item"
             :class="{ selected: index === 4 }"
             @mouseover="change(4)"
-            @click="$router.push('safeUpload/show')"
+            @click="swiperDetail(4)"
           >
             安全管理责任图
             <i class="iconfont icon-anniu-jiantouxiangyou"></i>
           </div>
+          <!-- @click="$router.push('dragontiger/dragontigerTotal')" -->
           <div
             class="item"
             :class="{ selected: index === 5 }"
             @mouseover="change(5)"
-            @click="$router.push('dragontiger/dragontigerTotal')"
+            @click="swiperDetail(5)"
             v-if="activity"
           >
             {{ activity.title }} 龙虎榜
@@ -280,6 +290,160 @@
         </div>
       </div>
       <!-- @dong结束 -->
+
+      <!-- dialog -->
+      <el-dialog
+        :title="dutyList.showTime + '周值班表'"
+        :visible.sync="dialogVisible0"
+        :fullscreen="true"
+        custom-class="dialog-height"
+      >
+        <iframe
+          :src="dutyList.url"
+          frameborder="0"
+          style="width: 100%; height: 100%"
+        ></iframe>
+      </el-dialog>
+
+      <el-dialog
+        :title="weekplanList.showTime + '周工作安排'"
+        :visible.sync="dialogVisible1"
+        :fullscreen="true"
+        custom-class="dialog-height"
+      >
+        <iframe
+          :src="weekplanList.url"
+          frameborder="0"
+          style="width: 100%; height: 100%"
+        ></iframe>
+      </el-dialog>
+
+      <el-dialog
+        :title="seasonName + '量化评比综合情况'"
+        :visible.sync="dialogVisible2"
+        :fullscreen="true"
+        custom-class="dialog-height season2"
+        @open="openSeason2"
+      >
+        <div id="season2"></div>
+      </el-dialog>
+
+      <el-dialog
+        :title="nowTime + '在岗情况'"
+        :visible.sync="dialogVisible3"
+        :fullscreen="true"
+        custom-class="dialog-height"
+        @open="openPerson2"
+      >
+        <div class="main-chart">
+          <div id="_chart1" class="chart"></div>
+          <div id="_chart2" class="chart"></div>
+          <div id="_chart3" class="chart"></div>
+        </div>
+        <div class="main-list">
+          <h4 style="margin-bottom: 5px">不在岗人员列表</h4>
+          <el-table
+            ref="multipleTable"
+            :data="personData"
+            tooltip-effect="dark"
+            style="width: 100%"
+          >
+            <!-- <el-table-column type="selection" width="55"></el-table-column> -->
+            <el-table-column label="序号" type="index"></el-table-column>
+            <el-table-column
+              align="center"
+              prop="userName"
+              label="姓名"
+            ></el-table-column>
+            <el-table-column
+              align="center"
+              prop="deptName"
+              label="所属连队"
+            ></el-table-column>
+            <el-table-column
+              align="center"
+              prop="jobTypeName"
+              label="身份"
+            ></el-table-column>
+            <el-table-column
+              align="center"
+              prop="startTime"
+              label="离队时间"
+            ></el-table-column>
+            <el-table-column
+              align="center"
+              prop="endTime"
+              label="归队时间"
+            ></el-table-column>
+            <el-table-column
+              align="center"
+              prop="title"
+              label="外出事由"
+            ></el-table-column>
+          </el-table>
+        </div>
+      </el-dialog>
+
+      <el-dialog
+        title="安全管理责任图"
+        :visible.sync="dialogVisible4"
+        :fullscreen="true"
+        custom-class="dialog-height"
+        @open="openDrawSafe2"
+      >
+        <div id="safeBox2"></div>
+      </el-dialog>
+
+      <el-dialog
+        :title="activity.title + '龙虎榜'"
+        :visible.sync="dialogVisible5"
+        :fullscreen="true"
+        custom-class="dialog-height"
+      >
+        <div>
+          <!-- 龙虎榜 -->
+          <h2 class="dragon-tiger-title" v-if="activity">
+            {{ activity.title }}龙虎榜
+          </h2>
+          <el-table
+            :data="dragonTigerList"
+            style="width: 100%"
+            v-loading="loading"
+          >
+            <!-- :row-class-name="tableRowClassName" -->
+            <el-table-column
+              align="center"
+              type="index"
+              label="排名"
+            ></el-table-column>
+            <el-table-column property="avatar" label="照片" align="center">
+              <template slot-scope="scope">
+                <el-image
+                  v-if="scope.row.avatar"
+                  style="width: 60px; height: 60px"
+                  :src="scope.row.avatar"
+                >
+                </el-image>
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="name"
+              label="姓名"
+            ></el-table-column>
+            <el-table-column
+              align="center"
+              prop="deptName"
+              label="所属连队"
+            ></el-table-column>
+            <el-table-column
+              align="center"
+              prop="result"
+              label="成绩"
+            ></el-table-column>
+          </el-table>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -334,8 +498,17 @@ export default {
       imgLogo: require('@/assets/image/home-logo.png'),
       imgRight: require('@/assets/image/home-right.png'),
       dragonTigerList: [],
-      activity: null,
-      navIndex: 0
+      activity: {
+        title: ''
+      },
+      navIndex: 0,
+      dialogVisible0: false,
+      dialogVisible1: false,
+      dialogVisible2: false,
+      dialogVisible3: false,
+      dialogVisible4: false,
+      dialogVisible5: false,
+      personData: [],
     }
   },
   watch: {
@@ -445,8 +618,8 @@ export default {
         }
       }
     },
-    initSeasonCharts() {
-      var myChart = echarts.init(document.getElementById("season"));
+    initSeasonCharts(elemId = 'season') {
+      var myChart = echarts.init(document.getElementById(elemId));
 
       var option = {
         title: {
@@ -600,12 +773,125 @@ export default {
               name: '安全管理责任图',
               type: 'tree',
               orient: 'vertical', // vertical horizontal
+              edgeShape: 'polyline',
               rootLocation: {
                 x: '50%',
                 y: '15%'
               }, // 根节点位置  {x: 'center',y: 10}
               // nodePadding: 30,
               // layerPadding: 40,
+              // symbol: 'rectangle',
+              // borderColor: '#1890ff',
+
+              itemStyle: {
+                normal: {
+                  color: '#1890ff', //节点背景色
+                  borderWidth: 2,
+                  borderColor: '#1890ff',
+                  label: {
+                    show: true,
+                    position: 'inside',
+                    textStyle: {
+                      color: '#fff',
+                      fontSize: 16,
+                      fontWeight: 'bolder'
+                    }
+                  },
+                  lineStyle: {
+                    color: '#000',
+                    width: 2,
+                    type: 'solid' // 'curve'|'broken'|'solid'|'dotted'|'dashed'
+                  }
+                },
+                emphasis: {
+                  label: {
+                    show: false
+                  }
+                }
+              },
+              initialTreeDepth: 4,
+              data: [data]
+            }]
+          };
+          myChart.setOption(option);
+        }
+      });
+    },
+    drawSafe2() {
+      const myChart = echarts.init(document.getElementById("safeBox2"));
+      selectSafety({
+        size: 100,
+        current: 1,
+      }).then((res) => {
+        if (res.data.records.length > 0) {
+          const userData = JSON.parse(res.data.records[0].url);
+          const iteration = function (arr) {
+            let newArr = [];
+            if (arr != undefined && arr.length > 0) {
+              newArr = arr.map(item => {
+                item.symbolSize = [120, 40]
+                item.symbol = 'rectangle'
+                if (item.children != undefined && item.children.length > 0) {
+                  iteration(item.children);
+                }
+                return item;
+              });
+            }
+            return newArr;
+          };
+          const newObj = iteration(userData)
+          const data = {
+            name: '安全管理责任图',
+            value: 0,
+            symbolSize: [120, 40],
+            symbol: 'rectangle',
+            itemStyle: {
+              normal: {
+                borderWidth: 2,
+                borderColor: '#1890ff'
+              }
+            },
+            children: newObj
+          }
+          const option = {
+            // title: {
+            //   text: '安全责任图'
+            // },
+            // tooltip: {
+            //   show: false,
+            //   trigger: 'item',
+            //   formatter: "{b}: {c}"
+            // },
+            toolbox: {
+              show: false,
+              feature: {
+                mark: {
+                  show: true
+                },
+                dataView: {
+                  show: false,
+                  readOnly: false
+                },
+                restore: {
+                  show: false
+                },
+                saveAsImage: {
+                  show: true
+                }
+              }
+            },
+            calculable: true,
+            series: [{
+              name: '安全管理责任图',
+              type: 'tree',
+              orient: 'vertical', // vertical horizontal
+              edgeShape: 'polyline',
+              rootLocation: {
+                x: '50%',
+                y: '15%'
+              }, // 根节点位置  {x: 'center',y: 10}
+              // nodePadding: 130,
+              // layerPadding: 140,
               // symbol: 'rectangle',
               // borderColor: '#1890ff',
 
@@ -799,6 +1085,67 @@ export default {
       }
 
     },
+    async selectInfo2(jobType = 0) {
+      // pos是表格  
+      // ps是三个饼  1主官 2干部 3战士
+      this.nowTime = dateFormat("YYYY-mm-dd HH:MM:SS", new Date())
+      const res = await selectInfo({
+        deptId: 0,
+        startTime: this.nowTime,
+        jobType
+      })
+      if (res && res.code === '200') {
+        res.data.pos.records.map(item => {
+          switch (item.jobType) {
+            case 1:
+              item.jobTypeName = '主官'
+              break
+            case 2:
+              item.jobTypeName = '干部'
+              break
+            case 3:
+              item.jobTypeName = '战士'
+              break
+            default:
+              item.jobTypeName = '战士'
+          }
+        })
+        this.personData = res.data.pos.records
+
+        res.data.ps.forEach((elem, index) => {
+          if (elem.id === 1) {
+            this.chartSetOption({
+              chartId: '_chart1',
+              text: '主官在岗情况',
+              percent: elem.totalCount == 0 ? 0 : ((elem.totalCount - elem.outCount) / elem.totalCount * 100).toFixed(0),
+              color: elem.pass ? '#2975EC' : '#EF263D',
+              outCount: elem.outCount,
+              inCount: elem.totalCount - elem.outCount
+            })
+          } else if (elem.id === 2) {
+            this.chartSetOption({
+              chartId: '_chart2',
+              text: '领导在岗情况',
+              percent: elem.totalCount == 0 ? 0 : ((elem.totalCount - elem.outCount) / elem.totalCount * 100).toFixed(0),
+              color: elem.pass ? '#2975EC' : '#EF263D',
+              outCount: elem.outCount,
+              inCount: elem.totalCount - elem.outCount
+            })
+          } else if (elem.id === 3) {
+            this.chartSetOption({
+              chartId: '_chart3',
+              text: '战士在岗情况',
+              percent: elem.totalCount == 0 ? 0 : ((elem.totalCount - elem.outCount) / elem.totalCount * 100).toFixed(0),
+              color: elem.pass ? '#2975EC' : '#EF263D',
+              outCount: elem.outCount,
+              inCount: elem.totalCount - elem.outCount
+            })
+          }
+        });
+
+      }
+
+    },
     getList(type) {
       let _data = {
         current: 0,
@@ -886,6 +1233,24 @@ export default {
         // })
       });
     },
+    swiperDetail(index) {
+      this['dialogVisible' + index] = true
+    },
+    openSeason2() {
+      this.$nextTick(() => {
+        this.initSeasonCharts('season2')
+      })
+    },
+    openPerson2() {
+      this.$nextTick(() => {
+        this.selectInfo2(0)
+      })
+    },
+    openDrawSafe2() {
+      this.$nextTick(() => {
+        this.drawSafe2()
+      })
+    }
   },
   async mounted() {
     this.loading = true
@@ -899,7 +1264,7 @@ export default {
     await this.getSeasonList()
 
     this.drawSafe();
-    this.initSeasonCharts();
+    this.initSeasonCharts('season');
     this.selectInfo(0)
     this.loading = false
 
@@ -938,8 +1303,14 @@ export default {
 
 #season {
   width: 800px;
-  height: 500px;
-  margin: 30px auto;
+  height: 580px;
+  margin: 10px auto;
+}
+
+#season2 {
+  width: 1200px;
+  height: 800px;
+  margin: 0 auto;
 }
 .main-chart {
   height: 100%;
@@ -1021,10 +1392,6 @@ export default {
       .dragon-tiger {
         padding: 20px;
         overflow: scroll;
-        &-title {
-          text-align: center;
-          margin-bottom: 20px;
-        }
       }
     }
     .swiper-right {
@@ -1160,5 +1527,30 @@ export default {
   right: 60px;
   top: 50%;
   transform: translateY(-50%);
+}
+.dragon-tiger-title {
+  text-align: center;
+  color: #000;
+  margin-bottom: 20px;
+}
+.dialog-height {
+  .main-chart {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .main-chart .chart {
+    flex: 1;
+    height: 450px;
+  }
+}
+
+#safeBox2 {
+  width: 1600px;
+  height: 800px;
+  min-height: 500px;
+  margin: 0 auto;
 }
 </style>
