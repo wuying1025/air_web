@@ -158,9 +158,12 @@ export default {
               alignWithLabel: true
             },
             axisLabel: {
-              inside: false,
+              interval: 0,
               textStyle: {
                 fontSize: 16,
+              },
+              formatter: function (value) {
+                return value.split("").join("\n");
               }
             }
           }
