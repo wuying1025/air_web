@@ -7,9 +7,8 @@
           type="primary"
           icon="el-icon-plus"
           size="mini"
-          v-if="list.length == 0"
           @click="handleAdd()"
-          >新增</el-button
+          >新增节点</el-button
         >
         <el-button
           class="filter-item"
@@ -17,7 +16,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleDel()"
-          >删除</el-button
+          >删除责任图</el-button
         >
       </el-form-item>
     </el-form>
@@ -84,9 +83,9 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="姓名" prop="user">
+        <el-form-item label="姓名" prop="userId">
           <el-select
-            v-model="loginForm.user"
+            v-model="loginForm.userId"
             placeholder="请选择姓名"
             style="width: 260px"
           >
@@ -94,7 +93,7 @@
               v-for="item in personList"
               :key="item.id"
               :label="item.name"
-              :value="item"
+              :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -111,11 +110,7 @@
 import { lastDept } from "@/api/system/dept";
 import { selectPerson } from "@/api/insider";
 import {
-  listDept,
   getDept,
-  delDept,
-  addDept,
-  updateDept,
 } from "@/api/system/dept";
 import { saveSafety, selectSafety } from "@/api/safety.js";
 import Treeselect from "@riophae/vue-treeselect";
@@ -128,35 +123,27 @@ export default {
     return {
       // 遮罩层
       loading: true,
-      // 表格树数据
-      deptList: [],
       list: [],
-      deptOptions: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
-      // 状态数据字典
-      statusOptions: [],
-      // 查询参数
-      queryParams: {
-        deptName: undefined,
-        status: undefined,
-      },
       // 表单参数
       form: {},
-      obj: {},
+      obj: { name: "安全责任图", children: [] },
       loginForm: {
-        deptId: "",
-        user: "",
+        deptId: '',
+        userId: '',
       },
+      dept: null,
+      user: null,
       deptList: [],
       personList: [],
       rules: {
         deptId: [{ required: true, message: "请选择部门", trigger: "blur" }],
-        user: [{ required: true, message: "请选择姓名", trigger: "blur" }],
+        userId: [{ required: true, message: "请选择姓名", trigger: "blur" }],
       },
-      id: 0,
+      id: this.$route.params.id
     };
   },
   created() {
@@ -164,31 +151,35 @@ export default {
     this.getList();
   },
   computed: {
-    changeDeptId() {
-      return this.loginForm.deptId;
-    },
-    changeUserId() {
-      return this.loginForm.user;
-    },
+    changeDeptId() { return this.loginForm.deptId },
+    changeUserId() { return this.loginForm.userId },
   },
   watch: {
     changeDeptId(val) {
-      console.log(val,'111')
-      if (val != undefined) {
-        this.personList = [];
-        this.loginForm.user = "";
-        this.getPersonInfoByDeptId(val);
+      if (val) {
+        this.personList = []
+        // this.loginForm.userId = ''
+        for (let i in this.deptList) {
+          if (val == this.deptList[i].deptId) {
+            this.dept = this.deptList[i]
+            break
+          }
+        }
+        this.getPersonInfoByDeptId(val)
       }
     },
     changeUserId(val) {
-      console.log(95, val);
-      // this.questionList = []
-      // this.loginForm.questionId = ''
-      // this.getQuestionList(val)
-    },
+      if (val) {
+        for (let i in this.personList) {
+          if (val == this.personList[i].id) {
+            this.user = this.personList[i]
+            break
+          }
+        }
+      }
+    }
   },
   methods: {
-    /** 查询人员列表 */
     getList() {
       this.loading = true;
       selectSafety({
@@ -210,10 +201,9 @@ export default {
     // 表单重置
     reset() {
       this.loginForm = {
-        deptId: undefined,
-        user: undefined,
+        dept: '',
+        user: '',
       };
-      // this.resetForm("form");
     },
 
     /** 新增按钮操作 */
@@ -241,26 +231,27 @@ export default {
     /** 提交按钮 */
     submitForm: function () {
       //验证
-      this.$refs['question'].validate(valid => {
+      this.$refs["question"].validate((valid) => {
         if (valid) {
           if (JSON.stringify(this.obj) == "{}") {
             this.list.push({
-              name: this.loginForm.user.name,
-              id: this.loginForm.user.id,
+              name: this.dept.deptName + "：" + this.user.name,
+              id: this.user.id,
             });
           }
           if (!this.obj.hasOwnProperty("children")) {
             this.obj.children = [];
           }
           this.obj.children.push({
-            name: this.loginForm.user.name,
-            id: this.loginForm.user.id,
+            name: this.dept.deptName + "：" + this.user.name,
+            id: this.user.id,
           });
 
           // this.list已更新 提交到数据库 ->更新页面
           var data = this.id
             ? { url: JSON.stringify(this.list), id: this.id }
             : { url: JSON.stringify(this.list) };
+
           saveSafety(data).then(() => {
             this.open = false;
             this.getList();
@@ -276,7 +267,6 @@ export default {
         type: "warning",
       })
         .then(() => {
-          console.log(111)
           var data = this.id
             ? { url: JSON.stringify([]), id: this.id }
             : { url: JSON.stringify([]) };
@@ -286,7 +276,7 @@ export default {
             this.msgSuccess("删除成功");
           });
         })
-        .catch(function () {});
+        .catch(function () { });
     },
     async getDeptList() {
       const res = await lastDept();
@@ -304,19 +294,10 @@ export default {
         this.personList = res.data.records;
       }
     },
-    handleLogin(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$router.push({
-            path: "/examList",
-            query: { ...this.loginForm },
-          });
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
-    },
   },
+  mounted() {
+    this.id = this.$route.params.id
+    console.log(id)
+  }
 };
 </script>

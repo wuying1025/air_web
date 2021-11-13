@@ -2,7 +2,17 @@
   <div>
     <el-main>
       <div class="main-content">
-        <div id="safeBox"></div>
+        <div class="app-container">
+          <el-button
+            class="filter-item"
+            type="primary"
+            icon="el-icon-back"
+            size="mini"
+            @click="$router.go(-1)"
+            >返回</el-button
+          >
+          <div id="safeBox"></div>
+        </div>
       </div>
     </el-main>
   </div>
@@ -10,28 +20,25 @@
 
 <script>
 import echarts from "echarts";
-import { selectSafety } from "@/api/safety.js";
+import { getSafetyById } from "@/api/safety.js";
 
 export default {
   data() {
     return {
-
+      id: this.$route.params.id
     };
   },
   methods: {
     drawSafe() {
       const myChart = echarts.init(document.getElementById("safeBox"));
-      selectSafety({
-        size: 100,
-        current: 1,
-      }).then((res) => {
-        if (res.data.records.length > 0) {
-          const userData = JSON.parse(res.data.records[0].url);
+      getSafetyById(this.id).then((res) => {
+        if (res.code == 200 && res.data) {
+          const userData = JSON.parse(res.data.url);
           const iteration = function (arr) {
             let newArr = [];
             if (arr != undefined && arr.length > 0) {
               newArr = arr.map(item => {
-                item.symbolSize = [200, 50]
+                item.symbolSize = [60, 30]
                 item.symbol = 'rectangle'
                 if (item.children != undefined && item.children.length > 0) {
                   iteration(item.children);
@@ -45,7 +52,7 @@ export default {
           const data = {
             name: '安全责任图',
             value: 0,
-            symbolSize: [200, 50],
+            symbolSize: [90, 30],
             symbol: 'rectangle',
             itemStyle: {
               normal: {
@@ -87,15 +94,11 @@ export default {
               name: '安全责任图',
               type: 'tree',
               orient: 'vertical', // vertical horizontal
+              edgeShape: 'polyline',
               rootLocation: {
                 x: '50%',
                 y: '15%'
-              }, // 根节点位置  {x: 'center',y: 10}
-              // nodePadding: 30,
-              // layerPadding: 40,
-              // symbol: 'rectangle',
-              // borderColor: '#1890ff',
-
+              },
               itemStyle: {
                 normal: {
                   color: '#1890ff', //节点背景色
@@ -132,6 +135,8 @@ export default {
     },
   },
   mounted() {
+    this.id = this.$route.params.id
+
     this.drawSafe();
   }
 };
@@ -142,13 +147,6 @@ export default {
   margin-top: 20px;
 }
 #safeBox {
-  height: 500px;
-}
-.main-content {
-  background: #fff;
-  min-height: calc(100vh - 210px);
-  padding: 20px;
-  box-sizing: border-box;
-  /* height:calc(100vh-200px); */
+  min-height: 500px;
 }
 </style>

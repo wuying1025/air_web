@@ -712,12 +712,19 @@ export default {
         current: 1,
       }).then((res) => {
         if (res.data.records.length > 0) {
-          const userData = JSON.parse(res.data.records[0].url);
+          let userData = []
+          res.data.records.map(elem => {
+            if (elem.type == 1) {
+              userData = JSON.parse(elem.url)
+              return
+            }
+          })
+
           const iteration = function (arr) {
             let newArr = [];
             if (arr != undefined && arr.length > 0) {
               newArr = arr.map(item => {
-                item.symbolSize = [120, 40]
+                item.symbolSize = [50, 30]
                 item.symbol = 'rectangle'
                 if (item.children != undefined && item.children.length > 0) {
                   iteration(item.children);
@@ -731,7 +738,7 @@ export default {
           const data = {
             name: '安全管理责任图',
             value: 0,
-            symbolSize: [120, 40],
+            symbolSize: [120, 30],
             symbol: 'rectangle',
             itemStyle: {
               normal: {
@@ -829,7 +836,7 @@ export default {
             let newArr = [];
             if (arr != undefined && arr.length > 0) {
               newArr = arr.map(item => {
-                item.symbolSize = [120, 40]
+                item.symbolSize = [80, 40]
                 item.symbol = 'rectangle'
                 if (item.children != undefined && item.children.length > 0) {
                   iteration(item.children);
@@ -1295,8 +1302,8 @@ export default {
   }
 }
 #safeBox {
-  width: 800px;
-  height: 500px;
+  width: 1000px;
+  height: 600px;
   min-height: 500px;
   margin: 30px auto;
 }

@@ -626,6 +626,32 @@ export const constantRoutes = [{
       title: '活动排名'
     }
   }]
+},{
+  path: '/safeUploads',
+  component: Layout,
+  hidden: true,
+  children: [{
+    path: 'configSafeUpload/:id',
+    component: () => import('@/views/safeUpload/upload/config'),
+    name: 'ConfigSafeUpload',
+    meta: {
+      title: '配置责任图'
+    }
+  }, {
+    path: 'addSafeUpload/',
+    component: () => import('@/views/safeUpload/upload/add'),
+    name: 'AddSafeUpload',
+    meta: {
+      title: '创建责任图'
+    }
+  }, {
+    path: 'showSafeUpload/:id',
+    component: () => import('@/views/safeUpload/upload/show'),
+    name: 'ShowSafeUpload',
+    meta: {
+      title: '查看责任图'
+    }
+  },]
 },
 
 ]
