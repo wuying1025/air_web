@@ -54,11 +54,11 @@
             prop="endDate"
             label="截止时间"
           ></el-table-column>
-          <el-table-column align="center" label="完成人数 / 总人数">
+          <!-- <el-table-column align="center" label="完成人数 / 总人数">
             <template slot-scope="scope">
               <span>{{ scope.row.completeNum }} / {{ totalPersonNum }}</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column align="center" class="handle_row" label="操作">
             <template slot-scope="scope">
               <el-button
@@ -156,8 +156,6 @@ export default {
             })
             this.$set(this.addList[index], 'completeNum', sum)
           })
-          console.log(111);
-          console.log(this.addList);
         }
       }
     },

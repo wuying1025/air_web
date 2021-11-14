@@ -4,39 +4,11 @@
       :model="loginForm"
       :rules="rules"
       class="login-form"
-      label-width="60px"
+      label-width="80px"
       ref="question"
     >
       <h3 class="title">问卷调查</h3>
-      <el-form-item label="部门" prop="deptId">
-        <el-select
-          v-model="loginForm.deptId"
-          placeholder="请选择部门"
-          style="width: 260px"
-        >
-          <el-option
-            v-for="item in deptList"
-            :key="item.deptId"
-            :label="item.deptName"
-            :value="item.deptId"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="姓名" prop="userId">
-        <el-select
-          v-model="loginForm.userId"
-          placeholder="请选择姓名"
-          style="width: 260px"
-        >
-          <el-option
-            v-for="item in personList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="问卷" prop="questionId">
+      <el-form-item label="选择问卷" prop="questionId">
         <el-select
           v-model="loginForm.questionId"
           placeholder="请选择问卷"
@@ -50,6 +22,37 @@
           ></el-option>
         </el-select>
       </el-form-item>
+      <div v-if="userShow">
+        <el-form-item label="选择部门" prop="deptId">
+          <el-select
+            v-model="loginForm.deptId"
+            placeholder="请选择部门"
+            style="width: 260px"
+          >
+            <el-option
+              v-for="item in deptList"
+              :key="item.deptId"
+              :label="item.deptName"
+              :value="item.deptId"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="选择姓名" prop="userId">
+          <el-select
+            v-model="loginForm.userId"
+            placeholder="请选择姓名"
+            style="width: 260px"
+          >
+            <el-option
+              v-for="item in personList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </div>
+
       <el-form-item>
         <el-button
           :loading="loading"
@@ -94,12 +97,14 @@ export default {
           { required: true, message: "请选择问卷", trigger: "change" }
         ],
       },
+      userShow: false
     }
   },
 
   computed: {
     changeDeptId() { return this.loginForm.deptId },
-    changeUserId() { return this.loginForm.userId },
+    // changeUserId() { return this.loginForm.userId },
+    changeQuestionId() { return this.loginForm.questionId },
   },
   watch: {
     changeDeptId(val) {
@@ -109,11 +114,23 @@ export default {
         this.getPersonInfoByDeptId(val)
       }
     },
-    changeUserId(val) {
-      // console.log(95, val);
-      this.questionList = []
-      this.loginForm.questionId = ''
-      this.getQuestionList(val)
+    // changeUserId(val) {
+    //   this.questionList = []
+    //   this.loginForm.questionId = ''
+    //   // this.getQuestionList(val)
+    // },
+    changeQuestionId(val) {
+      this.questionList.map(question => {
+        if (question.id == val) {
+          if (question.type == 1) {
+            this.userShow = true
+          } else if (question.type == 2) {
+            this.userShow = false
+            this.deptId = ''
+            this.userId = ''
+          }
+        }
+      })
     }
   },
   methods: {
@@ -135,7 +152,7 @@ export default {
     },
     async getQuestionList() {
       const res = await findMyNaire({
-        userId: this.loginForm.userId,
+        // userId: this.loginForm.userId,
         pageNum: 0,
         pageSize: 99999
       })
@@ -151,11 +168,11 @@ export default {
           return false;
         }
       });
-    }
+    },
   },
   mounted() {
     this.getDeptList();
-    // this.getQuestionList();
+    this.getQuestionList();
   }
 }
 </script>

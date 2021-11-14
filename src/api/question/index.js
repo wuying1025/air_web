@@ -73,3 +73,10 @@ export function geTNaireContent(data) {
         data: data
     })
 }
+
+export function naireStatistics(id) {
+    return request({
+        url: '/naire/naireStatistics/' + id,
+        method: 'get',
+    })
+}
