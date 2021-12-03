@@ -1,15 +1,25 @@
 <template>
   <el-main>
     <div class="main-content">
-     <!--  <el-form
+      <el-form
         ref="queryForm"
         align="right"
         :inline="true"
         @submit.native.prevent
       >
-        <el-form-item prop="name">
+      <el-form-item label="审批状态">
+        <el-select v-model="search.status" placeholder="请选择审批状态">
+          <el-option
+            v-for="item in statusList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+        <el-form-item label="姓名">
           <el-input
-            v-model="search.name"
+            v-model="search.userName"
             placeholder="请输入人员姓名"
             style="width: 240px"
             @submit.native.prevent
@@ -26,14 +36,14 @@
           >
           <el-button icon="el-icon-refresh" @click="onReset">重置</el-button>
         </el-form-item>
-      </el-form> -->
+      </el-form>
 
       <el-row :gutter="10" class="mb8">
         <el-col :span="1.5">
           <el-button
             icon="el-icon-plus"
             type="primary"
-            style="background: rgb(74, 119, 252)"
+            style="background: rgb(74, 119, 252); margin-top: 20px;"
             size="mini"
             @click="$router.push('/out/leaveApply')"
             >请假外出人员申请</el-button
@@ -67,7 +77,12 @@
         <el-table-column
           align="center"
           prop="endTime"
-          label="计划离队时间"
+          label="计划归队时间"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="backTime"
+          label="实际归队时间"
         ></el-table-column>
         <el-table-column
           align="center"
@@ -79,9 +94,10 @@
           prop="remark"
           label="备注"
         ></el-table-column>
-        <el-table-column label="操作" align="center">
+        <!-- <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
+              v-if="scope.row.status == 1"
               size="mini"
               type="text"
               icon="el-icon-edit"
@@ -89,7 +105,7 @@
               >修改</el-button
             >
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <div class="page-box">
         <el-pagination
@@ -116,8 +132,25 @@ export default {
       pageSize: 10,
       total: 0, //总页数
       search: {
-        name: ''
-      }
+        userName: '',
+        status: 0
+      },
+      statusList: [{
+        id: 0,
+        name: '全部'
+      }, {
+        id: 1,
+        name: '待审批'
+      }, {
+        id: 2,
+        name: '已通过'
+      }, {
+        id: 3,
+        name: '未通过'
+      }, {
+        id: 4,
+        name: '已销假'
+      }],
     };
   },
   methods: {
@@ -127,10 +160,11 @@ export default {
         current: this.currentPage,
         size: this.pageSize,
         deptId: 0,
-        status: 0,
-        typeId: 1 // 请假1
+        // status: 0,
+        typeId: 1, // 请假1
+        ...this.search
       })
-      console.log(res);
+      // console.log(res);
       if (res && res.data && res.data.records) {
         res.data.records.map(item => {
           switch (item.status) {
@@ -160,10 +194,14 @@ export default {
       this.selectPerson();
     },
     onSearch() {
-
+      this.selectPerson()
     },
     onReset() {
-
+      this.search = {
+        userName: '',
+        status: 0,
+      }
+      this.selectPerson()
     },
   },
   mounted() {
@@ -179,7 +217,7 @@ export default {
   padding: 20px;
   box-sizing: border-box;
 }
-.el-form-item{
-  margin-bottom: 0!important;
+.el-form-item {
+  margin-bottom: 0 !important;
 }
 </style>

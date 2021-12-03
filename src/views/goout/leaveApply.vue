@@ -44,7 +44,16 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="外出事由" prop="title">
-          <el-input v-model="station.title" style="width: 400px"></el-input>
+          <!-- <el-input v-model="station.title" style="width: 400px"></el-input> -->
+          <el-select v-model="station.title" placeholder="请选择" style="width: 400px">
+            <el-option
+              v-for="item in stationTitleList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="计划离队时间" prop="startTime">
           <el-date-picker
@@ -178,15 +187,33 @@ export default {
       personData: [],
       rules: {
         name: [{ required: true, message: '请输入姓名', trigger: 'change' }],
-        idCard: [{ required: true, message: '请输入身份证号', trigger: 'blur' }],
-        jobTypeName: [{ required: true, message: '请输入身份', trigger: 'blur' }],
-        jobName: [{ required: true, message: '请输入部职别', trigger: 'blur' }],
-        remark1: [{ required: true, message: '请输入军衔', trigger: 'blur' }],
-        approvalUser: [{ required: true, message: '请输入责任人', trigger: 'blur' }],
+        // idCard: [{ required: true, message: '请输入身份证号', trigger: 'blur' }],
+        // jobTypeName: [{ required: true, message: '请输入身份', trigger: 'blur' }],
+        // jobName: [{ required: true, message: '请输入部职别', trigger: 'blur' }],
+        // remark1: [{ required: true, message: '请输入军衔', trigger: 'blur' }],
+        // approvalUser: [{ required: true, message: '请输入责任人', trigger: 'blur' }],
         title: [{ required: true, message: '请输入外出事由', trigger: 'blur' }],
         startTime: [{ required: true, message: '请输入计划离队时间', trigger: 'blur' }],
         endTime: [{ required: true, message: '请输入计划归队时间', trigger: 'blur' }],
       },
+      stationTitleList: [
+        {
+          value: '休假',
+          label: '休假'
+        }, {
+          value: '借调',
+          label: '借调'
+        }, {
+          value: '出差',
+          label: '出差'
+        }, {
+          value: '住院',
+          label: '住院'
+        }, {
+          value: '其它',
+          label: '其它'
+        }
+      ]
     }
   },
   methods: {
@@ -235,16 +262,16 @@ export default {
       this.station.id = ''
 
       const res = await savePersonout(this.station)
-      console.log(res);
+      // console.log(res);
       if (res && res.code === '200') {
         this.$message({
-          message: '添加成功',
+          message: '提交成功',
           type: 'success'
         })
         this.$router.push('/goout/leave')
       } else {
         this.$message({
-          message: '添加失败',
+          message: '提交失败',
           type: 'error'
         })
         console.error(res)

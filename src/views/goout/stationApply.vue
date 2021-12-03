@@ -182,12 +182,12 @@ export default {
       personData: [],
       rules: {
         name: [{ required: true, message: '请输入姓名', trigger: 'change' }],
-        idCard: [{ required: true, message: '请输入身份证号', trigger: 'blur' }],
-        jobTypeName: [{ required: true, message: '请输入身份', trigger: 'blur' }],
-        jobName: [{ required: true, message: '请输入部职别', trigger: 'blur' }],
-        remark1: [{ required: true, message: '请输入军衔', trigger: 'blur' }],
-        home: [{ required: true, message: '请输入居住地点', trigger: 'blur' }],
-        title: [{ required: true, message: '请输入外出事由', trigger: 'blur' }],
+        // idCard: [{ required: true, message: '请输入身份证号', trigger: 'blur' }],
+        // jobTypeName: [{ required: true, message: '请输入身份', trigger: 'blur' }],
+        // jobName: [{ required: true, message: '请输入部职别', trigger: 'blur' }],
+        // remark1: [{ required: true, message: '请输入军衔', trigger: 'blur' }],
+        // home: [{ required: true, message: '请输入居住地点', trigger: 'blur' }],
+        // title: [{ required: true, message: '请输入外出事由', trigger: 'blur' }],
         startTime: [{ required: true, message: '请输入计划离队时间', trigger: 'blur' }],
         endTime: [{ required: true, message: '请输入计划归队时间', trigger: 'blur' }],
       },
@@ -239,16 +239,16 @@ export default {
       this.station.id = ''
 
       const res = await savePersonout(this.station)
-      console.log(res);
+      // console.log(res);
       if (res && res.code === '200') {
         this.$message({
-          message: '添加成功',
+          message: '提交成功',
           type: 'success'
         })
         this.$router.push('/goout/station')
       } else {
         this.$message({
-          message: '添加失败',
+          message: '提交失败',
           type: 'error'
         })
         console.error(res)
@@ -260,7 +260,7 @@ export default {
       this.station.endTime = dateFormat("YYYY-mm-dd HH:MM:SS", this.station.endTime)
 
       const res = await updateOut(this.station)
-      console.log(res);
+      // console.log(res);
       if (res && res.code === '200') {
         this.$message({
           message: '修改成功',
@@ -309,8 +309,6 @@ export default {
         default:
           this.station.jobTypeName = ''
       }
-      console.log(306);
-      console.log(this.station);
       // this.station = res.data
 
       // if (res && res.code === '200') {
