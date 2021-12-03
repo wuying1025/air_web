@@ -70,6 +70,7 @@ let contentTitles = []
 import { getRawList, getLawDetail,getByContent } from "@/api/law";
 import { encode, decode } from "js-base64";
 import Tinymce from "@/components/Tinymce/index";
+let selectTextId = "";
 export default {
   data() {
     return {
@@ -217,8 +218,11 @@ export default {
     // 测试滚动
     testScroll(event) {
       if (event.target.dataset.ref) {
+        if(selectTextId)document.getElementById(selectTextId).style.backgroundColor = "yellow"
         let thisRef = event.target.dataset.ref;
         let thisTop = document.getElementById(thisRef).offsetTop;
+        selectTextId = thisRef;
+        document.getElementById(thisRef).style.backgroundColor = "red"
         this.$refs.textContent.scrollTo(0, thisTop - 230);
       }
     },
