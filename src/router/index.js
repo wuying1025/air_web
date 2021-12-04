@@ -311,6 +311,20 @@ export const constantRoutes = [{
     meta: {
       title: '外来人员信息详情'
     }
+  }, {
+    path: 'addOutsider',
+    component: () => import('@/views/outsider/add'),
+    name: 'AddOutsider',
+    meta: {
+      title: '外来人员登记'
+    }
+  }, {
+    path: 'addOutsider/:id',
+    component: () => import('@/views/outsider/add'),
+    name: 'UpdateOutsider',
+    meta: {
+      title: '修改登记信息'
+    }
   }]
 }, {
   path: '/questions',
@@ -579,7 +593,7 @@ export const constantRoutes = [{
       title: '创建周值班表'
     }
   }]
-},{
+}, {
   path: '/dragontigers',
   component: Layout,
   hidden: true,
@@ -611,14 +625,14 @@ export const constantRoutes = [{
     meta: {
       title: '成绩录入'
     }
-  },{
+  }, {
     path: 'deptScore/:id/:typeId',
     component: () => import('@/views/dragontiger/deptScore'),
     name: 'DeptScore',
     meta: {
       title: '连队排名'
     }
-  },{
+  }, {
     path: 'totalScore/:id/:typeId',
     component: () => import('@/views/dragontiger/totalScore'),
     name: 'TotalScore',
@@ -626,7 +640,7 @@ export const constantRoutes = [{
       title: '活动排名'
     }
   }]
-},{
+}, {
   path: '/safeUploads',
   component: Layout,
   hidden: true,
@@ -666,7 +680,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.path == '/index') {
     store.dispatch('app/closeSideBar', { withoutAnimation: false })
-  }else{
+  } else {
     store.dispatch('app/openSideBar', { withoutAnimation: false })
   }
   next()

@@ -86,7 +86,8 @@ export default {
       searchData = {
         ...this.search,
         size: this.pageSize,
-        current: this.currentPage
+        current: this.currentPage,
+        status: 0
       }
     ) {
       this.loading = true;
