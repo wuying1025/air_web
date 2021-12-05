@@ -6,92 +6,127 @@
         v-loading.fullscreen.lock="fullscreenLoading"
         v-if="!fullscreenLoading"
       >
-        <el-form
-          ref="form"
-          :model="todaywork"
-          label-width="100px"
-          size="medium"
-        >
-          <el-form-item label="联系人单位：">{{
-            todaywork.company
-          }}</el-form-item>
-          <el-form-item label="联系人：">{{ todaywork.contacts }}</el-form-item>
-          <el-form-item label="来访事由：">{{ todaywork.title }}</el-form-item>
-          <el-form-item label="来访时段"
-            >{{ todaywork.startTime }} 至 {{ todaywork.endTime }}</el-form-item
+        <el-card class="box-card">
+          <el-form
+            ref="form"
+            :model="todaywork"
+            label-width="100px"
+            size="medium"
           >
-          <el-form-item label="来访人员：">
-            <div
-              class="out-item"
-              v-for="(obj, index) in todaywork.persons"
-              :key="index"
+            <el-form-item label="联系人单位：">{{
+              todaywork.company
+            }}</el-form-item>
+            <el-form-item label="联系人：">{{
+              todaywork.contacts
+            }}</el-form-item>
+            <el-form-item label="来访事由：">{{
+              todaywork.title
+            }}</el-form-item>
+            <el-form-item label="来访时段"
+              >{{ todaywork.startTime }} 至
+              {{ todaywork.endTime }}</el-form-item
             >
-              姓名：{{
-                obj.name
-              }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;手机号：{{
-                obj.tel
-              }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;身份证号：{{
-                obj.idCard
-              }}
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <el-button
-                @click="openTabWin(obj.url, 'view')"
-                v-if="obj.url"
-                icon="el-icon-view"
-                size="small"
-                type="primary"
-                >查看附件</el-button
+            <el-form-item label="来访人员：">
+              <div
+                class="out-item"
+                v-for="(obj, index) in todaywork.persons"
+                :key="index"
               >
-            </div>
-          </el-form-item>
-          <el-form-item label="来访车辆：">
-            <span
-              class="out-item"
-              v-for="(obj, index) in todaywork.cars"
-              :key="index"
-              >{{ obj.carNum }}</span
-            >
-          </el-form-item>
-          <el-form-item label="近七天行程:">{{
-            todaywork.journey
-          }}</el-form-item>
-          <el-form-item label="备注:">{{ todaywork.remark }}</el-form-item>
-
-          <el-form-item
-            label="进入时间:"
-            v-if="
-              todaywork.records.length == 0 || todaywork.records[0].type == 2
-            "
+                姓名：{{
+                  obj.name
+                }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;手机号：{{
+                  obj.tel
+                }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;身份证号：{{
+                  obj.idCard
+                }}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <el-button
+                  @click="openTabWin(obj.url, 'view')"
+                  v-if="obj.url"
+                  icon="el-icon-view"
+                  size="small"
+                  type="primary"
+                  >查看附件</el-button
+                >
+              </div>
+            </el-form-item>
+            <el-form-item label="来访车辆：">
+              <span
+                class="out-item"
+                v-for="(obj, index) in todaywork.cars"
+                :key="index"
+                >{{ obj.carNum }}</span
+              >
+            </el-form-item>
+            <el-form-item label="近七天行程:">{{
+              todaywork.journey
+            }}</el-form-item>
+            <el-form-item label="备注:">{{ todaywork.remark }}</el-form-item>
+          </el-form>
+        </el-card>
+        <el-card class="box-card">
+          <el-form
+            ref="form"
+            :model="todaywork"
+            label-width="100px"
+            size="medium"
           >
-            <el-date-picker
-              v-model="enterTime"
-              type="datetime"
-              placeholder="选择日期时间"
-              value-format="yyyy-MM-dd HH:mm:ss"
-            ></el-date-picker>
-            <el-button type="warning" :disabled="!clickFlag" @click="enter(1)"
-              >进入</el-button
-            >
-          </el-form-item>
-          <el-form-item
-            label="离开时间:"
-            v-else-if="todaywork.records[0].type == 1"
+            <el-form-item label="来访记录:">
+              <div v-for="(item, index) in todaywork.records" :key="index">
+                <span v-if="item.type == 1">
+                  <el-tag type="danger">进入</el-tag>
+                </span>
+                <span v-if="item.type == 2">
+                  <el-tag type="success">离开</el-tag>
+                </span>
+                {{ item.time }}
+              </div>
+            </el-form-item>
+          </el-form>
+        </el-card>
+        <el-card class="box-card">
+          <el-form
+            ref="form"
+            :model="todaywork"
+            label-width="100px"
+            size="medium"
           >
-            <el-date-picker
-              v-model="leaveTime"
-              type="datetime"
-              placeholder="选择日期时间"
-              value-format="yyyy-MM-dd HH:mm:ss"
-            ></el-date-picker>
-            <el-button type="success" :disabled="!clickFlag" @click="enter(2)"
-              >离开</el-button
+            <el-form-item
+              label="进入时间:"
+              v-if="
+                todaywork.records.length == 0 || todaywork.records[0].type == 2
+              "
             >
-          </el-form-item>
-          <el-form-item>
-            <!-- <el-button type="primary" @click="$router.go(-1)">确定</el-button> -->
-            <el-button type="primary" @click="$router.go(-1)">返回</el-button>
-          </el-form-item>
-        </el-form>
+              <el-date-picker
+                v-model="enterTime"
+                type="datetime"
+                placeholder="选择日期时间"
+                value-format="yyyy-MM-dd HH:mm:ss"
+              ></el-date-picker>
+              <el-button type="warning" :disabled="!clickFlag" @click="enter(1)"
+                >进入</el-button
+              >
+            </el-form-item>
+            <el-form-item
+              label="离开时间:"
+              v-else-if="todaywork.records[0].type == 1"
+            >
+              <el-date-picker
+                v-model="leaveTime"
+                type="datetime"
+                placeholder="选择日期时间"
+                value-format="yyyy-MM-dd HH:mm:ss"
+              ></el-date-picker>
+              <el-button type="success" :disabled="!clickFlag" @click="enter(2)"
+                >离开</el-button
+              >
+            </el-form-item>
+            <el-form-item>
+              <!-- <el-button type="primary" @click="$router.go(-1)">确定</el-button> -->
+              <el-button type="primary" @click="$router.go(-1)">返回</el-button>
+            </el-form-item>
+          </el-form>
+        </el-card>
       </div>
     </div>
   </el-main>
@@ -199,5 +234,8 @@ export default {
 }
 .out-item {
   margin-right: 10px;
+}
+.box-card {
+  margin-bottom: 20px;
 }
 </style>

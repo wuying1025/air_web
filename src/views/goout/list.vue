@@ -83,15 +83,25 @@
           ></el-table-column>
           <el-table-column align="center" label="操作" show-overflow-tooltip>
             <template slot-scope="scope">
-              <el-button type="warning" v-if="scope.row.in" @click="enter(1)"
+              <el-button
+                size="mini"
+                type="warning"
+                v-if="scope.row.in"
+                icon="el-icon-right"
+                @click="enter(1, scope.row.id)"
                 >进入</el-button
               >
-              <el-button type="success" v-if="!scope.row.in" @click="enter(2)"
+              <el-button
+                size="mini"
+                type="success"
+                v-if="!scope.row.in"
+                icon="el-icon-back"
+                @click="enter(2, scope.row.id)"
                 >离开</el-button
               >
               <el-button
                 size="mini"
-                type="text"
+                type="primary"
                 icon="el-icon-view"
                 @click.stop="showDetail(scope.row)"
                 >详情</el-button
@@ -114,6 +124,7 @@
 </template>
 
 <script>
+import { dateFormat } from "@/utils/format.js";
 import { selectIn, getDetailById, saveRecord } from "@/api/goout.js";
 export default {
   data() {
@@ -150,48 +161,34 @@ export default {
           nameArr.map((n, i) => {
             item.nameCard += n + '：' + idCardArr[i] + '；<br>'
           })
-          console.log(153);
           // 查询进入离开情况
           let p = new Promise((resolve, reject) => {
             getDetailById(item.id).then(res => {
-              console.log(res);
               resolve(res)
             }).catch(err => {
               reject(err)
             })
           })
           promiseArr.push(p)
-          console.log(promiseArr);
-          // const detail = await getDetailById(item.id)
-          // console.log(159);
-          // console.log(detail)
-          // if (detail.code == 200 && detail.data && detail.data.records) {
-          //   if (detail.data.records.length == 0 || detail.data.records[0].type == 1) {
-          //     item.in = true
-          //   } else {
-          //     item.in = false
-          //   }
-          // }
         })
         // in = true 表示可以进入
         Promise.all(promiseArr).then(r => {
-          console.log(164);
           r.map((e, i) => {
             if (e.code == 200 && e.data && e.data.records) {
               if (e.data.records.length == 0) {
                 res.data.records[i].in = true
               } else if (e.data.records[0] && e.data.records[0].type == 1) {
                 res.data.records[i].in = false
+              } else if (e.data.records[0] && e.data.records[0].type == 2) {
+                res.data.records[i].in = true
               }
             }
           })
           this.list = res.data.records;
-          console.log(res.data.records);
           this.total = res.data.total;
         }).catch(err => {
           console.log(err);
         })
-
       }
       this.loading = false;
     },
@@ -209,7 +206,38 @@ export default {
       this.search.name = "";
       this.selectIn();
     },
-    enter() { }
+    enter(type, id) {
+      const confirmTitle = (type == 1 ? '进入' : '离开')
+      const nowTime = dateFormat("YYYY-mm-dd HH:MM:SS", new Date())
+      this.$confirm(confirmTitle + '时间为：' + nowTime, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        const res = await saveRecord({
+          time: nowTime,
+          type, //1进入 2 出
+          inId: id
+        });
+        if (res.code === "200") {
+          this.$message({
+            type: 'success',
+            message: confirmTitle + '成功!'
+          });
+          this.selectIn()
+        } else {
+          this.$message({
+            message: "记录失败",
+            type: "error"
+          });
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        });
+      });
+    }
   },
   created() {
     this.selectIn();
