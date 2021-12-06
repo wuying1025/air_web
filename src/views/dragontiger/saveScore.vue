@@ -25,7 +25,11 @@
             <div>{{ activity.remark }}</div>
           </el-form-item>
 
-          <el-table :data="personList" style="width: 100%">
+          <el-table
+            :data="personList"
+            style="width: 100%"
+            :row-style="{ height: '60px' }"
+          >
             <el-table-column
               align="center"
               type="index"
@@ -41,72 +45,66 @@
               prop="deptName"
               label="所属连队"
             ></el-table-column>
-            <!-- <el-table-column
-          align="center"
-          prop="idCard"
-          width="180"
-          label="身份证号码"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="jobName"
-          label="部职别"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="jobTypeName"
-          label="身份"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="remark1"
-          label="军衔"
-        ></el-table-column> -->
+
+            <el-table-column align="center" label="是否参加" width="300">
+              <template slot-scope="scope">
+                <el-switch
+                  v-model="personList[scope.$index].type"
+                  active-text="参加"
+                  inactive-text="不参加"
+                  :active-value="0"
+                  :inactive-value="1"
+                  @change="
+                    handleSwitchChange(
+                      personList[scope.$index],
+                      personList[scope.$index].type
+                    )
+                  "
+                >
+                </el-switch>
+              </template>
+            </el-table-column>
+
             <el-table-column align="center" label="成绩录入" width="300">
               <template slot-scope="scope">
-                <!-- <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-tickets"
-            @click="lookHandle(scope.row)"
-            >详情</el-button
-          > -->
-                <div v-if="activity.typeId == 1">
-                  <el-form :inline="true">
-                    <el-row type="flex" class="row" justify="space-between">
-                      <el-col :span="12">
-                        <el-form-item>
-                          <el-input
-                            placeholder="分钟数"
-                            v-model="personList[scope.$index].minute"
-                            type="number"
-                          >
-                            <template slot="append">分</template>
-                          </el-input>
-                        </el-form-item>
-                      </el-col>
-                      <el-col :span="12">
-                        <el-form-item>
-                          <el-input
-                            placeholder="秒数"
-                            v-model="personList[scope.$index].second"
-                            type="number"
-                          >
-                            <template slot="append">秒</template>
-                          </el-input>
-                        </el-form-item>
-                      </el-col>
-                    </el-row>
-                  </el-form>
-                </div>
-                <div v-else-if="activity.typeId == 2">
-                  <el-input
-                    placeholder="请输入个数"
-                    v-model="personList[scope.$index].count"
-                    type="number"
-                  >
-                    <template slot="append">个</template>
-                  </el-input>
+                <div v-if="personList[scope.$index] && personList[scope.$index].resultShow">
+                  <div v-if="activity.typeId == 1">
+                    <el-form :inline="true">
+                      <el-row type="flex" class="row" justify="space-between">
+                        <el-col :span="12">
+                          <el-form-item>
+                            <el-input
+                              placeholder="分钟数"
+                              v-model="personList[scope.$index].minute"
+                              type="number"
+                            >
+                              <template slot="append">分</template>
+                            </el-input>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                          <el-form-item>
+                            <el-input
+                              placeholder="秒数"
+                              v-model="personList[scope.$index].second"
+                              type="number"
+                            >
+                              <template slot="append">秒</template>
+                            </el-input>
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                    </el-form>
+                  </div>
+                  <div v-else-if="activity.typeId == 2">
+                    <el-input
+                      placeholder="请输入个数"
+                      v-model="personList[scope.$index].count"
+                      type="number"
+                    >
+                      <template slot="append">个</template>
+                    </el-input>
+                  </div>
                 </div>
               </template>
             </el-table-column>
@@ -211,7 +209,6 @@ export default {
     },
     async selectCate() {
       const res = await selectCate()
-      // console.log(res);
       if (res.code == 200) {
         this.cateData = res.data.records
       }
@@ -219,7 +216,6 @@ export default {
     async getPersonList() {
       const res = await selectPersonByDept()
       const deptRes = await lastDept()
-      console.log(res);
       if (res.code === '200' && res.data) {
         res.data.map(item => {
           switch (item.jobType) {
@@ -246,15 +242,18 @@ export default {
           item.second = 0
           item.count = 0
           item.url = ''
+          item.type = 0
+          item.resultShow = true
           if (!this.isUpdate) {
             delete item.id
           }
         })
         this.personList = res.data
-        console.log(250);
-        console.log(this.personList);
       }
     },
+    handleSwitchChange(a, b) {
+      this.$set(a, 'resultShow', b == 1 ? false : true)
+    }
   },
   async mounted() {
     await this.selectCate()
@@ -276,8 +275,6 @@ export default {
         activityId: id,
         typeId: typeId
       })
-      console.log(272);
-      console.log(deptScore);
       if (deptScore.code === '200' && deptScore.data && deptScore.data.records && deptScore.data.records.length > 0) {
         this.isUpdate = true
         deptScore.data.records.map(elem => {

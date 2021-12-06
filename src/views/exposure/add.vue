@@ -5,7 +5,7 @@
       <div class="main-content">
         <div v-loading="loading" class="app-container">
           <el-form ref="form" :model="form" :rules="rules" label-width="130px">
-            <el-form-item label="曝光标题" prop="title">
+            <el-form-item label="申请标题" prop="title">
               <el-input v-model="form.title" style="width: 300px"></el-input>
             </el-form-item>
             <el-form-item label="选择分类" prop="cateId">
@@ -22,6 +22,12 @@
                 ></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="部门">
+              <el-input v-model="form.deptName" style="width: 300px"></el-input>
+            </el-form-item>
+            <el-form-item label="联系人">
+              <el-input v-model="form.contact" style="width: 300px"></el-input>
+            </el-form-item>
             <el-form-item label="曝光内容" prop="content">
               <tinymce v-model="form.content" :height="300" />
               <!-- <VueUeditorWrap :config="myConfig" v-model="form.content" /> -->
@@ -36,7 +42,7 @@
               <el-button v-else type="primary" @click="submitForm('form')"
                 >立即创建</el-button
               >
-              <el-button @click="resetForm('form')">取消</el-button>
+              <el-button @click="$router.go(-1)">返回</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -57,7 +63,9 @@ export default {
       form: {
         title: "",
         content: "",
-        cateId: ''
+        cateId: '',
+        deptName: '',
+        contact: '',
       },
       rules: {
         title: [{ required: true, message: "请输入标题", trigger: "blur" }],
@@ -80,8 +88,7 @@ export default {
             title: this.form.title,
             type: 2,
             id: this.$route.query.id,
-            content: this.form.content,
-            cateId: this.form.cateId,
+            ...this.form,
           }).then((res) => {
             this.$message({
               message: "修改成功",
@@ -103,8 +110,7 @@ export default {
           addExposure({
             title: this.form.title,
             type: 2,
-            content: this.form.content,
-            cateId: this.form.cateId,
+            ...this.form,
           }).then((res) => {
             this.$message({
               message: "添加成功",
