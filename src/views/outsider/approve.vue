@@ -60,7 +60,7 @@
           </el-table-column>
           <el-table-column
             align="center"
-            prop="cars"
+            prop="carNum"
             label="车牌号"
           ></el-table-column>
 
