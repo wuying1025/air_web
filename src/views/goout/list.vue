@@ -58,7 +58,7 @@
               <div v-html="scope.row.nameCard"></div>
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="cars" label="车牌号">
+          <el-table-column align="center" prop="carNum" label="车牌号">
           </el-table-column>
           <!-- <el-table-column align="center" prop="company" label="联系人单位"></el-table-column> -->
           <!-- <el-table-column align="center" prop="contacts" label="联系人"></el-table-column> -->
@@ -81,7 +81,7 @@
             prop="company"
             label="联系单位"
           ></el-table-column>
-          <el-table-column align="center" label="操作" show-overflow-tooltip>
+          <el-table-column align="center" label="操作" width="190">
             <template slot-scope="scope">
               <el-button
                 size="mini"
