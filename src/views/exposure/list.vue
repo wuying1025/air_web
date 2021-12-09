@@ -310,7 +310,11 @@ export default {
       this.$refs.form.resetFields();
     },
     tableRowClassName({ row, rowIndex }) {
-      if (row.count == 0) {
+      const now = new Date();
+      const millisecond = now.getTime() - new Date(row.createTime).getTime();
+      const days = millisecond / (24 * 3600 * 1000)
+
+      if (row.count == 0 && days > 3) {
         return 'warning-row'
       }
       return ''
@@ -363,5 +367,4 @@ export default {
   text-align: right;
   margin-top: 20px;
 }
-
 </style>

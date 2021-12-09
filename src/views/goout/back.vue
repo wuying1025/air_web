@@ -48,9 +48,14 @@
           :data="personData"
           tooltip-effect="dark"
           style="width: 100%"
+          @selection-change="handleSelectionChange"
         >
-          <!-- <el-table-column type="selection" width="55"></el-table-column> -->
-          <el-table-column label="序号" type="index" width="50"></el-table-column>
+          <el-table-column type="selection" width="55"></el-table-column>
+          <el-table-column
+            label="序号"
+            type="index"
+            width="50"
+          ></el-table-column>
           <el-table-column
             align="center"
             prop="userName"
@@ -99,6 +104,11 @@
             </template>
           </el-table-column>
         </el-table>
+        <div style="margin-top: 20px">
+          <el-button @click="toggleSelection()" type="primary" size="mini"
+            >批量销假</el-button
+          >
+        </div>
         <el-dialog
           title="销假记录"
           :visible.sync="dialogVisible"
@@ -127,6 +137,35 @@
             <el-button type="primary" @click="doHandle">确 定</el-button>
           </span>
         </el-dialog>
+
+        <el-dialog
+          title="销假记录"
+          :visible.sync="dialogVisibleAll"
+          width="40%"
+          :before-close="
+            () => {
+              dialogVisibleAll = false;
+            }
+          "
+        >
+          <el-form ref="approveAll" :model="approveAll" label-width="150px">
+            <el-form-item label="实际归队时间：" prop="backTime">
+              <el-date-picker
+                v-model="approveAll.backTime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                required
+                type="datetime"
+                placeholder="请选择实际归队时间"
+              ></el-date-picker>
+            </el-form-item>
+          </el-form>
+
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="cancelAll">取 消</el-button>
+            <el-button type="primary" @click="doHandleAll">确 定</el-button>
+          </span>
+        </el-dialog>
+
         <div class="page-box">
           <el-pagination
             style="width: 100%"
@@ -177,6 +216,13 @@ export default {
       },
       rules: {
         backTime: [{ required: true, message: "请输入实际归队时间", trigger: "blur" }],
+      },
+      multipleSelection: [],
+      dialogVisibleAll: false,
+      approveAll: {
+        id: null,
+        status: 4,
+        backTime: dateFormat("YYYY-mm-dd HH:MM:SS", new Date())
       },
     };
   },
@@ -265,6 +311,59 @@ export default {
         status: 0
       }
       this.selectPerson()
+    },
+    toggleSelection(rows) {
+      if (this.multipleSelection.length > 0) {
+        this.dialogVisibleAll = true
+      } else {
+        this.$message({
+          message: '请选择要销假的数据',
+          type: 'error'
+        })
+      }
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
+    cancelAll() {
+      this.dialogVisibleAll = false
+      this.approveAll = {
+        id: null,
+        status: 1,
+        backTime: dateFormat("YYYY-mm-dd HH:MM:SS", new Date())
+      }
+    },
+    doHandleAll() {
+      let promiseArr = []
+      this.multipleSelection.map(elem => {
+        let p = new Promise((resolve, reject) => {
+          updateStatus({
+            id: elem.id,
+            status: 4,
+            backTime: this.approveAll.backTime
+          }).then(res => {
+            resolve(res)
+          }).catch(err => {
+            reject(err)
+          })
+        })
+        promiseArr.push(p)
+      })
+
+      Promise.all(promiseArr).then(res => {
+        this.$message({
+          message: '批量销假成功',
+          type: 'success'
+        })
+        this.dialogVisibleAll = false
+        this.multipleSelection = []
+        this.selectPerson()
+      }).catch(err => {
+        this.$message({
+          message: '批量销假失败',
+          type: 'error'
+        })
+      })
     },
   },
   mounted() {
