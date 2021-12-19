@@ -11,7 +11,7 @@
               size="small"
             />
           </el-form-item>
-          <el-form-item label="活动分类">
+          <!-- <el-form-item label="活动分类">
             <el-select v-model="search.cateId" placeholder="请选择活动分类">
               <el-option
                 v-for="item in cateData"
@@ -20,7 +20,7 @@
                 :value="item.id"
               ></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item>
             <el-button
               type="primary"
@@ -34,7 +34,7 @@
             >
           </el-form-item>
         </el-form>
-        <el-row :gutter="10" class="mb8">
+        <!-- <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
             <el-button
               type="primary"
@@ -44,7 +44,7 @@
               >创建活动</el-button
             >
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-table :data="list" style="width: 100%" v-loading="loading">
           <el-table-column
             align="center"
@@ -56,11 +56,11 @@
             prop="title"
             label="活动名称"
           ></el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             align="center"
             prop="cateName"
             label="活动分类"
-          ></el-table-column>
+          ></el-table-column> -->
           <el-table-column
             align="center"
             prop="time"
@@ -152,10 +152,10 @@ export default {
       list: [],
       currentPage: 1,
       pageSize: 10,
-      cateData: [],
+      // cateData: [],
       search: {
         title: "",
-        cateId: 0,
+        // cateId: 0,
       },
       total: 0, //分页总页数
       loading: true,
@@ -169,7 +169,7 @@ export default {
         current: this.currentPage,
         size: this.pageSize,
         title: this.search.title,
-        cateId: this.search.cateId,
+        // cateId: this.search.cateId,
       })
       // console.log(res);
       if (res.code === '200' && res.data) {
@@ -203,11 +203,11 @@ export default {
       this.currentPage = value;
       this.getData();
     },
-    scoreHandle({ id, typeId }) {
-      this.$router.push(`/dragontigers/saveScore/${id}/${typeId}`)
+    scoreHandle({ id }) {
+      this.$router.push(`/dragontigers/saveScore/${id}`)
     },
-    deptScore({ id, typeId }) {
-      this.$router.push(`/dragontigers/deptScore/${id}/${typeId}`)
+    deptScore({ id }) {
+      this.$router.push(`/dragontigers/deptScore/${id}`)
     },
     editHandle({ id }) {
       this.$router.push(`/dragontigers/addDragontiger/${id}`)
@@ -228,7 +228,7 @@ export default {
   },
   created() {
     this.getData();
-    this.getCateList();
+    // this.getCateList();
   },
 
 };

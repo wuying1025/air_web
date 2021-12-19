@@ -11,16 +11,6 @@
               size="small"
             />
           </el-form-item>
-          <el-form-item label="活动分类">
-            <el-select v-model="search.cateId" placeholder="请选择活动分类">
-              <el-option
-                v-for="item in cateData"
-                :key="item.id"
-                :label="item.cateName"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item>
             <el-button
               type="primary"
@@ -47,11 +37,6 @@
           ></el-table-column>
           <el-table-column
             align="center"
-            prop="cateName"
-            label="活动分类"
-          ></el-table-column>
-          <el-table-column
-            align="center"
             prop="time"
             label="活动时间"
             width="250"
@@ -73,7 +58,7 @@
                 type="text"
                 icon="el-icon-tickets"
                 @click="deptScore(scope.row)"
-                >查看排名</el-button
+                >查看龙虎榜</el-button
               >
             </template>
           </el-table-column>
@@ -150,7 +135,7 @@ export default {
       }
     },
     // 获取分类列表
-    async getCateList() {
+    /* async getCateList() {
       const { code, data } = await selectCate({
         size: 1000,
       })
@@ -158,7 +143,7 @@ export default {
         this.cateData = data.records;
         this.cateData.unshift({ id: 0, cateName: "全部分类" });
       }
-    },
+    }, */
     searchHandle() {
       this.getData();
     },
@@ -174,8 +159,8 @@ export default {
     scoreHandle({ id }) {
       this.$router.push(`/dragontigers/saveScore/${id}`)
     },
-    deptScore({ id, typeId }) {
-      this.$router.push(`/dragontigers/totalScore/${id}/${typeId}`)
+    deptScore({ id }) {
+      this.$router.push(`/dragontigers/totalScore/${id}`)
     },
     editHandle({ id }) {
       this.$router.push(`/dragontigers/addDragontiger/${id}`)
@@ -196,7 +181,7 @@ export default {
   },
   created() {
     this.getData();
-    this.getCateList();
+    // this.getCateList();
   },
 
 };
