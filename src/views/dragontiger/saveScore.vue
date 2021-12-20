@@ -288,10 +288,10 @@ export default {
     async updateHandle() {
       this.personList.map(elem => {
         if (elem.minute1 && elem.second1) {
-          elem.item3 = elem.minute1 + '-' + elem.second1
+          elem.item3 = elem.minute1 + '″' + elem.second1
         }
         if (elem.minute2 && elem.second2) {
-          elem.item4 = elem.minute2 + '-' + elem.second2
+          elem.item4 = elem.minute2 + '′' + elem.second2 + '″'
         }
       })
       // console.log(this.personList)
@@ -387,12 +387,14 @@ export default {
         // this.isUpdate = true
         deptScore.data.records.map(elem => {
           if (elem.item3) {
-            elem.minute1 = elem.item3.split('-')[0]
-            elem.second1 = elem.item3.split('-')[1]
+            const splitArr = elem.item3.split('″')
+            elem.minute1 = splitArr[0]
+            elem.second1 = splitArr[1]
           }
           if (elem.item4) {
-            elem.minute2 = elem.item4.split('-')[0]
-            elem.second2 = elem.item4.split('-')[1]
+            const splitArr = elem.item4.split('′')
+            elem.minute2 = splitArr[0]
+            elem.second2 = splitArr[1].substring(0, splitArr[1].length - 1)
           }
 
           if (elem.type == 0) {

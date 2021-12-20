@@ -1237,6 +1237,7 @@ export default {
       if (res.code === '200' && res.data && res.data.records && res.data.records.length > 0) {
         const firstData = res.data.records[0]
         const score = await selectScore({
+          sex: '男',
           activityId: firstData.id,
           // typeId: firstData.typeId
         })
@@ -1262,15 +1263,13 @@ export default {
               elem.result2 = 0
             }
             if (elem.item3) {
-              const item3Arr = elem.item3.split('-')
-              elem.result3 = `${elem.score3}（${item3Arr[0]}″${item3Arr[1]}）`
+              elem.result3 = `${elem.score3}（${elem.item3}）`
             } else {
               elem.result3 = 0
             }
 
             if (elem.item4) {
-              const item4Arr = elem.item4.split('-')
-              elem.result4 = `${elem.score4}（${item4Arr[0]}″${item4Arr[1]}）`
+              elem.result4 = `${elem.score4}（${elem.item4}）`
             } else {
               elem.result4 = 0
             }
