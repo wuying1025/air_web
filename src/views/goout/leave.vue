@@ -220,6 +220,7 @@ export default {
       this.search = {
         userName: '',
         status: 0,
+        time: ''
       }
       this.selectPerson()
     },
