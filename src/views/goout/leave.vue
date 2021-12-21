@@ -7,16 +7,16 @@
         :inline="true"
         @submit.native.prevent
       >
-      <el-form-item label="审批状态">
-        <el-select v-model="search.status" placeholder="请选择审批状态">
-          <el-option
-            v-for="item in statusList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
+        <el-form-item label="审批状态">
+          <el-select v-model="search.status" placeholder="请选择审批状态">
+            <el-option
+              v-for="item in statusList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="姓名">
           <el-input
             v-model="search.userName"
@@ -25,6 +25,17 @@
             @submit.native.prevent
             v-on:keyup.13="onSearch"
           />
+        </el-form-item>
+        <el-form-item label="实际归队时间">
+          <el-date-picker
+            style="width: 390px"
+            v-model="search.time"
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="yyyy-MM-dd HH:mm:ss"
+          ></el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -43,7 +54,7 @@
           <el-button
             icon="el-icon-plus"
             type="primary"
-            style="background: rgb(74, 119, 252); margin-top: 20px;"
+            style="background: rgb(74, 119, 252); margin-top: 20px"
             size="mini"
             @click="$router.push('/out/leaveApply')"
             >请假外出人员申请</el-button
@@ -133,7 +144,8 @@ export default {
       total: 0, //总页数
       search: {
         userName: '',
-        status: 0
+        status: 0,
+        time: ''
       },
       statusList: [{
         id: 0,
@@ -156,7 +168,15 @@ export default {
   methods: {
     async selectPerson() {
       this.loading = true;
+      let start = null
+      let end = null
+      if (this.search.time) {
+        start = this.search.time[0]
+        end = this.search.time[1]
+      }
       const res = await selectPersonOut({
+        startTime: start,
+        endTime: end,
         current: this.currentPage,
         size: this.pageSize,
         deptId: 0,
