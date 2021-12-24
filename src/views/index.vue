@@ -219,7 +219,7 @@
             <i class="iconfont icon-anniu-jiantouxiangyou"></i>
           </div>
           <!-- @click="$router.push('goout/innerOut')" -->
-          <div
+          <!-- <div
             class="item"
             :class="{ selected: index === 3 }"
             @mouseover="change(3)"
@@ -227,7 +227,7 @@
           >
             {{ nowTime }} 在岗情况
             <i class="iconfont icon-anniu-jiantouxiangyou"></i>
-          </div>
+          </div> -->
           <!-- @click="$router.push('safeUpload/show')" -->
           <div
             class="item"
