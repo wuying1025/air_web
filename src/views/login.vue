@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <router-link class="dining" :to="{ path: '/diningLogin' }" target="_blank">伙食情况调查</router-link>
     <router-link class="question" :to="{ path: '/questionnaireLogin' }" target="_blank">问卷调查系统</router-link>
     <router-link class="exam" :to="{ path: '/examLogin' }" target="_blank">在线考试系统</router-link>
     <el-form
@@ -265,6 +266,19 @@ export default {
   color: #fff;
 }
 .exam:hover {
+  color: #1890ff;
+}
+
+.dining {
+  position: absolute;
+  top: 20px;
+  right: 290px;
+  font-size: 18px;
+  font-weight: bolder;
+  color: #fff;
+}
+
+.dining:hover {
   color: #1890ff;
 }
 </style>

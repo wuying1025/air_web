@@ -356,6 +356,14 @@ export const constantRoutes = [{
   component: () => import('@/views/questionnaire/login'),
   hidden: true
 }, {
+  path: '/diningLogin',
+  component: () => import('@/views/dining/login'),
+  hidden: true
+}, {
+  path: '/diningTest',
+  component: () => import('@/views/dining/test'),
+  hidden: true
+}, {
   path: '/questionnaireTest',
   component: () => import('@/views/questionnaire/test'),
   hidden: true
@@ -666,7 +674,46 @@ export const constantRoutes = [{
       title: '查看责任图'
     }
   },]
-},
+}, {
+  path: '/dinings',
+  component: Layout,
+  hidden: true,
+  children: [{
+    path: 'unitAdd',
+    component: () => import('@/views/dining/unitAdd'),
+    name: 'DiningUnitAdd',
+    meta: {
+      title: '创建就餐单位'
+    }
+  }, {
+    path: 'unitAdd/:id',
+    component: () => import('@/views/dining/unitAdd'),
+    name: 'DiningUnitUpdate',
+    meta: {
+      title: '修改就餐单位'
+    }
+  }, {
+    path: 'add',
+    component: () => import('@/views/dining/naireAdd'),
+    meta: { title: '创建问卷' },
+    hidden: true,
+  }, {
+    path: 'questionList',
+    component: () => import('@/views/dining/questionList'),
+    meta: { title: '编辑问题' },
+    hidden: true,
+  }, {
+    path: 'detailList',
+    component: () => import('@/views/dining/detailList'),
+    meta: { title: '查看排名' },
+    hidden: true,
+  }, {
+    path: 'testDetail',
+    component: () => import('@/views/dining/testDetail'),
+    meta: { title: '问卷详情' },
+    hidden: true,
+  }]
+}
 
 ]
 
