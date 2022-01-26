@@ -103,3 +103,9 @@ export const getDiningNaireContent = (data = {}) => request({
     method: 'post',
     data
 })
+
+export const answer = (data = {}) => request({
+    url: '/dining/answer',
+    method: 'post',
+    data
+})
