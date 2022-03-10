@@ -132,7 +132,7 @@
             <el-button type="primary" @click="doUpload">确 定</el-button>
           </span>
         </el-dialog>
-        <div class="page-box">
+        <!-- <div class="page-box">
           <el-pagination
             style="width: 100%"
             background
@@ -142,7 +142,7 @@
             :page-size="pageSize"
             @current-change="handleCurrentChange"
           ></el-pagination>
-        </div>
+        </div> -->
       </div>
     </div>
   </el-main>
@@ -194,6 +194,8 @@ export default {
     async getData() {
       const res = await selectDeptScore({
         ...this.search,
+        current: 0,
+        size: 99999,
         activityId: this.activityId,
       })
       if (res.code === '200' && res.data) {

@@ -382,6 +382,8 @@ export default {
 
       const deptScore = await selectDeptScore({
         activityId: id,
+        current: 0,
+        size: 99999,
       })
       if (deptScore.code === '200' && deptScore.data && deptScore.data.records && deptScore.data.records.length > 0) {
         // this.isUpdate = true

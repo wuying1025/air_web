@@ -13,6 +13,7 @@
         >
           空军牡丹江场站管理系统
         </div>
+        <div class="user-name">{{ user_name }}</div>
         <a
           href="javascript:;"
           class="header-icons out"
@@ -186,6 +187,45 @@
               ></el-table-column>
             </el-table>
           </div>
+          <div class="left-item dragon-tiger" v-show="index == 6">
+            <h2 class="dragon-tiger-title">
+              <!-- {{ Number(new Date().getMonth() + 1) }}月伙食调查表排名 -->
+              {{ diningTitle }} 伙食排名
+            </h2>
+            <el-table :data="quesList" style="width: 100%">
+              <el-table-column
+                type="index"
+                width="150"
+                label="排名"
+                align="center"
+              ></el-table-column>
+              <el-table-column
+                align="center"
+                prop="name"
+                label="单位"
+              ></el-table-column>
+              <el-table-column
+                align="center"
+                prop="avg"
+                label="平均分"
+              ></el-table-column>
+              <el-table-column
+                align="center"
+                prop="count"
+                label="参与人数"
+              ></el-table-column>
+              <!-- <el-table-column align="center" class="handle_row" label="操作">
+                <template slot-scope="scope">
+                  <el-button
+                    v-if="scope.row.isCompleted != '0'"
+                    size="mini"
+                    @click="look(scope.row)"
+                    >问卷详情</el-button
+                  >
+                </template>
+              </el-table-column> -->
+            </el-table>
+          </div>
         </div>
         <div class="swiper-right">
           <!-- @click="$router.push('duty/dutyUpload')" -->
@@ -249,6 +289,17 @@
             {{ activity.title }} 龙虎榜
             <i class="iconfont icon-anniu-jiantouxiangyou"></i>
           </div>
+          <div
+            class="item"
+            :class="{ selected: index === 6 }"
+            @mouseover="change(6)"
+            @click="swiperDetail(6)"
+            v-if="activity"
+          >
+            <!-- {{ Number(new Date().getMonth() + 1) }}月伙食调查表排名 -->
+            {{diningTitle}} 伙食排名
+            <i class="iconfont icon-anniu-jiantouxiangyou"></i>
+          </div>
         </div>
       </div>
       <!-- @dong -->
@@ -268,42 +319,15 @@
           </ul>
         </div>
 
-        <div class="links">
-          <h2 class="list-title">
-            <span class="line"></span>
-            <span class="cn-title">友情链接</span>
-            <!-- <span class="en-title">/LINKS</span> -->
-          </h2>
-          <div class="links-list">
-            <a href="#" id="">
-              <img src="@/assets/image/001.jpg" alt="" />
-            </a>
-            <a href="#" id="">
-              <img src="@/assets/image/002.jpg" alt="" />
-            </a>
-            <a href="#" id="">
-              <img src="@/assets/image/003.jpg" alt="" />
-            </a>
-            <a href="#" id="">
-              <img src="@/assets/image/004.jpg" alt="" />
-            </a>
-            <a href="#" id="">
-              <img src="@/assets/image/005.jpg" alt="" />
-            </a>
-            <a href="#" id="">
-              <img src="@/assets/image/006.jpg" alt="" />
-            </a>
-          </div>
-        </div>
         <div class="footer">
-          <div class="footer-content">
+          <!-- <div class="footer-content">
             友情链接：
             <a href="#" id="">国防部</a>| <a href="#">教育部</a>|
             <a href="#">中国军网</a>| <a href="#">中国空军网</a>|
             <a href="#"> 新华网</a>| <a href="#">北京大学</a>|
             <a href="#">清华大学</a>| <a href="#">北京航空航天大学 </a>|
             <a href="#">阳光高考</a>
-          </div>
+          </div> -->
           <div class="company">
             <div class="company-name">
               主办：中国人民解放军空军京ICP备19021936号
@@ -494,11 +518,59 @@
           </el-table>
         </div>
       </el-dialog>
+
+      <el-dialog
+        :title="diningTitle + '伙食排名'"
+        :visible.sync="dialogVisible6"
+        :fullscreen="true"
+        custom-class="dialog-height"
+      >
+        <div>
+          <h2 class="dragon-tiger-title">
+            <!-- {{ Number(new Date().getMonth() + 1) }}月伙食调查表排名 -->
+            {{ diningTitle }} 伙食排名
+          </h2>
+          <el-table :data="quesList" style="width: 100%">
+            <el-table-column
+              type="index"
+              width="150"
+              label="排名"
+              align="center"
+            ></el-table-column>
+            <el-table-column
+              align="center"
+              prop="name"
+              label="单位"
+            ></el-table-column>
+            <el-table-column
+              align="center"
+              prop="avg"
+              label="平均分"
+            ></el-table-column>
+            <el-table-column
+              align="center"
+              prop="count"
+              label="参与人数"
+            ></el-table-column>
+            <!-- <el-table-column align="center" class="handle_row" label="操作">
+              <template slot-scope="scope">
+                <el-button
+                  v-if="scope.row.isCompleted != '0'"
+                  size="mini"
+                  @click="look(scope.row)"
+                  >问卷详情</el-button
+                >
+              </template>
+            </el-table-column> -->
+          </el-table>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
+import * as echarts from "echarts";
 import PanelGroup from './dashboard/PanelGroup'
 import LineChart from './dashboard/LineChart'
 import RaddarChart from './dashboard/RaddarChart'
@@ -509,7 +581,6 @@ import { selectWorkplan } from "@/api/workplan"
 import { selectWorkupload } from "@/api/workupload"
 import { selectOutsider } from "@/api/outsider.js";
 import { dateFormat } from "@/utils/format"
-import echarts from "echarts";
 import { selectSafety } from "@/api/safety.js";
 import { seasonList, selectTotal } from "@/api/evaluation"
 import { selectInfo } from "@/api/goout.js";
@@ -518,6 +589,9 @@ import { selectActivity, selectScore, getActivityById } from "@/api/activity.js"
 import { removeToken } from "@/utils/auth";
 
 import store from '@/store'
+import { mapGetters } from 'vuex'
+import { findDiningNaire, getScore } from "@/api/dining";
+
 
 export default {
   name: 'Index',
@@ -558,13 +632,21 @@ export default {
       dialogVisible3: false,
       dialogVisible4: false,
       dialogVisible5: false,
+      dialogVisible6: false,
       personData: [],
+      quesList: [],
+      diningTitle: ''
     }
   },
   watch: {
     $route(route) {
       store.dispatch('app/closeSideBar', { withoutAnimation: false })
     }
+  },
+  computed: {
+    ...mapGetters([
+      'user_name'
+    ]),
   },
   methods: {
     async getWorkplan() {
@@ -1348,7 +1430,35 @@ export default {
       this.$nextTick(() => {
         this.drawSafe2()
       })
-    }
+    },
+    async getDiningList() {
+      const res = await findDiningNaire({
+        current: 0,
+        size: 9999,
+        // title: this.search.title
+      })
+      const records = res.data.records;
+      if (records && records[0]) {
+        const first = records[0]
+        this.naireId = first.id
+        this.diningTitle = first.title
+        const type = first.type
+        const month = first.month
+        const title = first.title
+        const score = await getScore({
+          month
+        })
+        if (score && score.data) {
+          this.quesList = score.data
+        }
+      }
+    },
+    async look(_data) {
+      this.$router.push({
+        path: "/dinings/testDetail/",
+        query: { naireId: this.naireId, id: _data.id, title: _data.name }
+      });
+    },
   },
   async mounted() {
     this.loading = true
@@ -1358,6 +1468,7 @@ export default {
     this.getWeekplan()
     this.getOutsider()
     this.getDragonTigerList()
+    this.getDiningList()
 
     await this.getSeasonList()
 
@@ -1486,6 +1597,7 @@ export default {
       .left-item {
         height: 633px;
         border: 1px solid #dabbbe;
+        max-width: 1190px;
       }
       .dragon-tiger {
         padding: 20px;
@@ -1496,19 +1608,28 @@ export default {
       flex: 1;
       .item {
         width: 100%;
-        height: 106px;
-        background-color: #fff;
-        color: #a11e2b;
+        height: 90px;
+        background-color: #e7e7e7;
+        color: #0a0a0a;
         //@dong
         padding: 0 50px;
-        line-height: 106px;
-        font-size: 20px;
+        line-height: 90px;
+        font-size: 18px;
         box-sizing: border-box;
-        border-bottom: 1px solid #dabbbe;
+        // border-bottom: 1px solid #dabbbe;
         cursor: pointer;
+        margin: 15px 0;
+        border-radius: 10px;
+        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.29),
+          1px 1px 1px rgba(255, 255, 255, 0.44) inset;
+        color: #444;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .selected {
-        background-color: #a11e2b;
+        // background-color: #a11e2b;
+        background-image: linear-gradient(#ff184c, #fb450e);
         color: #fff;
       }
       .icon-anniu-jiantouxiangyou {
@@ -1601,7 +1722,19 @@ export default {
     text-align: center;
     a {
       color: #fff;
-      margin: 0 12px;
+      // margin: 0 12px;
+      padding: 0 15px;
+    }
+    .right {
+      position: relative;
+      &::after {
+        content: " ";
+        height: 20px;
+        width: 1px;
+        background: #fff;
+        position: absolute;
+        right: 0;
+      }
     }
   }
   .company {
@@ -1650,5 +1783,12 @@ export default {
   height: 800px;
   min-height: 500px;
   margin: 0 auto;
+}
+.user-name {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 140px;
+  font-weight: bolder;
 }
 </style>

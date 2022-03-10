@@ -5,7 +5,7 @@
       class="drawer-bg"
       @click="handleClickOutside"
     />
-    <sidebar class="sidebar-container" />
+    <sidebar class="sidebar-container" @handleSidebar="handleSidebar" />
     <div :class="{ hasTagsView: needTagsView }" class="main-container">
       <div :class="{ 'fixed-header': fixedHeader }">
         <navbar v-show="showNavBar" />
@@ -79,7 +79,10 @@ export default {
   methods: {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
-    }
+    },
+    handleSidebar(status) {
+      this.sidebar.opened = status;
+    },
   }
 }
 </script>

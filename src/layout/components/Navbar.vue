@@ -31,6 +31,7 @@
         </a>
         <a href="#" class="header-icons message"></a>
         <a href="#" class="header-icons mine"></a> -->
+        <div class="user-name">{{ user_name }}</div>
         <a href="javascript:;" class="header-icons out" @click="logout"></a>
       </template>
     </div>
@@ -268,5 +269,13 @@ export default {
 }
 .right-menu .out {
   background-position: -183px -3px;
+}
+.user-name {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 100px;
+  color: #fff;
+  font-weight: bolder;
 }
 </style>
